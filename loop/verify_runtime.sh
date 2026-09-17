@@ -5,23 +5,23 @@
 # 3) bash/write tools work in -p mode
 set -euo pipefail
 
-GEN="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="${GEN}/evidence/audit/VERIFY_RUNTIME.md"
+PKG="$(cd "$(dirname "$0")/.." && pwd)"
+OUT="${PKG}/evidence/audit/VERIFY_RUNTIME.md"
 mkdir -p "$(dirname "$OUT")"
 
 {
   echo "# Runtime verification"
   echo
   echo "- time: $(date -Is)"
-  echo "- pi: $("$GEN/node_modules/.bin/pi" --version 2>/dev/null || echo missing)"
+  echo "- pi: $("$PKG/node_modules/.bin/pi" --version 2>/dev/null || echo missing)"
   echo
 } >"$OUT"
 
-if [[ ! -f "$GEN/.env" ]]; then
+if [[ ! -f "$PKG/.env" ]]; then
   {
     echo "## Status: SKIPPED"
     echo
-    echo "Missing \`$GEN/.env\`. Copy \`.env.example\` and fill BASE_URL / API_KEY / MODEL_NAME, then re-run:"
+    echo "Missing \`$PKG/.env\`. Copy \`.env.example\` and fill BASE_URL / API_KEY / MODEL_NAME, then re-run:"
     echo
     echo '```bash'
     echo "./loop/verify_runtime.sh"
@@ -31,12 +31,12 @@ if [[ ! -f "$GEN/.env" ]]; then
   exit 0
 fi
 
-set -a; . "$GEN/.env"; set +a
-export PI_CODING_AGENT_DIR="$GEN/.agentcfg"
+set -a; . "$PKG/.env"; set +a
+export PI_CODING_AGENT_DIR="$PKG/.agentcfg"
 
-PI="$GEN/node_modules/.bin/pi"
-EXT="$GEN/.agentcfg/extensions/provider.js"
-BASE_ARGS=(-p --mode json --provider genesis --model "$MODEL_NAME" -e "$EXT" -ne --no-skills -nc --approve --session-dir "$GEN/.agentcfg/sessions")
+PI="$PKG/node_modules/.bin/pi"
+EXT="$PKG/.agentcfg/extensions/provider.js"
+BASE_ARGS=(-p --mode json --provider "${PI_PROVIDER:-reaxevolve}" --model "$MODEL_NAME" -e "$EXT" -ne --no-skills -nc --approve --session-dir "$PKG/.agentcfg/sessions")
 
 pass=0
 fail=0
@@ -68,7 +68,7 @@ run_check "1_provider_token" \
   "Reply with exactly the single word: pong"
 
 # 2) skill whitelist — load only generate-ts-guesses if present
-SKILL_A="$GEN/.skills/generate-ts-guesses"
+SKILL_A="$PKG/.skills/generate-ts-guesses"
 if [[ -d "$SKILL_A" ]]; then
   run_check "2_skill_whitelist" \
     "$PI" "${BASE_ARGS[@]}" --skill "$SKILL_A" --no-tools \
@@ -79,13 +79,13 @@ else
 fi
 
 # 3) bash/write without interactive approve
-TMPDIR_CHK="$GEN/runs/_verify_runtime"
+TMPDIR_CHK="$PKG/runs/_verify_runtime"
 mkdir -p "$TMPDIR_CHK"
 MARKER="$TMPDIR_CHK/hello_from_pi.txt"
 rm -f "$MARKER"
 run_check "3_bash_write_tools" \
   "$PI" "${BASE_ARGS[@]}" --tools read,bash,write \
-  "Create file $MARKER containing exactly: genesis-ok. Then finish."
+  "Create file $MARKER containing exactly: runtime-ok. Then finish."
 
 if [[ -f "$MARKER" ]]; then
   echo "OK: marker file written" | tee -a "$OUT"

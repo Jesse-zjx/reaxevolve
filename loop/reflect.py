@@ -92,13 +92,15 @@ def _edge_status_counts(net: dict) -> dict:
     return dict(Counter(e.get("status") or "unknown" for e in edges))
 
 
-def _reflect_pressure(n_strict: int, reachable: bool, evo_n: int, metrics: list, digest: dict) -> dict:
-    """Tell fully_auto when noop is unacceptable."""
+def _reflect_pressure(n_strict: int, reach: dict, evo_n: int, metrics: list, digest: dict) -> dict:
+    """Tell fully_auto when a noop is unacceptable."""
+    reachable = bool(reach) and all(reach.values())
+    unreached = sorted(k for k, v in (reach or {}).items() if not v)
     reasons = []
     if n_strict < 2:
-        reasons.append(f"n_strict={n_strict} (<2); need more STRICT edges toward HMF")
-    if not reachable:
-        reasons.append("target_reachable_strict_from_glucose is false")
+        reasons.append(f"n_strict={n_strict} (<2); need more STRICT edges toward the targets")
+    if unreached:
+        reasons.append("targets with no STRICT route: " + ", ".join(unreached))
     if evo_n == 0:
         reasons.append("EVOLUTION_LOG is empty — no asset revision yet this campaign")
     recent = metrics[-3:] if metrics else []
@@ -138,7 +140,7 @@ def run(bundle_path: str | None = None) -> dict:
     net = _load_json(net_path, {}) or {}
     meta = net.get("meta") or {}
     n_strict = sum(1 for e in (net.get("edges") or {}).values() if e.get("status") == "STRICT")
-    reachable = bool(meta.get("target_reachable_strict_from_glucose"))
+    reach = meta.get("targets_reachable_strict") or {}
 
     core_h = 0.0
     ch = PKG / "evidence" / "state" / "loop" / "core_hours.json"
@@ -154,7 +156,7 @@ def run(bundle_path: str | None = None) -> dict:
     digest = _failure_digest()
     metrics = _recent_metrics()
     queue = _queue_summary()
-    pressure = _reflect_pressure(n_strict, reachable, evo_n, metrics, digest)
+    pressure = _reflect_pressure(n_strict, reach, evo_n, metrics, digest)
 
     bundle = {
         "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -167,16 +169,28 @@ def run(bundle_path: str | None = None) -> dict:
             "edge_status_counts": _edge_status_counts(net),
         },
         "n_strict": n_strict,
-        "target_reachable": reachable,
+        "targets_reachable_strict": reach,
+        "n_targets_reachable_strict": sum(1 for v in reach.values() if v),
+        "strict_distance_to_targets": meta.get("strict_distance_to_targets") or {},
         "core_hours": core_h,
         "evo_log_len": evo_n,
         "queue_summary": queue,
         "failure_digest": digest,
         "recent_metrics": metrics,
         "reflect_pressure": pressure,
-        "whitelist": [".skills/", "tools/"],
+        "whitelist": [
+            ".skills/",
+            "tools/geometry/",
+            "tools/guess/",
+            "tools/expand/",
+            "tools/screen/",
+            "tools/workflow/",
+        ],
         "policy_bar": "v5",
-        "note": "genesis Reflect bundle v1 — rich digest for fully_auto",
+        "note": (
+            "Reflect bundle: failure digest, queue state and revision pressure. Acceptance is "
+            "policy/acceptance/STRICT.md and is not revisable; only the paths in `whitelist` are."
+        ),
     }
     out = Path(bundle_path or (PKG / "evidence" / "state" / "loop" / "reflect_bundle.json"))
     out.parent.mkdir(parents=True, exist_ok=True)

@@ -57,7 +57,7 @@ def main() -> int:
         bad(f"guess not found: {guess_src}")
         return 1
 
-    work = Path(tempfile.mkdtemp(prefix="genesis_seamtest_"))
+    work = Path(tempfile.mkdtemp(prefix="reaxevolve_seamtest_"))
     try:
         print("== 1. nested guess discovery ==")
         rd = work / "round_0"

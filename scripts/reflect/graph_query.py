@@ -38,7 +38,7 @@ def load():
     if not os.path.isfile(p):
         sys.exit('反应网络不存在：%s（先跑 build_reaction_network.py）' % p)
     net = json.load(open(p))
-    # genesis stores edges/nodes as dicts; normalize to lists for shared views
+    # Graph Memory stores edges/nodes as dicts; normalize to lists for shared views
     if isinstance(net.get('edges'), dict):
         net['edges'] = list(net['edges'].values())
     if isinstance(net.get('nodes'), dict):

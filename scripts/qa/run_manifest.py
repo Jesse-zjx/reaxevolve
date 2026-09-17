@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Record / update the genesis run manifest (model, pi, bar, asset versions, core-h)."""
+"""Record / update the run manifest (model, pi, bar, asset versions, core-h)."""
 from __future__ import annotations
 
 import argparse

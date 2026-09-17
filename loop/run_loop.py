@@ -282,7 +282,20 @@ def reflect(enable_fully_auto: bool) -> dict:
             out["fully_auto"] = {"rc": r.returncode, "stdout": (r.stdout or "")[-2000:]}
     audit = PKG / "scripts" / "qa" / "isolation_audit.py"
     if audit.is_file():
-        subprocess.run([CP.PYBIN, str(audit)], cwd=str(PKG), check=False)
+        # Capture: an uncaptured child writes onto this process's stdout, and a caller
+        # parsing our JSON then sees two concatenated documents and reports a failure.
+        r = subprocess.run(
+            [CP.PYBIN, str(audit)], cwd=str(PKG), text=True, capture_output=True, check=False
+        )
+        out["isolation_audit"] = {
+            "rc": r.returncode,
+            "clean": r.returncode == 0,
+            "report": "evidence/audit/ISOLATION_AUDIT.md",
+        }
+        if r.returncode not in (0, 1):
+            log("isolation audit error:", (r.stderr or "")[-300:])
+        elif r.returncode == 1:
+            log("isolation audit: VIOLATIONS — see evidence/audit/ISOLATION_AUDIT.md")
     return out
 
 
@@ -318,8 +331,17 @@ def main():
     a = ap.parse_args()
 
     man = PKG / "scripts" / "qa" / "run_manifest.py"
-    if man.is_file():
-        subprocess.run([CP.PYBIN, str(man), "--event", "loop_start"], cwd=str(PKG), check=False)
+
+    def manifest(event: str):
+        # Captured for the same reason as the isolation audit: an uncaptured child writes
+        # onto this process's stdout and corrupts anything parsing our output.
+        if man.is_file():
+            subprocess.run(
+                [CP.PYBIN, str(man), "--event", event],
+                cwd=str(PKG), text=True, capture_output=True, check=False,
+            )
+
+    manifest("loop_start")
 
     log(
         f"run_loop start rounds={a.rounds} budget_h={a.budget_hours} top={a.top} "
@@ -327,14 +349,19 @@ def main():
     )
 
     if a.dry_run:
-        print(
-            json.dumps(
-                explore(a.template_top, a.llm_top, dry=True, use_llm=not a.no_llm),
-                indent=2,
-                ensure_ascii=False,
-            )
+        ex = explore(a.template_top, a.llm_top, dry=True, use_llm=not a.no_llm)
+        ref = reflect(False)
+        tpl = ex.get("template") or {}
+        log(
+            "dry-run explore:",
+            ex.get("status"),
+            f"frontier={tpl.get('n_frontier')}",
+            f"enumerated={tpl.get('n_enumerated')}",
+            f"kinds={tpl.get('by_kind')}",
+            f"llm={(ex.get('llm') or {}).get('status')}",
         )
-        reflect(False)
+        log("dry-run reflect bundle:", ref.get("bundle"))
+        log("no hypotheses written, no QM launched")
         return 0
 
     idle = 0
@@ -406,8 +433,7 @@ def main():
             log(f"STOP: {idle} idle rounds (no STRICT, no asset revision)")
             break
 
-    if man.is_file():
-        subprocess.run([CP.PYBIN, str(man), "--event", "loop_end"], cwd=str(PKG), check=False)
+    manifest("loop_end")
 
     meta = network_meta()
     final = {

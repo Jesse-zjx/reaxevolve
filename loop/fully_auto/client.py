@@ -16,8 +16,8 @@ import urllib.request
 
 
 
-def _load_genesis_env():
-    """Fall back to reaxevolve/.env for OpenAI-compatible fully_auto calls."""
+def _load_repo_env():
+    """Fall back to the repository .env for OpenAI-compatible Reflect calls."""
     env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), ".env")
     if not os.path.isfile(env_path):
         return
@@ -65,7 +65,7 @@ def _parse_proposal(text: str) -> dict:
 
 
 def propose(bundle: dict, prompt_path: str | None = None) -> dict:
-    _load_genesis_env()
+    _load_repo_env()
     base = os.environ.get("CHEM_FULLY_AUTO_BASE_URL", "").strip()
     key = os.environ.get("CHEM_FULLY_AUTO_API_KEY", "").strip()
     model = os.environ.get("CHEM_FULLY_AUTO_MODEL", "").strip()

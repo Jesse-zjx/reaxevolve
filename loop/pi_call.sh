@@ -2,7 +2,7 @@
 # Unified project-local pi launcher for reaxevolve.
 #
 # Usage:
-#   SKILL_FLAGS="--skill $GEN/.skills/generate-ts-guesses" \
+#   SKILL_FLAGS="--skill $PKG/.skills/generate-ts-guesses" \
 #   TOOL_FLAGS="--tools read,bash,write" \
 #   ./loop/pi_call.sh "your prompt"
 #
@@ -15,13 +15,13 @@
 
 set -euo pipefail
 
-GEN="$(cd "$(dirname "$0")/.." && pwd)"
-ENV_FILE="${GEN}/.env"
-PI_BIN="${GEN}/node_modules/.bin/pi"
+PKG="$(cd "$(dirname "$0")/.." && pwd)"
+ENV_FILE="${PKG}/.env"
+PI_BIN="${PKG}/node_modules/.bin/pi"
 
 if [[ ! -x "$PI_BIN" ]]; then
   echo "error: project-local pi not found at $PI_BIN" >&2
-  echo "run: (cd $GEN && npm install)" >&2
+  echo "run: (cd $PKG && npm install)" >&2
   exit 2
 fi
 
@@ -39,7 +39,7 @@ fi
 : "${API_KEY:?API_KEY required in .env}"
 : "${MODEL_NAME:?MODEL_NAME required in .env}"
 
-export PI_CODING_AGENT_DIR="${GEN}/.agentcfg"
+export PI_CODING_AGENT_DIR="${PKG}/.agentcfg"
 export BASE_URL API_KEY MODEL_NAME
 
 PI_MODE="${PI_MODE:-json}"
@@ -59,12 +59,12 @@ fi
 
 # shellcheck disable=SC2086
 exec "$PI_BIN" -p --mode "$PI_MODE" \
-  --provider genesis --model "$MODEL_NAME" \
+  --provider "${PI_PROVIDER:-reaxevolve}" --model "$MODEL_NAME" \
   --thinking "$THINKING" \
-  -e "${GEN}/.agentcfg/extensions/provider.js" -ne \
+  -e "${PKG}/.agentcfg/extensions/provider.js" -ne \
   --no-skills $SKILL_FLAGS \
   -nc \
-  --session-dir "${GEN}/.agentcfg/sessions" \
+  --session-dir "${PKG}/.agentcfg/sessions" \
   $TOOL_FLAGS \
   $EXTRA_FLAGS \
   "$PROMPT"

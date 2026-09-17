@@ -34,7 +34,13 @@ OUTDIR = f"{RN}/routes"; os.makedirs(OUTDIR, exist_ok=True)
 def C(s):
     m = Chem.MolFromSmiles(s); return Chem.MolToSmiles(m) if m else None
 
-TARGETS = {"HMF": "O=Cc1ccc(CO)o1"}  # genesis: HMF only
+# Human-set targets (policy/targets_and_budget.md). Kept in sync with
+# scripts/graph/build_reaction_network.py::TARGETS.
+TARGETS = {
+    "HMF": "O=Cc1ccc(CO)o1",
+    "HAA": "O=CCO",
+    "FF": "O=Cc1ccco1",
+}
 SEEDS = ["O=CC(O)C(O)C(O)C(O)CO", "OCC1OC(O)C(O)C(O)C1O"]  # open + cyclic glucose
 
 def load():

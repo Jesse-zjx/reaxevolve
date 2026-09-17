@@ -2,7 +2,7 @@
 """Validate one elementary step via pi-driven generate/diagnose rounds + run_qm_step.
 
 Mirrors TSBench run_iterative_skill_loop structure, but launches project-local pi
-and the stripped genesis QM driver (no FUSED / -300/-200 early-outs).
+and the QM driver in tools/workflow/run_qm_step.py.
 
 Usage:
   python loop/skill_runner.py \\
@@ -62,7 +62,7 @@ def _cleanup_scratch(workdir: Path, name: str | None = None) -> int:
                 pass
     return removed
 
-SCHEMA_VERSION = "genesis_ts_search.v0"
+SCHEMA_VERSION = "reaxevolve_ts_search.v1"
 
 
 def run(cmd, cwd=None, env=None, timeout=None):

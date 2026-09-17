@@ -39,10 +39,10 @@ LEAD = ('edge', 'name', 'reactant', 'product', 'coproduct', 'charge', 'status',
 
 
 def _extra_roots():
-    """Extra read-only trees holding records. Empty by default in genesis.
+    """Extra read-only trees holding records. Empty by default.
 
     The upstream campaign shipped defaults under /root/OpenAgentHarness, which agent.md
-    lists as a forbidden path here: genesis must never absorb another run's judgements.
+    lists as a forbidden path here: this repository must never absorb another run's judgements.
     Only an explicit CHEM_EXTRA_STRICT_CACHES (colon-separated) can add roots, and each
     one has to sit inside this package.
     """
