@@ -1,0 +1,46 @@
+# Secrets and local runtime
+.env
+.agentcfg/auth.json
+.agentcfg/sessions/
+.agentcfg/models-store.json
+node_modules/
+
+# QM scratch. A single round leaves hundreds of MB here; the durable outcome of a run is
+# the recorded verdict, not the wavefunctions.
+runs/
+*.gbw
+*.tmp
+**/xtbrestart
+**/xtbtopo.mol
+**/charges
+**/wbo
+*.xtboptok
+
+# Campaign products. Kept out of version control for now; which parts are small and
+# important enough to track is a separate decision.
+deposits/
+graph/canonical/*
+graph/caches/*
+graph/derived/*
+!graph/canonical/.gitkeep
+!graph/caches/.gitkeep
+!graph/derived/.gitkeep
+evidence/**
+!evidence/**/.gitkeep
+evolution/snapshots/*
+!evolution/snapshots/.gitkeep
+
+# Supplementary evaluation lanes: local corpora and run outputs, never vendored.
+# The convention is that each lane keeps a tracked README stating its own criterion.
+tsbench/*
+!tsbench/README.md
+
+# Byte-compiled
+**/__pycache__/
+*.pyc
+
+# Regenerated views
+*.html
+*.png
+!docs/**/*.png
+.DS_Store

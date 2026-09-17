@@ -1,0 +1,27 @@
+{
+  "schema": "reaxevolve-asset-versions.v1",
+  "note": "Initial asset set: the starting capability this campaign was given. Five declarative skills over a geometry toolkit and a QM driver, with no candidate enumerator and no candidate scoring. Explore under this asset set can only propose steps one at a time; there is nothing that expands a frontier or ranks what to spend QM on. This is the left arm of the fixed-asset comparison (preregistration/c2_protocol.md).",
+  "asset_set": "initial",
+  "skills": {
+    "generate-ts-guesses": "v0",
+    "diagnose-ts-failures": "v0",
+    "qm-execution": "v0",
+    "chain-assembly": "v0",
+    "memory-and-reflection": "v0"
+  },
+  "tools": {
+    "geometry/builder.py": "v0",
+    "geometry/inquire.py": "v0",
+    "geometry/map_reaction_atoms.py": "v0",
+    "geometry/parse_orca_output.py": "v0",
+    "geometry/smi_to_xyz.py": "v0",
+    "geometry/xyz_to_smiles.py": "v0",
+    "record_update.py": "v0",
+    "workflow/run_qm_step.py": "v0"
+  },
+  "absent_by_design": [
+    "expand/templates_expand.py",
+    "screen/diversity.py",
+    "guess/*"
+  ]
+}

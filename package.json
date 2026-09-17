@@ -1,0 +1,13 @@
+{
+  "name": "chem-genesis",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Genesis replay workspace: project-local pi driver for evolution observation",
+  "type": "module",
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "0.84.1"
+  }
+}

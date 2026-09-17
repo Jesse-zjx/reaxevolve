@@ -1,0 +1,66 @@
+{
+  "note": "How the initial asset set maps onto the final one. Skills were renamed, merged and split as they took on campaign-specific content, so an asset_id in an early EVOLUTION_LOG entry does not resolve against the current tree without this map. Resolution order: exact key, then `merged_into`, then `new_in_final` (no predecessor).",
+  "skills": {
+    "renamed": {
+      ".skills/qm-execution": ".skills/qm-reaction-validation",
+      ".skills/chain-assembly": ".skills/strict-chain-assembly",
+      ".skills/strict-pathway-validation": ".skills/pathway-method"
+    },
+    "unchanged": [
+      ".skills/memory-and-reflection"
+    ],
+    "merged_into": {
+      ".skills/generate-ts-guesses": [
+        ".skills/ts-validation-strategy",
+        ".skills/pathway-method"
+      ],
+      ".skills/diagnose-ts-failures": [
+        ".skills/ts-validation-strategy",
+        ".skills/strict-edge-criterion"
+      ]
+    },
+    "new_in_final": [
+      ".skills/strict-edge-criterion"
+    ]
+  },
+  "tools": {
+    "new_in_final": [
+      "tools/expand/templates_expand.py",
+      "tools/screen/diversity.py",
+      "tools/guess/ladder.py",
+      "tools/guess/auto_guess.py",
+      "tools/guess/constrained_scan_guess.py",
+      "tools/guess/dry_proton_guess.py",
+      "tools/guess/water_relay_guess.py",
+      "tools/guess/neb_guess.py",
+      "tools/guess/scan2d.py",
+      "tools/guess/scan2d_guess.py",
+      "tools/guess/proton_scan.py",
+      "tools/workflow/orca_xtb_workflow.py",
+      "tools/workflow/validate_candidate.py",
+      "tools/workflow/soft_mode_cleanup.py",
+      "tools/workflow/prepare_step.py",
+      "tools/workflow/auto_validate_driver.py"
+    ],
+    "unchanged": [
+      "tools/geometry/builder.py",
+      "tools/geometry/inquire.py",
+      "tools/geometry/map_reaction_atoms.py",
+      "tools/geometry/parse_orca_output.py",
+      "tools/geometry/smi_to_xyz.py",
+      "tools/geometry/xyz_to_smiles.py",
+      "tools/record_update.py",
+      "tools/workflow/run_qm_step.py"
+    ]
+  },
+  "layout": {
+    "note": "Directory moves that are not asset changes; kept so old paths in archived records resolve.",
+    "tools/qm-workspace/resources": "tools/guess and tools/workflow",
+    "tools/reaction_network": "scripts/graph, scripts/viz and tools/expand",
+    "tools/qm-workspace/validation": "runs/validation",
+    "graph/reaction_network.json": "graph/canonical/reaction_network.json",
+    "graph/strict_caches": "graph/caches/strict_caches",
+    "evidence/experience": "evidence/memory/experience",
+    ".skills/strict-pathway-validation/scripts/check_strict_bar.py": "policy/acceptance/check_strict_bar.py"
+  }
+}
