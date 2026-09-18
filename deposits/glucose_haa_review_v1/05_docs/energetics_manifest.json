@@ -1,0 +1,140 @@
+{
+  "level": "r2SCAN-3c/CPCM(water)",
+  "route": "glucose -> HAA (branching retro-aldol)",
+  "nodes": [
+    {
+      "idx": 0,
+      "name": "node_0_open_glucose",
+      "smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "E_Eh": -687.104159289544,
+      "formula": "C6H12O6",
+      "xyz": "node_0_open_glucose.xyz"
+    },
+    {
+      "idx": 1,
+      "name": "node_1_open_fructose",
+      "smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "E_Eh": -687.109971116116,
+      "formula": "C6H12O6",
+      "xyz": "node_1_open_fructose.xyz"
+    },
+    {
+      "idx": 2,
+      "name": "node_2_glyceraldehyde",
+      "smiles": "O=CC(O)CO",
+      "E_Eh": -343.538711654795,
+      "formula": "C3H6O3",
+      "xyz": "node_2_glyceraldehyde.xyz"
+    },
+    {
+      "idx": 3,
+      "name": "node_3_glycolaldehyde_enol",
+      "smiles": "OC=CO",
+      "E_Eh": -229.008736034478,
+      "formula": "C2H4O2",
+      "xyz": "node_3_glycolaldehyde_enol.xyz"
+    },
+    {
+      "idx": 4,
+      "name": "node_4_HAA_glycolaldehyde",
+      "smiles": "O=CCO",
+      "E_Eh": -229.016083452342,
+      "formula": "C2H4O2",
+      "xyz": "node_4_HAA_glycolaldehyde.xyz"
+    }
+  ],
+  "coproducts": [
+    {
+      "name": "coproduct_DHA_enol",
+      "smiles": "OC=C(O)CO",
+      "E_Eh": -343.525223610778,
+      "formula": "C3H6O3",
+      "xyz": "coproduct_DHA_enol.xyz"
+    },
+    {
+      "name": "coproduct_formaldehyde",
+      "smiles": "C=O",
+      "E_Eh": -114.48611371493,
+      "formula": "CH2O",
+      "xyz": "coproduct_formaldehyde.xyz"
+    },
+    {
+      "name": "water",
+      "smiles": "O",
+      "E_Eh": -76.428653689818,
+      "formula": "H2O",
+      "xyz": "water.xyz"
+    }
+  ],
+  "water_Eh": -76.428653689818,
+  "steps": [
+    {
+      "step": "step_1",
+      "title": "Aldose-ketose isomerization (glucose -> fructose)",
+      "kind": "isomerization",
+      "ts_xyz": "step_1_isomerization_TS.xyz",
+      "imag_cm": [
+        -474.1
+      ],
+      "E_TS_Eh": -687.046941822108,
+      "reactant_node": 0,
+      "product_node": 1,
+      "coproduct": null,
+      "spectator": null,
+      "barrier_fwd_kcal": 35.9,
+      "dE_rxn_kcal": -3.6,
+      "ts_cleanup_note": null
+    },
+    {
+      "step": "step_2",
+      "title": "C6 retro-aldol (fructose -> glyceraldehyde + DHA-enol)",
+      "kind": "retro-aldol (C-C cleavage)",
+      "ts_xyz": "step_2_retroaldol_C6_TS.xyz",
+      "imag_cm": [
+        -758.1
+      ],
+      "E_TS_Eh": -687.052843649293,
+      "reactant_node": 1,
+      "product_node": 2,
+      "coproduct": "DHA_enol",
+      "spectator": null,
+      "barrier_fwd_kcal": 35.1,
+      "dE_rxn_kcal": 29.8,
+      "ts_cleanup_note": "DEFGRID3 re-opt removed a -13.5 cm-1 grid-noise soft mode -> single imaginary -758.1"
+    },
+    {
+      "step": "step_3",
+      "title": "C3 retro-aldol (glyceraldehyde -> glycolaldehyde-enol + formaldehyde)",
+      "kind": "retro-aldol (C-C cleavage)",
+      "ts_xyz": "step_3_retroaldol_C3_TS.xyz",
+      "imag_cm": [
+        -942.1
+      ],
+      "E_TS_Eh": -343.488494630077,
+      "reactant_node": 2,
+      "product_node": 3,
+      "coproduct": "formaldehyde",
+      "spectator": null,
+      "barrier_fwd_kcal": 31.5,
+      "dE_rxn_kcal": 27.5,
+      "ts_cleanup_note": null
+    },
+    {
+      "step": "step_4",
+      "title": "Water-catalysed enol->keto tautomerization (-> HAA)",
+      "kind": "tautomerization (water relay)",
+      "ts_xyz": "step_4_watercat_tautomerization_TS.xyz",
+      "imag_cm": [
+        -920.1
+      ],
+      "E_TS_Eh": -305.38889928835,
+      "reactant_node": 3,
+      "product_node": 4,
+      "coproduct": null,
+      "spectator": "H2O (catalytic relay)",
+      "barrier_fwd_kcal": 30.4,
+      "dE_rxn_kcal": -4.6,
+      "ts_cleanup_note": null
+    }
+  ]
+}

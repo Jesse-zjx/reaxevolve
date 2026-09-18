@@ -1,0 +1,43 @@
+{
+  "level": "r2SCAN-3c/CPCM(water), DEFGRID3",
+  "imaginary_modes": {
+    "step1": [
+      -434.65
+    ],
+    "step2": [
+      -2042.51
+    ],
+    "step3": [
+      -2032.48
+    ],
+    "step4": [
+      -932.28
+    ],
+    "step5": [
+      -1629.95
+    ],
+    "step6": [
+      -540.8
+    ]
+  },
+  "all_single_imaginary": true,
+  "irc_double_end_exact": true,
+  "cross_step_SMILES_consistent": true,
+  "termini": {
+    "start": "O=CC(O)C(O)C(O)C(O)CO",
+    "end": "O=CCO"
+  },
+  "new_vs_reused": {
+    "reused_from_glucose_ff_review_v1": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "new_in_this_package": [
+      6
+    ]
+  },
+  "step6_check_strict_bar": "PASS (reactant xylulose; product HAA.DHA-enol; DEFGRID3; imag -540.8)"
+}

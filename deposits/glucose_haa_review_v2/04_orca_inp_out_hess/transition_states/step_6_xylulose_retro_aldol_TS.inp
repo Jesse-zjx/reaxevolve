@@ -1,0 +1,5 @@
+! r2SCAN-3c OptTS NumFreq VeryTightSCF DEFGRID3 CPCM(water)
+%geom Calc_Hess true Recalc_Hess 3 MaxIter 200 end
+%maxcore 4000
+%pal nprocs 10 end
+* xyzfile 0 1 guess.xyz *

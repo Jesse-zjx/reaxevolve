@@ -1,0 +1,1 @@
+Assembled by scripts in chem-discovery session 2026-08-04 from glucose_ff_review_v1 steps 1-5 + tools/reaction_network/r2_xlu_cleanp.

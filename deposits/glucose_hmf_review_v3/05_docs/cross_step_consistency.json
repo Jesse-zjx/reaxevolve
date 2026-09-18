@@ -1,0 +1,55 @@
+{
+  "shared_nodes": {
+    "node1": {
+      "expected": "O=CC(O)=CC(O)C(O)CO",
+      "producer": "step1_dh1g.IRC_B",
+      "producer_smiles": "O=CC(O)=CC(O)C(O)CO",
+      "consumer": "step2_taut3.IRC_F",
+      "consumer_smiles": "O=CC(O)=CC(O)C(O)CO",
+      "dE_prod_minus_reac_kcal": -5.72,
+      "consistent": false
+    },
+    "node2": {
+      "expected": "O=CC(=O)CC(O)C(O)CO",
+      "producer": "step2_taut3.IRC_B",
+      "producer_smiles": "O=CC(=O)CC(O)C(O)CO",
+      "consumer": "step3_dh2.IRC_B",
+      "consumer_smiles": "O=CC(=O)CC(O)C(O)CO",
+      "dE_prod_minus_reac_kcal": -0.024,
+      "consistent": true
+    },
+    "node3": {
+      "expected": "O=CC(=O)C=CC(O)CO",
+      "producer": "step3_dh2.IRC_F",
+      "producer_smiles": "O=CC(=O)C=CC(O)CO",
+      "consumer": "step4clean.IRC_B",
+      "consumer_smiles": "O=CC(=O)C=CC(O)CO",
+      "dE_prod_minus_reac_kcal": -1.818,
+      "consistent": false
+    },
+    "node4": {
+      "expected": "O=CC1(O)C=CC(CO)O1",
+      "producer": "step4clean.IRC_F",
+      "producer_smiles": "O=CC1(O)C=CC(CO)O1",
+      "consumer": "step5_hmfarom.IRC_B",
+      "consumer_smiles": "O=CC1(O)C=CC(CO)O1",
+      "dE_prod_minus_reac_kcal": -0.321,
+      "consistent": true
+    }
+  },
+  "termini": {
+    "node0_glucose": {
+      "expected": "O=CC(O)C(O)C(O)C(O)CO",
+      "smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "E_Eh": -687.10277583462,
+      "ok": true
+    },
+    "node5_HMF": {
+      "expected": "O=Cc1ccc(CO)o1",
+      "smiles": "O=Cc1ccc(CO)o1",
+      "E_Eh": -457.8240875836,
+      "ok": true
+    }
+  },
+  "all_consistent": false
+}

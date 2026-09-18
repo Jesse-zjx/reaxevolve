@@ -1,0 +1,5 @@
+! r2SCAN-3c OptTS NumFreq TightSCF DEFGRID3 CPCM(water)
+%geom Calc_Hess true Recalc_Hess 5 TS_Active_Atoms {6 7 8 10 11 23} end TS_Active_Atoms_Factor 1.5 MaxIter 150 end
+%maxcore 4000
+%pal nprocs 8 end
+* xyzfile 0 1 guess.xyz *

@@ -1,0 +1,170 @@
+{
+  "level": "r2SCAN-3c/CPCM(water), DEFGRID3",
+  "route": "glucose -> HAA via FF backbone + xylulose retro-aldol (HAA_R2)",
+  "route_id": "HAA_R2",
+  "note": "Steps 1\u20135 are identical to glucose_ff_review_v1 steps 1\u20135 (already expert-validated). Step 6 is the new branch: D-xylulose cleaves to HAA + DHA-enol. This is a second, independent glucose\u2192HAA route from the deposit HAA_R1.",
+  "nodes": [
+    {
+      "idx": 0,
+      "name": "node_0_open_glucose",
+      "smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "canonical_smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "E_Eh": -687.102179385788,
+      "xyz": "node_0_open_glucose.xyz"
+    },
+    {
+      "idx": 1,
+      "name": "node_1_open_fructose",
+      "smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "canonical_smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "E_Eh": -687.105488528014,
+      "xyz": "node_1_open_fructose.xyz"
+    },
+    {
+      "idx": 2,
+      "name": "node_2_fructose_23enediol",
+      "smiles": "OCC(O)=C(O)C(O)C(O)CO",
+      "canonical_smiles": "OCC(O)=C(O)C(O)C(O)CO",
+      "E_Eh": -687.098987261543,
+      "xyz": "node_2_fructose_23enediol.xyz"
+    },
+    {
+      "idx": 3,
+      "name": "node_3_3ketohexose",
+      "smiles": "O=C(C(O)CO)C(O)C(O)CO",
+      "canonical_smiles": "O=C(C(O)CO)C(O)C(O)CO",
+      "E_Eh": -687.104644921864,
+      "xyz": "node_3_3ketohexose.xyz"
+    },
+    {
+      "idx": 4,
+      "name": "node_4_C5_enediol",
+      "smiles": "OC=C(O)C(O)C(O)CO",
+      "canonical_smiles": "OC=C(O)C(O)C(O)CO",
+      "E_Eh": -572.572721607293,
+      "xyz": "node_4_C5_enediol.xyz"
+    },
+    {
+      "idx": 5,
+      "name": "node_5_xylulose",
+      "smiles": "O=C(CO)C(O)C(O)CO",
+      "canonical_smiles": "O=C(CO)C(O)C(O)CO",
+      "E_Eh": -572.585354053528,
+      "xyz": "node_5_xylulose.xyz"
+    },
+    {
+      "idx": 6,
+      "name": "node_6_HAA",
+      "smiles": "O=CCO",
+      "canonical_smiles": "O=CCO",
+      "E_Eh": -229.016083452342,
+      "xyz": "node_6_HAA.xyz"
+    }
+  ],
+  "coproducts": [
+    {
+      "name": "DHA_enol",
+      "smiles": "OC=C(O)CO",
+      "E_Eh": -343.525223610778,
+      "xyz": "coproduct_DHA_enol.xyz",
+      "produced_at_step": 6,
+      "note": "Co-product of step 6 (xylulose retro-aldol). Geometry reused from glucose_haa_review_v1."
+    },
+    {
+      "name": "formaldehyde",
+      "smiles": "C=O",
+      "E_Eh": -114.48615417309,
+      "xyz": null,
+      "produced_at_step": 4,
+      "note": "Co-product of step 4 (C6\u2192C5 retro-aldol). Geometry/energy from glucose_ff_review_v1."
+    }
+  ],
+  "water_Eh": -76.428657474072,
+  "formaldehyde_Eh": -114.48615417309,
+  "steps": [
+    {
+      "step": "step_1_isomerization",
+      "kind": "aldose-ketose isomerization",
+      "ts_xyz": "step_1_isomerization_TS.xyz",
+      "imag_cm-1": -434.65,
+      "E_TS_Eh": -687.047194775048,
+      "reactant_node": 0,
+      "product_node": 1,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 34.5,
+      "dE_rxn_kcal": -2.1,
+      "provenance": "reused from glucose_ff_review_v1 (expert-validated)"
+    },
+    {
+      "step": "step_2_enolization",
+      "kind": "keto-enol enolization",
+      "ts_xyz": "step_2_enolization_TS.xyz",
+      "imag_cm-1": -2042.51,
+      "E_TS_Eh": -687.005494471402,
+      "reactant_node": 1,
+      "product_node": 2,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 62.7,
+      "dE_rxn_kcal": 4.1,
+      "provenance": "reused from glucose_ff_review_v1 (expert-validated)"
+    },
+    {
+      "step": "step_3_ketonization",
+      "kind": "enol-keto ketonization",
+      "ts_xyz": "step_3_ketonization_TS.xyz",
+      "imag_cm-1": -2032.48,
+      "E_TS_Eh": -687.001790808949,
+      "reactant_node": 2,
+      "product_node": 3,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 61.0,
+      "dE_rxn_kcal": -3.6,
+      "provenance": "reused from glucose_ff_review_v1 (expert-validated)"
+    },
+    {
+      "step": "step_4_retro_aldol",
+      "kind": "retro-aldol C-C cleavage",
+      "ts_xyz": "step_4_retro_aldol_TS.xyz",
+      "imag_cm-1": -932.28,
+      "E_TS_Eh": -687.057138159169,
+      "reactant_node": 3,
+      "product_node": 4,
+      "coproduct": "C=O",
+      "spectator_water": null,
+      "barrier_fwd_kcal": 29.8,
+      "dE_rxn_kcal": 28.7,
+      "provenance": "reused from glucose_ff_review_v1 (expert-validated)"
+    },
+    {
+      "step": "step_5_ketonization",
+      "kind": "enediol->ketose (dry)",
+      "ts_xyz": "step_5_ketonization_TS.xyz",
+      "imag_cm-1": -1629.95,
+      "E_TS_Eh": -572.481458624697,
+      "reactant_node": 4,
+      "product_node": 5,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 57.3,
+      "dE_rxn_kcal": -7.9,
+      "provenance": "reused from glucose_ff_review_v1 (expert-validated)"
+    },
+    {
+      "step": "step_6_xylulose_retro_aldol",
+      "kind": "retro-aldol C\u2013C cleavage (xylulose \u2192 HAA + DHA-enol)",
+      "ts_xyz": "step_6_xylulose_retro_aldol_TS.xyz",
+      "imag_cm-1": -540.8,
+      "E_TS_Eh": -572.536667153495,
+      "reactant_node": 5,
+      "product_node": 6,
+      "coproduct": "OC=C(O)CO",
+      "spectator_water": null,
+      "barrier_fwd_kcal": 30.6,
+      "dE_rxn_kcal": 27.6,
+      "provenance": "tools/reaction_network/r2_xlu_cleanp (2026-07-19)"
+    }
+  ]
+}

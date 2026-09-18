@@ -1,0 +1,248 @@
+{
+  "level": "r2SCAN-3c/CPCM(water), DEFGRID3",
+  "nodes": [
+    {
+      "idx": 0,
+      "name": "node_0_open_glucose",
+      "smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "canonical_smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "E_Eh": -687.102179385788,
+      "xyz": "node_0_open_glucose.xyz"
+    },
+    {
+      "idx": 1,
+      "name": "node_1_open_fructose",
+      "smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "canonical_smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "E_Eh": -687.105488528014,
+      "xyz": "node_1_open_fructose.xyz"
+    },
+    {
+      "idx": 2,
+      "name": "node_2_fructose_23enediol",
+      "smiles": "OCC(O)=C(O)C(O)C(O)CO",
+      "canonical_smiles": "OCC(O)=C(O)C(O)C(O)CO",
+      "E_Eh": -687.098987261543,
+      "xyz": "node_2_fructose_23enediol.xyz"
+    },
+    {
+      "idx": 3,
+      "name": "node_3_3ketohexose",
+      "smiles": "O=C(C(O)CO)C(O)C(O)CO",
+      "canonical_smiles": "O=C(C(O)CO)C(O)C(O)CO",
+      "E_Eh": -687.104644921864,
+      "xyz": "node_3_3ketohexose.xyz"
+    },
+    {
+      "idx": 4,
+      "name": "node_4_C5_enediol",
+      "smiles": "OC=C(O)C(O)C(O)CO",
+      "canonical_smiles": "OC=C(O)C(O)C(O)CO",
+      "E_Eh": -572.572721607293,
+      "xyz": "node_4_C5_enediol.xyz"
+    },
+    {
+      "idx": 5,
+      "name": "node_5_xylulose",
+      "smiles": "O=C(CO)C(O)C(O)CO",
+      "canonical_smiles": "O=C(CO)C(O)C(O)CO",
+      "E_Eh": -572.585354053528,
+      "xyz": "node_5_xylulose.xyz"
+    },
+    {
+      "idx": 6,
+      "name": "node_6_open_xylose",
+      "smiles": "O=CC(O)C(O)C(O)CO",
+      "canonical_smiles": "O=CC(O)C(O)C(O)CO",
+      "E_Eh": -572.580737237812,
+      "xyz": "node_6_open_xylose.xyz"
+    },
+    {
+      "idx": 7,
+      "name": "node_7_xylo_3deoxy_enol",
+      "smiles": "O=CC(O)=CC(O)CO",
+      "canonical_smiles": "O=CC(O)=CC(O)CO",
+      "E_Eh": -496.151611344893,
+      "xyz": "node_7_xylo_3deoxy_enol.xyz"
+    },
+    {
+      "idx": 8,
+      "name": "node_8_3deoxyxylosone",
+      "smiles": "O=CC(=O)CC(O)CO",
+      "canonical_smiles": "O=CC(=O)CC(O)CO",
+      "E_Eh": -496.147418203738,
+      "xyz": "node_8_3deoxyxylosone.xyz"
+    },
+    {
+      "idx": 9,
+      "name": "node_9_xylo_dicarbonyl_ene",
+      "smiles": "O=CC(=O)C=CCO",
+      "canonical_smiles": "O=CC(=O)C=CCO",
+      "E_Eh": -419.702653539398,
+      "xyz": "node_9_xylo_dicarbonyl_ene.xyz"
+    },
+    {
+      "idx": 10,
+      "name": "node_10_furanic_hemiketal",
+      "smiles": "O=CC1(O)C=CCO1",
+      "canonical_smiles": "O=CC1(O)C=CCO1",
+      "E_Eh": -419.712226404613,
+      "xyz": "node_10_furanic_hemiketal.xyz"
+    },
+    {
+      "idx": 11,
+      "name": "node_11_furfural",
+      "smiles": "O=Cc1ccco1",
+      "canonical_smiles": "O=Cc1ccco1",
+      "E_Eh": -343.301624750164,
+      "xyz": "node_11_furfural.xyz"
+    }
+  ],
+  "water_Eh": -76.428657474072,
+  "formaldehyde_Eh": -114.48615417309,
+  "steps": [
+    {
+      "step": "step_1_isomerization",
+      "kind": "aldose-ketose isomerization",
+      "ts_xyz": "step_1_isomerization_TS.xyz",
+      "imag_cm-1": -434.65,
+      "E_TS_Eh": -687.047194775048,
+      "reactant_node": 0,
+      "product_node": 1,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 34.5,
+      "dE_rxn_kcal": -2.1
+    },
+    {
+      "step": "step_2_enolization",
+      "kind": "keto-enol enolization",
+      "ts_xyz": "step_2_enolization_TS.xyz",
+      "imag_cm-1": -2042.51,
+      "E_TS_Eh": -687.005494471402,
+      "reactant_node": 1,
+      "product_node": 2,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 62.7,
+      "dE_rxn_kcal": 4.1
+    },
+    {
+      "step": "step_3_ketonization",
+      "kind": "enol-keto ketonization",
+      "ts_xyz": "step_3_ketonization_TS.xyz",
+      "imag_cm-1": -2032.48,
+      "E_TS_Eh": -687.001790808949,
+      "reactant_node": 2,
+      "product_node": 3,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 61.0,
+      "dE_rxn_kcal": -3.6
+    },
+    {
+      "step": "step_4_retro_aldol",
+      "kind": "retro-aldol C-C cleavage",
+      "ts_xyz": "step_4_retro_aldol_TS.xyz",
+      "imag_cm-1": -932.28,
+      "E_TS_Eh": -687.057138159169,
+      "reactant_node": 3,
+      "product_node": 4,
+      "coproduct": "C=O",
+      "spectator_water": null,
+      "barrier_fwd_kcal": 29.8,
+      "dE_rxn_kcal": 28.7
+    },
+    {
+      "step": "step_5_ketonization",
+      "kind": "enediol->ketose (dry)",
+      "ts_xyz": "step_5_ketonization_TS.xyz",
+      "imag_cm-1": -1629.95,
+      "E_TS_Eh": -572.481458624697,
+      "reactant_node": 4,
+      "product_node": 5,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 57.3,
+      "dE_rxn_kcal": -7.9
+    },
+    {
+      "step": "step_6_isomerization",
+      "kind": "ketose-aldose isomerization",
+      "ts_xyz": "step_6_isomerization_TS.xyz",
+      "imag_cm-1": -766.5,
+      "E_TS_Eh": -572.523947762142,
+      "reactant_node": 5,
+      "product_node": 6,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 38.5,
+      "dE_rxn_kcal": 2.9
+    },
+    {
+      "step": "step_7_dehydration",
+      "kind": "dehydration",
+      "ts_xyz": "step_7_dehydration_TS.xyz",
+      "imag_cm-1": -1459.81,
+      "E_TS_Eh": -572.503730422597,
+      "reactant_node": 6,
+      "product_node": 7,
+      "coproduct": "O",
+      "spectator_water": null,
+      "barrier_fwd_kcal": 48.3,
+      "dE_rxn_kcal": 0.3
+    },
+    {
+      "step": "step_8_tautomerization",
+      "kind": "keto-enol tautomerization",
+      "ts_xyz": "step_8_tautomerization_TS.xyz",
+      "imag_cm-1": -2137.83,
+      "E_TS_Eh": -496.043513591521,
+      "reactant_node": 7,
+      "product_node": 8,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 67.8,
+      "dE_rxn_kcal": 2.6
+    },
+    {
+      "step": "step_9_dehydration",
+      "kind": "dehydration",
+      "ts_xyz": "step_9_dehydration_TS.xyz",
+      "imag_cm-1": -1541.14,
+      "E_TS_Eh": -496.078213237805,
+      "reactant_node": 8,
+      "product_node": 9,
+      "coproduct": "O",
+      "spectator_water": null,
+      "barrier_fwd_kcal": 43.4,
+      "dE_rxn_kcal": 10.1
+    },
+    {
+      "step": "step_10_ring_closure",
+      "kind": "ring closure (hemiketal)",
+      "ts_xyz": "step_10_ring_closure_TS.xyz",
+      "imag_cm-1": -1621.48,
+      "E_TS_Eh": -419.64480471799,
+      "reactant_node": 9,
+      "product_node": 10,
+      "coproduct": null,
+      "spectator_water": null,
+      "barrier_fwd_kcal": 36.3,
+      "dE_rxn_kcal": -6.0
+    },
+    {
+      "step": "step_11_aromatization",
+      "kind": "aromatizing dehydration",
+      "ts_xyz": "step_11_aromatization_TS.xyz",
+      "imag_cm-1": -872.91,
+      "E_TS_Eh": -419.632624785757,
+      "reactant_node": 10,
+      "product_node": 11,
+      "coproduct": "O",
+      "spectator_water": null,
+      "barrier_fwd_kcal": 50.0,
+      "dE_rxn_kcal": -11.3
+    }
+  ]
+}

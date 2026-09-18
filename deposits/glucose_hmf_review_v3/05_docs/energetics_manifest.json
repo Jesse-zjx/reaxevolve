@@ -1,0 +1,118 @@
+{
+  "level": "r2SCAN-3c/CPCM(water)",
+  "nodes": [
+    {
+      "idx": 0,
+      "name": "node_0_glucose",
+      "expected_smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "optimized_smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "smiles_ok": true,
+      "E_Eh": -687.10277583462,
+      "xyz": "node_0_glucose.xyz"
+    },
+    {
+      "idx": 1,
+      "name": "node_1",
+      "expected_smiles": "O=CC(O)=CC(O)C(O)CO",
+      "optimized_smiles": "O=CC(O)=CC(O)C(O)CO",
+      "smiles_ok": true,
+      "E_Eh": -610.662164235004,
+      "xyz": "node_1.xyz"
+    },
+    {
+      "idx": 2,
+      "name": "node_2",
+      "expected_smiles": "O=CC(=O)CC(O)C(O)CO",
+      "optimized_smiles": "O=CC(=O)CC(O)C(O)CO",
+      "smiles_ok": true,
+      "E_Eh": -610.671155429734,
+      "xyz": "node_2.xyz"
+    },
+    {
+      "idx": 3,
+      "name": "node_3_I",
+      "expected_smiles": "O=CC(=O)C=CC(O)CO",
+      "optimized_smiles": "O=CC(=O)C=CC(O)CO",
+      "smiles_ok": true,
+      "E_Eh": -534.224013659685,
+      "xyz": "node_3_I.xyz"
+    },
+    {
+      "idx": 4,
+      "name": "node_4_M",
+      "expected_smiles": "O=CC1(O)C=CC(CO)O1",
+      "optimized_smiles": "O=CC1(O)C=CC(CO)O1",
+      "smiles_ok": true,
+      "E_Eh": -534.235628086809,
+      "xyz": "node_4_M.xyz"
+    },
+    {
+      "idx": 5,
+      "name": "node_5_HMF",
+      "expected_smiles": "O=Cc1ccc(CO)o1",
+      "optimized_smiles": "O=Cc1ccc(CO)o1",
+      "smiles_ok": true,
+      "E_Eh": -457.8240875836,
+      "xyz": "node_5_HMF.xyz"
+    }
+  ],
+  "water_Eh": -76.428654148893,
+  "steps": [
+    {
+      "step": "step_1_dehydration",
+      "ts_xyz": "step_1_dehydration_TS.xyz",
+      "imag_cm-1": -1410.08,
+      "E_TS_Eh": -687.022846144443,
+      "reactant_node": 0,
+      "product_node": 1,
+      "coproduct": "O",
+      "barrier_fwd_kcal": 50.2,
+      "dE_rxn_kcal": 7.5
+    },
+    {
+      "step": "step_2_tautomerization",
+      "ts_xyz": "step_2_tautomerization_TS.xyz",
+      "imag_cm-1": -1449.78,
+      "E_TS_Eh": -610.553485099621,
+      "reactant_node": 1,
+      "product_node": 2,
+      "coproduct": null,
+      "barrier_fwd_kcal": 68.2,
+      "dE_rxn_kcal": -5.6
+    },
+    {
+      "step": "step_3_dehydration",
+      "ts_xyz": "step_3_dehydration_TS.xyz",
+      "imag_cm-1": -1532.96,
+      "E_TS_Eh": -610.596948913376,
+      "reactant_node": 2,
+      "product_node": 3,
+      "coproduct": "O",
+      "barrier_fwd_kcal": 46.6,
+      "dE_rxn_kcal": 11.6
+    },
+    {
+      "step": "step_4_ringclose",
+      "ts_xyz": "step_4_ringclose_TS.xyz",
+      "imag_cm-1": -1574.5,
+      "E_TS_Eh": -534.17165178838,
+      "reactant_node": 3,
+      "product_node": 4,
+      "coproduct": null,
+      "barrier_fwd_kcal": 32.9,
+      "dE_rxn_kcal": -7.3,
+      "ts_cleanup_note": "soft -34.9 cm-1 mode removed by displacement+reopt; single imaginary -1574.5"
+    },
+    {
+      "step": "step_5_aromatization",
+      "ts_xyz": "step_5_aromatization_TS.xyz",
+      "imag_cm-1": -830.39,
+      "E_TS_Eh": -534.154231111283,
+      "reactant_node": 4,
+      "product_node": 5,
+      "coproduct": "O",
+      "barrier_fwd_kcal": 51.1,
+      "dE_rxn_kcal": -10.7
+    }
+  ]
+}

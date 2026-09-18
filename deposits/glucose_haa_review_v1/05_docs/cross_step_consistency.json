@@ -1,0 +1,38 @@
+{
+  "shared_nodes": {
+    "fructose": {
+      "expected": "O=C(CO)C(O)C(O)C(O)CO",
+      "producer": "step1.IRC_F",
+      "consumer": "step2.IRC_B",
+      "producer_smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "consumer_smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "dE_prod_minus_reac_kcal": -0.733,
+      "same_species": true,
+      "note": "same canonical SMILES; conformer-only difference"
+    },
+    "glyceraldehyde": {
+      "expected": "O=CC(O)CO",
+      "producer": "step2.IRC_F",
+      "consumer": "step3.IRC_B",
+      "producer_smiles": "O=CC(O)CO",
+      "consumer_smiles": "O=CC(O)CO",
+      "dE_prod_minus_reac_kcal": 1.617,
+      "same_species": true,
+      "note": "same canonical SMILES; conformer-only difference"
+    },
+    "glycolaldehyde_enol": {
+      "expected": "OC=CO",
+      "producer": "step3.IRC_F",
+      "consumer": "step4.IRC_F",
+      "producer_smiles": "OC=CO",
+      "consumer_smiles": "OC=CO",
+      "dE_prod_minus_reac_kcal": -0.006,
+      "same_species": true,
+      "note": "same minimum"
+    }
+  },
+  "termini": {
+    "reactant": "open-chain D-glucose (O=CC(O)C(O)C(O)C(O)CO)",
+    "product": "HAA / glycolaldehyde (O=CCO)"
+  }
+}

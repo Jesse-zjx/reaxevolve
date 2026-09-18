@@ -1,0 +1,14 @@
+! r2SCAN-3c OptTS NumFreq VeryTightSCF DEFGRID3 CPCM(water)
+%geom
+  Calc_Hess true
+  Recalc_Hess 3
+  TolE 5e-7
+  TolRMSG 1e-5
+  TolMaxG 3e-5
+  TolRMSD 2e-4
+  TolMaxD 4e-4
+  MaxIter 200
+end
+%maxcore 4000
+%pal nprocs 8 end
+* xyzfile 0 1 g.xyz *

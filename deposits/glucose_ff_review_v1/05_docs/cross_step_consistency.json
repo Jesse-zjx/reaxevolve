@@ -1,0 +1,129 @@
+{
+  "level": "r2SCAN-3c/CPCM(water), DEFGRID3",
+  "shared_nodes": {
+    "node1": {
+      "expected_smiles": "O=C(CO)C(O)C(O)C(O)CO",
+      "name": "node_1_open_fructose",
+      "producer": "step_1",
+      "producer_endpoint": "step_1_IRC_F.xyz",
+      "consumer": "step_2",
+      "consumer_endpoint": "step_2_IRC_F.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node2": {
+      "expected_smiles": "OCC(O)=C(O)C(O)C(O)CO",
+      "name": "node_2_fructose_23enediol",
+      "producer": "step_2",
+      "producer_endpoint": "step_2_IRC_B.xyz",
+      "consumer": "step_3",
+      "consumer_endpoint": "step_3_IRC_B.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node3": {
+      "expected_smiles": "O=C(C(O)CO)C(O)C(O)CO",
+      "name": "node_3_3ketohexose",
+      "producer": "step_3",
+      "producer_endpoint": "step_3_IRC_F.xyz",
+      "consumer": "step_4",
+      "consumer_endpoint": "step_4_IRC_F.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node4": {
+      "expected_smiles": "OC=C(O)C(O)C(O)CO",
+      "name": "node_4_C5_enediol",
+      "producer": "step_4",
+      "producer_endpoint": "step_4_IRC_B.xyz",
+      "consumer": "step_5",
+      "consumer_endpoint": "step_5_IRC_F.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node5": {
+      "expected_smiles": "O=C(CO)C(O)C(O)CO",
+      "name": "node_5_xylulose",
+      "producer": "step_5",
+      "producer_endpoint": "step_5_IRC_B.xyz",
+      "consumer": "step_6",
+      "consumer_endpoint": "step_6_IRC_F.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node6": {
+      "expected_smiles": "O=CC(O)C(O)C(O)CO",
+      "name": "node_6_open_xylose",
+      "producer": "step_6",
+      "producer_endpoint": "step_6_IRC_B.xyz",
+      "consumer": "step_7",
+      "consumer_endpoint": "step_7_IRC_B.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node7": {
+      "expected_smiles": "O=CC(O)=CC(O)CO",
+      "name": "node_7_xylo_3deoxy_enol",
+      "producer": "step_7",
+      "producer_endpoint": "step_7_IRC_F.xyz",
+      "consumer": "step_8",
+      "consumer_endpoint": "step_8_IRC_B.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node8": {
+      "expected_smiles": "O=CC(=O)CC(O)CO",
+      "name": "node_8_3deoxyxylosone",
+      "producer": "step_8",
+      "producer_endpoint": "step_8_IRC_F.xyz",
+      "consumer": "step_9",
+      "consumer_endpoint": "step_9_IRC_B.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node9": {
+      "expected_smiles": "O=CC(=O)C=CCO",
+      "name": "node_9_xylo_dicarbonyl_ene",
+      "producer": "step_9",
+      "producer_endpoint": "step_9_IRC_F.xyz",
+      "consumer": "step_10",
+      "consumer_endpoint": "step_10_IRC_F.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    },
+    "node10": {
+      "expected_smiles": "O=CC1(O)C=CCO1",
+      "name": "node_10_furanic_hemiketal",
+      "producer": "step_10",
+      "producer_endpoint": "step_10_IRC_B.xyz",
+      "consumer": "step_11",
+      "consumer_endpoint": "step_11_IRC_F.xyz",
+      "producer_matches": true,
+      "consumer_matches": true,
+      "consistent": true
+    }
+  },
+  "termini": {
+    "node0_glucose": {
+      "expected": "O=CC(O)C(O)C(O)C(O)CO",
+      "E_Eh": -687.102179385788,
+      "ok": true
+    },
+    "node10_furfural": {
+      "expected": "O=CC1(O)C=CCO1",
+      "E_Eh": -419.712226404613,
+      "ok": true
+    }
+  },
+  "all_consistent": true,
+  "note": "Product of step n and reactant of step n+1 have identical neutral canonical SMILES (verified from raw IRC endpoints). Catalytic water in step 5 stripped as spectator; formaldehyde coproduct of step 4 accounted on the product side."
+}

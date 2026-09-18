@@ -16,9 +16,12 @@ runs/
 **/wbo
 *.xtboptok
 
-# Campaign products. Kept out of version control for now; which parts are small and
+# Deposits are tracked: they are the reviewer-facing evidence and the whole point of the
+# repository accompanying the paper. 35 MB working tree, ~11 MB packed, largest file 3.3 MB.
+# ORCA scratch that produced them is not tracked (see runs/).
+
+# Other campaign products. Kept out of version control for now; which parts are small and
 # important enough to track is a separate decision.
-deposits/
 graph/canonical/*
 graph/caches/*
 graph/derived/*
