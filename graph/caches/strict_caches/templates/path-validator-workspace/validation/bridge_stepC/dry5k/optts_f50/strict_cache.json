@@ -1,0 +1,21 @@
+{
+  "OC=C(O)C(O)C(O)CO>>O=C(CO)C(O)C(O)CO": {
+    "reactant": "OC=C(O)C(O)C(O)CO",
+    "product": "O=C(CO)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -1629.95,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-16",
+    "ts_imag_all": [
+      -1629.95
+    ],
+    "note": "DRY enediol->ketose (xylulose); HMF-clean, no catalytic water; DEFGRID3 single imaginary; strict neutral IRC"
+  }
+}

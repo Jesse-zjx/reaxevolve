@@ -1,0 +1,17 @@
+{
+  "OC=CO>>O=CCO": {
+    "name": "ek_ga",
+    "reactant": "OC=CO",
+    "product": "O=CCO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -72.56,
+    "status": "NOT_CLEAN_TS (imag modes=[-72.56, -55.57])",
+    "endpoint_match": null,
+    "time": "2026-07-05 11:17",
+    "ts_imag_all": [
+      -72.56,
+      -55.57
+    ]
+  }
+}

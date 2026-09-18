@@ -1,0 +1,21 @@
+{
+  "OC=CO>>O=CCO": {
+    "name": "ekw",
+    "reactant": "OC=CO",
+    "product": "O=CCO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -920.12,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-05 23:47",
+    "ts_imag_all": [
+      -920.12
+    ]
+  }
+}

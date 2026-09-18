@@ -1,0 +1,16 @@
+{
+  "O=CC1=CCC(O)(CO)O1>>O=CC1(O)C=CC(CO)O1": {
+    "name": "gap2_L_M",
+    "reactant": "O=CC1=CCC(O)(CO)O1",
+    "product": "O=CC1(O)C=CC(CO)O1",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -52.41,
+    "status": "NOT_CLEAN_TS (imag modes=[-52.41])",
+    "endpoint_match": null,
+    "time": "2026-06-28 03:03",
+    "ts_imag_all": [
+      -52.41
+    ]
+  }
+}

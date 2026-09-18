@@ -1,0 +1,21 @@
+{
+  "O=C(CO)C1OC=CC1O>>O=C(CO)c1ccco1": {
+    "name": "OeCCOC1OCeCC1O__OeCCOc1ccco1_g1",
+    "reactant": "O=C(CO)C1OC=CC1O",
+    "product": "O=C(CO)c1ccco1",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -927.95,
+    "status": "MISMATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-07-02 04:54",
+    "ts_imag_all": [
+      -927.95
+    ]
+  }
+}

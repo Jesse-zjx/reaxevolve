@@ -1,0 +1,13 @@
+{
+  "O=CC(=O)C=CC(O)CO>>O=CC1(O)C=CC(CO)O1": {
+    "name": "ringclose",
+    "reactant": "O=CC(=O)C=CC(O)CO",
+    "product": "O=CC1(O)C=CC(CO)O1",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "TS_FAILED",
+    "endpoint_match": null,
+    "time": "2026-06-21 15:05"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "O=CC(=O)C=CC(O)CO>>O=CC(O)=CC=C(O)CO": {
+    "name": "n3_n15",
+    "reactant": "O=CC(=O)C=CC(O)CO",
+    "product": "O=CC(O)=CC=C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -815.42,
+    "status": "PARTIAL_MATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-06-26 21:31",
+    "ts_imag_all": [
+      -815.42
+    ]
+  }
+}

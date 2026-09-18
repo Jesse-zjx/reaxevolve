@@ -1,0 +1,16 @@
+{
+  "OC=CO>>O=CCO": {
+    "name": "ek13",
+    "reactant": "OC=CO",
+    "product": "O=CCO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -157.29,
+    "status": "NOT_CLEAN_TS (imag modes=[-157.29])",
+    "endpoint_match": null,
+    "time": "2026-07-05 21:20",
+    "ts_imag_all": [
+      -157.29
+    ]
+  }
+}

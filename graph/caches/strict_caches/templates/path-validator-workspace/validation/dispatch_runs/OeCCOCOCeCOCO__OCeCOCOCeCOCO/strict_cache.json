@@ -1,0 +1,24 @@
+{
+  "O=C(CO)C(O)C=C(O)CO>>OC=C(O)C(O)C=C(O)CO": {
+    "name": "OeCCOCOCeCOCO__OCeCOCOCeCOCO_g0",
+    "reactant": "O=C(CO)C(O)C=C(O)CO",
+    "product": "OC=C(O)C(O)C=C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "TS_FAILED",
+    "endpoint_match": null,
+    "time": "2026-07-12 20:45"
+  },
+  "O=CC(O)C(O)C=C(O)CO>>OC=C(O)C(O)C=C(O)CO": {
+    "name": "OeCCOCOCeCOCO__OCeCOCOCeCOCO_g0",
+    "reactant": "O=CC(O)C(O)C=C(O)CO",
+    "product": "OC=C(O)C(O)C=C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "TS_FAILED",
+    "endpoint_match": null,
+    "time": "2026-07-12 21:04"
+  }
+}

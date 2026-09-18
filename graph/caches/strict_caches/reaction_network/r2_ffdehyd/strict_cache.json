@@ -1,0 +1,22 @@
+{
+  "O=C(CO)C(O)C(O)CO>>O=C(C=C(O)CO)CO": {
+    "name": "r2_ffdehyd",
+    "reactant": "O=C(CO)C(O)C(O)CO",
+    "product": "O=C(C=C(O)CO)CO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -1995.79,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-07-20",
+    "ts_imag_all": [
+      -1995.79
+    ],
+    "note": "FF-R2 ketose dehydration (DEFGRID3 single imaginary; strict neutral double-end IRC)"
+  }
+}

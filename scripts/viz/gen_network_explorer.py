@@ -19,10 +19,22 @@ while _pkg != '/' and not _os.path.isdir(_os.path.join(_pkg, 'tools')):
 _sys.path.insert(0, _os.path.join(_pkg, 'tools'))
 _sys.path.insert(0, _os.path.join(_pkg, 'scripts', 'lib'))
 import chem_paths as _CP
+
+def _edge_records(net):
+    """Edges as a list, whichever container the graph file uses.
+
+    Graph Memory keys edges by id; iterating the dict directly yields its keys, which
+    silently produces an empty result rather than an error.
+    """
+    e = net.get("edges")
+    if isinstance(e, dict):
+        return [v for v in e.values() if isinstance(v, dict)]
+    return [v for v in (e or []) if isinstance(v, dict)]
+
 _CP.bootstrap()
 
 NET = json.load(open(_os.path.join(_CP.GRAPH, 'reaction_network.json')))
-STRICT = [e for e in NET['edges'] if e['status'] == 'STRICT']
+STRICT = [e for e in _edge_records(NET) if e.get('status') == 'STRICT']
 def C(s):
     try: return Chem.CanonSmiles(s)
     except Exception: return s

@@ -1,0 +1,22 @@
+{
+  "O=CC(O)=CC(O)C(O)CO>>O=CC(=O)CC(O)C(O)CO": {
+    "name": "e2e_0",
+    "reactant": "O=CC(O)=CC(O)C(O)CO",
+    "product": "O=CC(=O)CC(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -1448.32,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-25 03:04",
+    "ts_imag_all": [
+      -1448.32,
+      -35.29
+    ]
+  }
+}

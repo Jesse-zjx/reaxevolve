@@ -1,0 +1,337 @@
+{
+  "HMF": {
+    "target_smiles": "O=Cc1ccc(CO)o1",
+    "n_validated_routes": 1,
+    "diversity": {
+      "n_routes": 1,
+      "mean_pairwise_overlap": 0.0,
+      "n_distinct_niches": 1
+    },
+    "routes": [
+      {
+        "route_id": "HMF_R1",
+        "target": "HMF",
+        "n_steps": 5,
+        "status": "STRICT_COMPLETE",
+        "nodes": [
+          "O=CC(O)C(O)C(O)C(O)CO",
+          "O=CC(O)=CC(O)C(O)CO",
+          "O=CC(=O)CC(O)C(O)CO",
+          "O=CC(=O)C=CC(O)CO",
+          "O=CC1(O)C=CC(CO)O1",
+          "O=Cc1ccc(CO)o1"
+        ],
+        "edges": [
+          {
+            "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+            "product": "O=CC(O)=CC(O)C(O)CO",
+            "kind": "dehydration",
+            "ts_imag": -1410.1,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(O)=CC(O)C(O)CO",
+            "product": "O=CC(=O)CC(O)C(O)CO",
+            "kind": "tautomerization",
+            "ts_imag": -1449.8,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(=O)CC(O)C(O)CO",
+            "product": "O=CC(=O)C=CC(O)CO",
+            "kind": "dehydration",
+            "ts_imag": -1533.0,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(=O)C=CC(O)CO",
+            "product": "O=CC1(O)C=CC(CO)O1",
+            "kind": "ring_closure",
+            "ts_imag": -1574.5,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC1(O)C=CC(CO)O1",
+            "product": "O=Cc1ccc(CO)o1",
+            "kind": "aromatization",
+            "ts_imag": -830.4,
+            "status": "STRICT"
+          }
+        ],
+        "niche": [
+          [
+            6
+          ],
+          false,
+          true,
+          [
+            "aromatization",
+            "dehydration",
+            "ring_closure",
+            "tautomerization"
+          ]
+        ]
+      }
+    ]
+  },
+  "HAA": {
+    "target_smiles": "O=CCO",
+    "n_validated_routes": 2,
+    "diversity": {
+      "n_routes": 2,
+      "mean_pairwise_overlap": 0.25,
+      "n_distinct_niches": 2
+    },
+    "routes": [
+      {
+        "route_id": "HAA_R1",
+        "target": "HAA",
+        "n_steps": 4,
+        "status": "STRICT_COMPLETE",
+        "nodes": [
+          "O=CC(O)C(O)C(O)C(O)CO",
+          "O=C(CO)C(O)C(O)C(O)CO",
+          "O=CC(O)CO",
+          "OC=CO",
+          "O=CCO"
+        ],
+        "edges": [
+          {
+            "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+            "product": "O=C(CO)C(O)C(O)C(O)CO",
+            "kind": "isomerization",
+            "ts_imag": -434.65,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+            "product": "O=CC(O)CO",
+            "kind": "retro_aldol",
+            "ts_imag": -758.07,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(O)CO",
+            "product": "OC=CO",
+            "kind": null,
+            "ts_imag": -942.1,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "OC=CO",
+            "product": "O=CCO",
+            "kind": null,
+            "ts_imag": -920.12,
+            "status": "STRICT"
+          }
+        ],
+        "niche": [
+          [
+            6,
+            3,
+            2
+          ],
+          true,
+          true,
+          [
+            "isomerization",
+            "retro_aldol"
+          ]
+        ]
+      },
+      {
+        "route_id": "HAA_R2",
+        "target": "HAA",
+        "n_steps": 6,
+        "status": "STRICT_COMPLETE",
+        "nodes": [
+          "O=CC(O)C(O)C(O)C(O)CO",
+          "O=C(CO)C(O)C(O)C(O)CO",
+          "OCC(O)=C(O)C(O)C(O)CO",
+          "O=C(C(O)CO)C(O)C(O)CO",
+          "OC=C(O)C(O)C(O)CO",
+          "O=C(CO)C(O)C(O)CO",
+          "O=CCO"
+        ],
+        "edges": [
+          {
+            "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+            "product": "O=C(CO)C(O)C(O)C(O)CO",
+            "kind": "isomerization",
+            "ts_imag": -434.65,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+            "product": "OCC(O)=C(O)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -2042.51,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "OCC(O)=C(O)C(O)C(O)CO",
+            "product": "O=C(C(O)CO)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -2032.48,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+            "product": "OC=C(O)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -932.28,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "OC=C(O)C(O)C(O)CO",
+            "product": "O=C(CO)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -1629.95,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=C(CO)C(O)C(O)CO",
+            "product": "O=CCO",
+            "kind": null,
+            "ts_imag": -540.8,
+            "status": "STRICT"
+          }
+        ],
+        "niche": [
+          [
+            6,
+            5,
+            2
+          ],
+          true,
+          true,
+          [
+            "isomerization"
+          ]
+        ]
+      }
+    ]
+  },
+  "FF": {
+    "target_smiles": "O=Cc1ccco1",
+    "n_validated_routes": 1,
+    "diversity": {
+      "n_routes": 1,
+      "mean_pairwise_overlap": 0.0,
+      "n_distinct_niches": 1
+    },
+    "routes": [
+      {
+        "route_id": "FF_R1",
+        "target": "FF",
+        "n_steps": 11,
+        "status": "STRICT_COMPLETE",
+        "nodes": [
+          "O=CC(O)C(O)C(O)C(O)CO",
+          "O=C(CO)C(O)C(O)C(O)CO",
+          "OCC(O)=C(O)C(O)C(O)CO",
+          "O=C(C(O)CO)C(O)C(O)CO",
+          "OC=C(O)C(O)C(O)CO",
+          "O=C(CO)C(O)C(O)CO",
+          "O=CC(O)C(O)C(O)CO",
+          "O=CC(O)=CC(O)CO",
+          "O=CC(=O)CC(O)CO",
+          "O=CC(=O)C=CCO",
+          "O=CC1(O)C=CCO1",
+          "O=Cc1ccco1"
+        ],
+        "edges": [
+          {
+            "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+            "product": "O=C(CO)C(O)C(O)C(O)CO",
+            "kind": "isomerization",
+            "ts_imag": -434.65,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+            "product": "OCC(O)=C(O)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -2042.51,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "OCC(O)=C(O)C(O)C(O)CO",
+            "product": "O=C(C(O)CO)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -2032.48,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+            "product": "OC=C(O)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -932.28,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "OC=C(O)C(O)C(O)CO",
+            "product": "O=C(CO)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -1629.95,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=C(CO)C(O)C(O)CO",
+            "product": "O=CC(O)C(O)C(O)CO",
+            "kind": null,
+            "ts_imag": -766.5,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(O)C(O)C(O)CO",
+            "product": "O=CC(O)=CC(O)CO",
+            "kind": null,
+            "ts_imag": -1459.8,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(O)=CC(O)CO",
+            "product": "O=CC(=O)CC(O)CO",
+            "kind": null,
+            "ts_imag": -2137.83,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(=O)CC(O)CO",
+            "product": "O=CC(=O)C=CCO",
+            "kind": null,
+            "ts_imag": -1541.1,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC(=O)C=CCO",
+            "product": "O=CC1(O)C=CCO1",
+            "kind": "ring_opening",
+            "ts_imag": -1621.5,
+            "status": "STRICT"
+          },
+          {
+            "reactant": "O=CC1(O)C=CCO1",
+            "product": "O=Cc1ccco1",
+            "kind": null,
+            "ts_imag": -872.91,
+            "status": "STRICT"
+          }
+        ],
+        "niche": [
+          [
+            6,
+            5
+          ],
+          true,
+          true,
+          [
+            "isomerization",
+            "ring_opening"
+          ]
+        ]
+      }
+    ]
+  }
+}

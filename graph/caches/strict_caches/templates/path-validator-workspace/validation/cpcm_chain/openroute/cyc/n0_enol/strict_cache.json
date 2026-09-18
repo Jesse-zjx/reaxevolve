@@ -1,0 +1,23 @@
+{
+  "OCC1OC(O)C(O)C(O)C1O>>OCC1OC=C(O)C(O)C1O": {
+    "name": "n0_enol",
+    "reactant": "OCC1OC(O)C(O)C(O)C1O",
+    "product": "OCC1OC=C(O)C(O)C1O",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -480.12,
+    "status": "MISMATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-27 03:14",
+    "ts_imag_all": [
+      -480.12,
+      -155.11,
+      -20.53
+    ]
+  }
+}

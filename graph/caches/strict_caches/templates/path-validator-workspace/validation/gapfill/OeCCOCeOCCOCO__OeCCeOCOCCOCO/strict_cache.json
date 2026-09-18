@@ -1,0 +1,32 @@
+{
+ "O=CC(O)C(=O)CC(O)CO>>O=CC(=O)C(O)CC(O)CO": {
+  "name": "gapB_g0",
+  "reactant": "O=CC(O)C(=O)CC(O)CO",
+  "product": "O=CC(=O)C(O)CC(O)CO",
+  "coproduct": null,
+  "charge": 0,
+  "ts_imag_cm-1": -827.44,
+  "status": "STRICT",
+  "endpoint_match": {
+   "F_isReactant": false,
+   "F_isProduct": true,
+   "B_isReactant": true,
+   "B_isProduct": false
+  },
+  "time": "2026-08-04 16:51",
+  "ts_imag_all": [
+   -827.44
+  ],
+  "ts_out": "gapB_g0_ts.out",
+  "ts_xyz": "gapB_g0_ts.xyz",
+  "hess": "gapB_g0_ts.hess",
+  "irc_f": "gapB_g0_irc_IRC_F.xyz",
+  "irc_b": "gapB_g0_irc_IRC_B.xyz",
+  "grid_ts": "DEFGRID3",
+  "grid_irc": "ORCA default (须在 DEFGRID3 重跑方可进交付包)",
+  "gate": "check_strict_bar.py VERDICT PASS (clauses 2-4 = 1/1)",
+  "guess": "round_0/hc_1.66_ho_1.05/guess.xyz",
+  "method": "scan2d_guess.py (GFN2 2D dual-distance) → OptTS+NumFreq DEFGRID3",
+  "note": "酮 C3→C2 的 1,2-迁移（并发 hydride C2→C3 + proton O2→O3）。原图 O=CC(O)C(O)=CC(O)CO→O=CC(=O)C(O)CC(O)CO 实际两步中的第二步。TS 一次收敛到恰好一个虚频 -827.44，无需 soft-mode cleanup。同档：交付包 xylulose→xylose iso -766.5 / glucose→fructose -434.65。"
+ }
+}

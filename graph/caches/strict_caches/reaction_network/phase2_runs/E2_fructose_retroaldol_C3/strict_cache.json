@@ -1,0 +1,17 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>O=CC(O)CO": {
+    "name": "E2_fructose_retroaldol_C3_t0_r3",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "O=CC(O)CO",
+    "coproduct": "O=C(CO)CO",
+    "charge": 0,
+    "ts_imag_cm-1": -62.38,
+    "status": "NOT_CLEAN_TS (imag modes=[-62.38, -11.68])",
+    "endpoint_match": null,
+    "time": "2026-07-01 04:39",
+    "ts_imag_all": [
+      -62.38,
+      -11.68
+    ]
+  }
+}

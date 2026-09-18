@@ -25,6 +25,18 @@ while _pkg != '/':
         break
     _pkg = _os.path.dirname(_pkg)
 import chem_paths as _CP
+
+def _edge_records(net):
+    """Edges as a list, whichever container the graph file uses.
+
+    Graph Memory keys edges by id; iterating the dict directly yields its keys, which
+    silently produces an empty result rather than an error.
+    """
+    e = net.get("edges")
+    if isinstance(e, dict):
+        return [v for v in e.values() if isinstance(v, dict)]
+    return [v for v in (e or []) if isinstance(v, dict)]
+
 _CP.bootstrap()
 
 RN = _CP.RN
@@ -45,7 +57,7 @@ SEEDS = ["O=CC(O)C(O)C(O)C(O)CO", "OCC1OC(O)C(O)C(O)C1O"]  # open + cyclic gluco
 
 def load():
     net = json.load(open(NET))
-    emap = {(e["reactant"], e["product"]): e for e in net["edges"]}
+    emap = {(e["reactant"], e["product"]): e for e in _edge_records(net)}
     return net, emap
 
 def build_graph(emap, statuses):

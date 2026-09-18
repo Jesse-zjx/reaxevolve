@@ -1,0 +1,17 @@
+{
+  "O=CC(O)=CC(O)CO>>OCC1C=C(O)C(O)O1": {
+    "name": "OeCCOeCCOCO__OCC1CeCOCOO1_g3",
+    "reactant": "O=CC(O)=CC(O)CO",
+    "product": "OCC1C=C(O)C(O)O1",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -664.14,
+    "status": "NOT_CLEAN_TS (imag modes=[-664.14, -357.18])",
+    "endpoint_match": null,
+    "time": "2026-07-13 09:16",
+    "ts_imag_all": [
+      -664.14,
+      -357.18
+    ]
+  }
+}

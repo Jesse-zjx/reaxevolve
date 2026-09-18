@@ -33,6 +33,13 @@ is why clause 1 requires the grid to be quoted next to every frequency — the c
 prints the as-built grid per step for exactly this reason. A mixed grid is a provenance
 fact to disclose, not a failure to hide.
 
+## Known gap
+
+`glucose_haa_review_v2` has no rendered report under `00_report/` — it is the only one of
+the four without one. Its report content is `README_FOR_EXPERT.md` plus
+`05_docs/FINAL_STRICT_CHAIN.md`, and the primary evidence under `04_orca_inp_out_hess/` is
+complete, so the package verifies; what is missing is the convenience rendering.
+
 ## Layout (identical in every deposit)
 
 ```

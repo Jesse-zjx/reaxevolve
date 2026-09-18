@@ -1,0 +1,21 @@
+{
+  "OC=C1C=CC(O)(CO)O1>>O=CC1(O)C=CC(CO)O1": {
+    "name": "g2_K_M",
+    "reactant": "OC=C1C=CC(O)(CO)O1",
+    "product": "O=CC1(O)C=CC(CO)O1",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -401.53,
+    "status": "NOT_CLEAN_TS (imag modes=[-401.53, -264.76, -110.37, -34.83, -28.27, -14.65])",
+    "endpoint_match": null,
+    "time": "2026-06-28 17:20",
+    "ts_imag_all": [
+      -401.53,
+      -264.76,
+      -110.37,
+      -34.83,
+      -28.27,
+      -14.65
+    ]
+  }
+}

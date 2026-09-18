@@ -1,0 +1,22 @@
+{
+  "O=C(C=C(O)CO)C(O)CO>>O=C(CO)CC(=O)C(O)CO": {
+    "name": "r2_hmftaut",
+    "reactant": "O=C(C=C(O)CO)C(O)CO",
+    "product": "O=C(CO)CC(=O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -1810.26,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-21",
+    "ts_imag_all": [
+      -1810.26
+    ],
+    "note": "HMF-R2 enol->keto tautomerization to deoxyosone; DEFGRID3 single imaginary; strict"
+  }
+}

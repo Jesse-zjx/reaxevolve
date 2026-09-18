@@ -1,0 +1,22 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>OCC(O)=C(O)C(O)C(O)CO": {
+    "name": "a1_g3vtight",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "OCC(O)=C(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -2042.51,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-11",
+    "ts_imag_all": [
+      -2042.51
+    ],
+    "note": "DEFGRID3 VeryTightOpt (TolE 5e-7, Recalc_Hess 3); EXACTLY ONE imaginary mode -- residual -4.05 cm-1 hydroxyl-torsion eliminated by tighter convergence. DEFGRID3 IRC endpoints strict."
+  }
+}

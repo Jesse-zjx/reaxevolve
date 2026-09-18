@@ -21,6 +21,18 @@ import chem_paths as CP  # noqa: E402
 import graph_views as GV  # noqa: E402
 
 from rdkit import Chem, RDLogger  # noqa: E402
+
+def _edge_records(net):
+    """Edges as a list, whichever container the graph file uses.
+
+    Graph Memory keys edges by id; iterating the dict directly yields its keys, which
+    silently produces an empty result rather than an error.
+    """
+    e = net.get("edges")
+    if isinstance(e, dict):
+        return [v for v in e.values() if isinstance(v, dict)]
+    return [v for v in (e or []) if isinstance(v, dict)]
+
 RDLogger.DisableLog('rdApp.*')
 
 
@@ -40,7 +52,7 @@ def load_kind_index():
         net = json.load(open(p))
     except Exception:
         return idx
-    for e in net.get('edges', []):
+    for e in _edge_records(net):
         k = e.get('reaction_kind')
         if not k:
             continue

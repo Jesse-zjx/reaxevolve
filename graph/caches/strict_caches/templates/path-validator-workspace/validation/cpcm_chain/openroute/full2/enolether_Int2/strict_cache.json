@@ -1,0 +1,23 @@
+{
+  "OCC1=CC(O)C(O)(CO)O1>>OC=C1OC(CO)=CC1O": {
+    "name": "enolether_Int2",
+    "reactant": "OCC1=CC(O)C(O)(CO)O1",
+    "product": "OC=C1OC(CO)=CC1O",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -346.74,
+    "status": "MISMATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-25 21:44",
+    "ts_imag_all": [
+      -346.74,
+      -101.02,
+      -49.08
+    ]
+  }
+}

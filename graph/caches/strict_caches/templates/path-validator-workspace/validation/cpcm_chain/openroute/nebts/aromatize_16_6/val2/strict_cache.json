@@ -1,0 +1,26 @@
+{
+  "OC=C1C=CC(O)(CO)O1>>O=Cc1ccc(CO)o1": {
+    "name": "aromatize_16_6",
+    "reactant": "OC=C1C=CC(O)(CO)O1",
+    "product": "O=Cc1ccc(CO)o1",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -502.72,
+    "status": "PARTIAL_MATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-25 15:22",
+    "ts_imag_all": [
+      -502.72,
+      -81.03,
+      -40.03,
+      -23.54,
+      -21.06,
+      -9.3
+    ]
+  }
+}

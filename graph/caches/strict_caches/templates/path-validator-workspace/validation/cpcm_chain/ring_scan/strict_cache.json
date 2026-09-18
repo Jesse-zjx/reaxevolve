@@ -1,0 +1,16 @@
+{
+  "O=CC(=O)C=CC(O)CO>>O=CC1(O)C=CC(CO)O1": {
+    "name": "ring_r0_dual_2.2_1.5",
+    "reactant": "O=CC(=O)C=CC(O)CO",
+    "product": "O=CC1(O)C=CC(CO)O1",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -195.49,
+    "status": "NOT_CLEAN_TS (imag modes=[-195.49])",
+    "endpoint_match": null,
+    "time": "2026-06-29 06:09",
+    "ts_imag_all": [
+      -195.49
+    ]
+  }
+}

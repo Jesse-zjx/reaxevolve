@@ -1,0 +1,21 @@
+{
+  "O=C(CO)C(O)C(O)CO>>O=CC(O)C(O)C(O)CO": {
+    "reactant": "O=C(CO)C(O)C(O)CO",
+    "product": "O=CC(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -766.5,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-16",
+    "ts_imag_all": [
+      -766.5
+    ],
+    "note": "DRY ketose->aldose isomerization (xylulose->xylose); concerted hydride+proton; DEFGRID3 single imaginary; strict neutral IRC"
+  }
+}

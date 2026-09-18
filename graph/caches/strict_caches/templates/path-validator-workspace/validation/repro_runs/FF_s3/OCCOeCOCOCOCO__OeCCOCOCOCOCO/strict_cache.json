@@ -1,0 +1,16 @@
+{
+  "OCC(O)=C(O)C(O)C(O)CO>>O=C(C(O)CO)C(O)C(O)CO": {
+    "name": "OCCOeCOCOCOCO__OeCCOCOCOCOCO_g1",
+    "reactant": "OCC(O)=C(O)C(O)C(O)CO",
+    "product": "O=C(C(O)CO)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -254.91,
+    "status": "NOT_CLEAN_TS (imag modes=[-254.91])",
+    "endpoint_match": null,
+    "time": "2026-08-02 04:17",
+    "ts_imag_all": [
+      -254.91
+    ]
+  }
+}

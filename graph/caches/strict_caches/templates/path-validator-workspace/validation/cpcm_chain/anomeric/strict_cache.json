@@ -1,0 +1,22 @@
+{
+  "O=CC(=O)C=CC(O)CO>>O=CC1(O)C=CC(CO)O1": {
+    "name": "anom_2.1_1.4",
+    "reactant": "O=CC(=O)C=CC(O)CO",
+    "product": "O=CC1(O)C=CC(CO)O1",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -1578.83,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-06-29 08:22",
+    "ts_imag_all": [
+      -1578.83,
+      -26.17
+    ]
+  }
+}

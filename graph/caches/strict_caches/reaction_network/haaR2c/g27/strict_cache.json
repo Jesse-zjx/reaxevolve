@@ -1,0 +1,14 @@
+{
+  "O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)C(O)CO": {
+    "name": "rag27",
+    "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+    "product": "O=CC(O)C(O)CO",
+    "coproduct": "O=CCO",
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "NOT_CLEAN_TS (imag modes=[])",
+    "endpoint_match": null,
+    "time": "2026-07-17 17:33",
+    "ts_imag_all": []
+  }
+}

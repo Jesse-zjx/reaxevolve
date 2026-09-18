@@ -1,0 +1,21 @@
+{
+  "O=CC1(O)C=CC(CO)O1>>O=Cc1ccc(CO)o1": {
+    "name": "hmfarom",
+    "reactant": "O=CC1(O)C=CC(CO)O1",
+    "product": "O=Cc1ccc(CO)o1",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -830.39,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-06-21 13:22",
+    "ts_imag_all": [
+      -830.39
+    ]
+  }
+}

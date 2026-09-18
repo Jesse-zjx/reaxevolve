@@ -1,0 +1,17 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>O=CC(O)CO": {
+    "name": "ra_t0_2d",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "O=CC(O)CO",
+    "coproduct": "OC=C(O)CO",
+    "charge": 0,
+    "ts_imag_cm-1": -63.0,
+    "status": "NOT_CLEAN_TS (imag modes=[-63.0, -35.22])",
+    "endpoint_match": null,
+    "time": "2026-07-06 12:24",
+    "ts_imag_all": [
+      -63.0,
+      -35.22
+    ]
+  }
+}

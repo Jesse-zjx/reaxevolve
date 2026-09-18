@@ -1,0 +1,658 @@
+{
+ "nodes": {
+  "O=CC(=O)CC(O)C(O)CO": {
+   "smiles": "O=CC(=O)CC(O)C(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": true
+  },
+  "O=CCO": {
+   "smiles": "O=CCO",
+   "formula": "C2H4O2",
+   "is_target": true,
+   "target_name": "HAA",
+   "in_chain": false
+  },
+  "O=C(C=C(O)CO)CO": {
+   "smiles": "O=C(C=C(O)CO)CO",
+   "formula": "C5H8O4",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC(=O)CC(O)CO": {
+   "smiles": "O=CC(=O)CC(O)CO",
+   "formula": "C5H8O4",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "OC=C(O)C(O)C(O)C(O)CO": {
+   "smiles": "OC=C(O)C(O)C(O)C(O)CO",
+   "formula": "C6H12O6",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CCC=O": {
+   "smiles": "O=CCC=O",
+   "formula": "C3H4O2",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=C(C=C(O)CO)C(O)CO": {
+   "smiles": "O=C(C=C(O)CO)C(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC(=O)C(O)CC(O)CO": {
+   "smiles": "O=CC(=O)C(O)CC(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=C(CO)C(O)C(O)C(O)CO": {
+   "smiles": "O=C(CO)C(O)C(O)C(O)CO",
+   "formula": "C6H12O6",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC(O)C(O)=CC(O)CO": {
+   "smiles": "O=CC(O)C(O)=CC(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "OC=C(O)C(O)C(O)CO": {
+   "smiles": "OC=C(O)C(O)C(O)CO",
+   "formula": "C5H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC1(O)C=CCO1": {
+   "smiles": "O=CC1(O)C=CCO1",
+   "formula": "C5H6O3",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC(=O)C=CC(O)CO": {
+   "smiles": "O=CC(=O)C=CC(O)CO",
+   "formula": "C6H8O4",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": true
+  },
+  "O=CC(O)C(O)C(O)CO": {
+   "smiles": "O=CC(O)C(O)C(O)CO",
+   "formula": "C5H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=Cc1ccco1": {
+   "smiles": "O=Cc1ccco1",
+   "formula": "C5H4O2",
+   "is_target": true,
+   "target_name": "FF",
+   "in_chain": false
+  },
+  "O=CC(O)CO": {
+   "smiles": "O=CC(O)CO",
+   "formula": "C3H6O3",
+   "is_target": true,
+   "target_name": "glyceraldehyde",
+   "in_chain": false
+  },
+  "O=C(CO)C(O)=CC(O)CO": {
+   "smiles": "O=C(CO)C(O)=CC(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC(O)=CC(O)CO": {
+   "smiles": "O=CC(O)=CC(O)CO",
+   "formula": "C5H8O4",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "OC=C1C=CC(O)(CO)O1": {
+   "smiles": "OC=C1C=CC(O)(CO)O1",
+   "formula": "C6H8O4",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC=CO": {
+   "smiles": "O=CC=CO",
+   "formula": "C3H4O2",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "OC1CO1": {
+   "smiles": "OC1CO1",
+   "formula": "C2H4O2",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC(O)=CC(O)C(O)CO": {
+   "smiles": "O=CC(O)=CC(O)C(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": true
+  },
+  "O=C(CO)C(O)C(O)CO": {
+   "smiles": "O=C(CO)C(O)C(O)CO",
+   "formula": "C5H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=C(C(O)CO)C(O)C(O)CO": {
+   "smiles": "O=C(C(O)CO)C(O)C(O)CO",
+   "formula": "C6H12O6",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC(O)C(O)C(O)C(O)CO": {
+   "smiles": "O=CC(O)C(O)C(O)C(O)CO",
+   "formula": "C6H12O6",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": true
+  },
+  "O=CC(O)C(=O)CC(O)CO": {
+   "smiles": "O=CC(O)C(=O)CC(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC1(O)C=CC(CO)O1": {
+   "smiles": "O=CC1(O)C=CC(CO)O1",
+   "formula": "C6H8O4",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": true
+  },
+  "OCC(O)=C(O)C(O)C(O)CO": {
+   "smiles": "OCC(O)=C(O)C(O)C(O)CO",
+   "formula": "C6H12O6",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=C(CO)CC(=O)C(O)CO": {
+   "smiles": "O=C(CO)CC(=O)C(O)CO",
+   "formula": "C6H10O5",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "OC=CO": {
+   "smiles": "OC=CO",
+   "formula": "C2H4O2",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=CC1=CCC(O)(CO)O1": {
+   "smiles": "O=CC1=CCC(O)(CO)O1",
+   "formula": "C6H8O4",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  },
+  "O=Cc1ccc(CO)o1": {
+   "smiles": "O=Cc1ccc(CO)o1",
+   "formula": "C6H6O3",
+   "is_target": true,
+   "target_name": "HMF",
+   "in_chain": true
+  },
+  "O=CC(=O)C=CCO": {
+   "smiles": "O=CC(=O)C=CCO",
+   "formula": "C5H6O3",
+   "is_target": false,
+   "target_name": null,
+   "in_chain": false
+  }
+ },
+ "edges": [
+  {
+   "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+   "product": "OC=C(O)C(O)C(O)CO",
+   "coproduct": "C=O",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -869.65,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/repro_runs/FF_s4/OeCCOCOCOCOCO__OCeCOCOCOCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(O)C(O)C(O)CO",
+   "product": "O=CC(O)=CC(O)CO",
+   "coproduct": "O",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1458.56,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/repro_runs/OeCCOCOCOCO__OeCCOeCCOCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(O)CO",
+   "product": "OC=CO",
+   "coproduct": "C=O",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1014.95,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/repro_runs/HAA_s3/OeCCOCO__OCeCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(CO)C(O)C(O)CO",
+   "product": "O=CC(O)C(O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -800.75,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/repro_runs/FF_s6/OeCCOCOCOCO__OeCCOCOCOCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC1(O)C=CCO1",
+   "product": "O=Cc1ccco1",
+   "coproduct": "O",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -850.57,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/repro_runs/FF_s11/OeCC1OCeCCO1__OeCc1ccco1/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(=O)CC(O)CO",
+   "product": "O=CC(=O)C=CCO",
+   "coproduct": "O",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1545.74,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/repro_runs/OeCCeOCCOCO__OeCCeOCeCCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+   "product": "O=CC(O)CO",
+   "coproduct": "OC=C(O)CO",
+   "reaction_kind": "retro_aldol",
+   "status": "STRICT",
+   "ts_imag": -421.62,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/repro_runs/HAA_s2/OeCCOCOCOCOCO__OeCCOCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "OC=C(O)C(O)C(O)CO",
+   "product": "O=C(CO)C(O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1629.95,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/bridge_stepC/dry5k/optts_f50/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "OCC(O)=C(O)C(O)C(O)CO",
+   "product": "O=C(C(O)CO)C(O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -2032.48,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/bridgeA/a2/sv/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+   "product": "OCC(O)=C(O)C(O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -2042.51,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/bridgeA/a1/g3vtight/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+   "product": "O=C(CO)C(O)C(O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": "isomerization",
+   "status": "STRICT",
+   "ts_imag": -434.65,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+   "product": "OC=C(O)C(O)C(O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -2252.31,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(=O)CC(O)C(O)CO",
+   "product": "O=CC(=O)C=CC(O)CO",
+   "coproduct": "O",
+   "reaction_kind": "dehydration",
+   "status": "STRICT",
+   "ts_imag": -1533.0,
+   "barrier_kcal": 46.6,
+   "dE_kcal": 11.6,
+   "source": "FINAL_STRICT_CHAIN",
+   "in_chain": true
+  },
+  {
+   "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+   "product": "O=C(CO)C(O)=CC(O)CO",
+   "coproduct": "O",
+   "reaction_kind": "dehydration",
+   "status": "STRICT",
+   "ts_imag": -1454.63,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+   "in_chain": false,
+   "n_imag": null
+  },
+  {
+   "reactant": "O=CC1(O)C=CC(CO)O1",
+   "product": "O=Cc1ccc(CO)o1",
+   "coproduct": "O",
+   "reaction_kind": "aromatization",
+   "status": "STRICT",
+   "ts_imag": -830.4,
+   "barrier_kcal": 51.1,
+   "dE_kcal": -10.7,
+   "source": "FINAL_STRICT_CHAIN",
+   "in_chain": true
+  },
+  {
+   "reactant": "O=CC(=O)C=CC(O)CO",
+   "product": "O=CC1(O)C=CC(CO)O1",
+   "coproduct": null,
+   "reaction_kind": "ring_closure",
+   "status": "STRICT",
+   "ts_imag": -1574.5,
+   "barrier_kcal": 32.9,
+   "dE_kcal": -7.3,
+   "source": "FINAL_STRICT_CHAIN",
+   "in_chain": true
+  },
+  {
+   "reactant": "OC=C1C=CC(O)(CO)O1",
+   "product": "O=CC1=CCC(O)(CO)O1",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1532.87,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/cpcm_chain/openroute/round7/n16_16ald/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(O)C(O)=CC(O)CO",
+   "product": "O=CC(O)C(=O)CC(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -2051.06,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/gapfill/OeCCOCOeCCOCO__OeCCOCeOCCOCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(O)C(=O)CC(O)CO",
+   "product": "O=CC(=O)C(O)CC(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -827.44,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/gapfill/OeCCOCeOCCOCO__OeCCeOCOCCOCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CCC=O",
+   "product": "O=CC=CO",
+   "coproduct": null,
+   "reaction_kind": "keto_to_enol",
+   "status": "STRICT",
+   "ts_imag": -1884.84,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/dispatch_runs_keto/OeCCCeO__OeCCeCO/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "OC1CO1",
+   "product": "O=CCO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -479.77,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/enol_keto_ga/dry/sv/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "OC=CO",
+   "product": "O=CCO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -920.12,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/enol_keto_ga/wcat/sv/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(O)=CC(O)CO",
+   "product": "O=CC(=O)CC(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -2137.83,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/ff_chain/step2/sv2/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(=O)C=CCO",
+   "product": "O=CC1(O)C=CCO1",
+   "coproduct": null,
+   "reaction_kind": "ring_opening",
+   "status": "STRICT",
+   "ts_imag": -1621.5,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/qm-workspace/validation/ff_chain/step4/sv/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(C=C(O)CO)C(O)CO",
+   "product": "O=C(CO)CC(=O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1810.26,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/reaction_network/r2_hmftaut/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(CO)C(O)C(O)CO",
+   "product": "O=C(C=C(O)CO)CO",
+   "coproduct": "O",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1995.79,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/reaction_network/r2_ffdehyd/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+   "product": "O=C(C=C(O)CO)C(O)CO",
+   "coproduct": "O",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -1873.27,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/reaction_network/r2_hmfdehyd/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=C(CO)C(O)C(O)CO",
+   "product": "O=CCO",
+   "coproduct": "OC=C(O)CO",
+   "reaction_kind": null,
+   "status": "STRICT",
+   "ts_imag": -540.8,
+   "barrier_kcal": null,
+   "dE_kcal": null,
+   "source": "tools/reaction_network/r2_xlu_cleanp/strict_cache.json",
+   "in_chain": false,
+   "n_imag": 1
+  },
+  {
+   "reactant": "O=CC(O)=CC(O)C(O)CO",
+   "product": "O=CC(=O)CC(O)C(O)CO",
+   "coproduct": null,
+   "reaction_kind": "tautomerization",
+   "status": "STRICT",
+   "ts_imag": -1449.8,
+   "barrier_kcal": 68.2,
+   "dE_kcal": -5.6,
+   "source": "FINAL_STRICT_CHAIN",
+   "in_chain": true
+  },
+  {
+   "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+   "product": "O=CC(O)=CC(O)C(O)CO",
+   "coproduct": "O",
+   "reaction_kind": "dehydration",
+   "status": "STRICT",
+   "ts_imag": -1410.1,
+   "barrier_kcal": 50.2,
+   "dE_kcal": 7.5,
+   "source": "FINAL_STRICT_CHAIN",
+   "in_chain": true
+  }
+ ],
+ "targets": {
+  "HMF": "O=Cc1ccc(CO)o1",
+  "FF": "O=Cc1ccco1",
+  "HAA": "O=CCO",
+  "furan": "c1ccoc1",
+  "5-MF": "Cc1ccc(C=O)o1",
+  "furfuryl_alcohol": "OCc1ccco1",
+  "glyceraldehyde": "O=CC(O)CO",
+  "DHA": "O=C(CO)CO",
+  "pyruvaldehyde": "CC(=O)C=O",
+  "glyoxal": "O=CC=O",
+  "erythrose": "O=CC(O)C(O)CO",
+  "acetol": "CC(=O)CO"
+ },
+ "target_reachable_strict_from_glucose": {
+  "HMF": true,
+  "FF": true,
+  "HAA": true,
+  "furan": false,
+  "5-MF": false,
+  "furfuryl_alcohol": false,
+  "glyceraldehyde": true,
+  "DHA": false,
+  "pyruvaldehyde": false,
+  "glyoxal": false,
+  "erythrose": false,
+  "acetol": false
+ },
+ "stats": {
+  "n_nodes": 33,
+  "n_edges": 30,
+  "edges_by_status": {
+   "STRICT": 30
+  },
+  "projection": "accepted"
+ }
+}

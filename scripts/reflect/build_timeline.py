@@ -42,6 +42,18 @@ sys.path.insert(0, os.path.join(_d, 'tools'))
 import chem_paths as CP  # noqa: E402
 
 from rdkit import Chem, RDLogger  # noqa: E402
+
+def _edge_records(net):
+    """Edges as a list, whichever container the graph file uses.
+
+    Graph Memory keys edges by id; iterating the dict directly yields its keys, which
+    silently produces an empty result rather than an error.
+    """
+    e = net.get("edges")
+    if isinstance(e, dict):
+        return [v for v in e.values() if isinstance(v, dict)]
+    return [v for v in (e or []) if isinstance(v, dict)]
+
 RDLogger.DisableLog('rdApp.*')    # the caches hold a few names and paths where SMILES belong
 
 DEPOSITS = (
@@ -220,7 +232,7 @@ def attempts_through(stamps, dt):
 
 def strict_edges():
     net = json.load(open(os.path.join(CP.GRAPH, 'reaction_network.json')))
-    return [e for e in net['edges'] if e.get('status') == 'STRICT']
+    return [e for e in _edge_records(net) if e.get('status') == 'STRICT']
 
 
 def date_edges(index, stamps):
@@ -636,7 +648,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--transcripts', default=os.environ.get('CHEM_TRANSCRIPTS', ''),
                     help='agent-transcripts directory; asset events are skipped without it')
-    ap.add_argument('--out-dir', default=os.path.join(PKG, 'evidence'))
+    ap.add_argument('--out-dir', default=os.path.join(PKG, 'evidence', 'state'))
     ap.add_argument('--bin', type=int, default=20,
                     help='width of an attempt-axis bin, in verdicts')
     a = ap.parse_args()

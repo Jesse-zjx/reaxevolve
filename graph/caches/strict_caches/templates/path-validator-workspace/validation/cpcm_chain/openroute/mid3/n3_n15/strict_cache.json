@@ -1,0 +1,16 @@
+{
+  "O=CC(=O)C=CC(O)CO>>O=CC(O)=CC=C(O)CO": {
+    "name": "n3_n15",
+    "reactant": "O=CC(=O)C=CC(O)CO",
+    "product": "O=CC(O)=CC=C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -92.78,
+    "status": "NOT_CLEAN_TS (imag modes=[-92.78])",
+    "endpoint_match": null,
+    "time": "2026-06-26 15:00",
+    "ts_imag_all": [
+      -92.78
+    ]
+  }
+}

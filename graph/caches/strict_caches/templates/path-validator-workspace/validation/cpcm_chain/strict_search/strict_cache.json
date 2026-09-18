@@ -1,0 +1,152 @@
+{
+  "O=CC(O)C(O)C(=O)C(O)CO>>O=CC(O)=CC(=O)C(O)CO": {
+    "name": "dgneb",
+    "reactant": "O=CC(O)C(O)C(=O)C(O)CO",
+    "product": "O=CC(O)=CC(=O)C(O)CO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -959.08,
+    "status": "PARTIAL_MATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-16 03:18",
+    "ts_imag_all": [
+      -959.08,
+      -82.12,
+      -37.43
+    ]
+  },
+  "O=C(C(O)CO)C(O)C(O)=CO>>O=CC(O)=CC(=O)C(O)CO": {
+    "name": "dgneb_enol",
+    "reactant": "O=C(C(O)CO)C(O)C(O)=CO",
+    "product": "O=CC(O)=CC(=O)C(O)CO",
+    "coproduct": "O",
+    "spectator": "O (relay)",
+    "charge": 0,
+    "ts_imag_cm-1": -959.08,
+    "ts_imag_all": [
+      -959.08,
+      -82.12,
+      -37.43
+    ],
+    "status": "STRICT",
+    "note": "open-chain beta-elimination from ENOL to conjugated enone; raw IRC F=enone+2H2O, B=enol+H2O, both neutral exact. Files: dgneb_ts.xyz, dgneb_irc_IRC_F/B.xyz",
+    "time": "2026-06-16"
+  },
+  "O=CC(O)C(O)C(O)C(O)CO>>OC=C(O)C(O)C(O)C(O)CO": {
+    "name": "E1d",
+    "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+    "product": "OC=C(O)C(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "TS_FAILED",
+    "endpoint_match": null,
+    "time": "2026-06-18 03:21"
+  },
+  "O=CC(O)C(O)C(O)C(O)CO>>O=C(CO)C(O)C(O)C(O)CO": {
+    "name": "iso",
+    "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+    "product": "O=C(CO)C(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -434.65,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-06-18 16:15",
+    "ts_imag_all": [
+      -434.65
+    ],
+    "note": "| DEFGRID3 single-imag -424.18, IRC glucose<->fructose exact | DEFGRID3-OPTIMIZED -434.65"
+  },
+  "O=C(CO)C(O)C(O)C(O)CO>>OC=C(O)C(O)C(O)C(O)CO": {
+    "name": "edA",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "OC=C(O)C(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -2252.31,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-06-18 21:44",
+    "ts_imag_all": [
+      -2252.31
+    ]
+  },
+  "O=CC(=O)CC(O)C(O)CO>>O=CC(=O)C=CC(O)CO": {
+    "name": "dh2",
+    "reactant": "O=CC(=O)CC(O)C(O)CO",
+    "product": "O=CC(=O)C=CC(O)CO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -1532.96,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-06-19 02:54",
+    "ts_imag_all": [
+      -1532.96
+    ]
+  },
+  "O=C(CO)C(O)C(O)C(O)CO>>O=C(CO)C(O)=CC(O)CO": {
+    "name": "dh1",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO (open-fructose)",
+    "product": "O=C(CO)C(O)=CC(O)CO (conjugated enol-enone)",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -1454.63,
+    "status": "STRICT",
+    "note": "FIRST dehydration (the famous rate-limiting fructose dehydration), simple 1,2-beta aldol-type from the keto. NEB-TS->DFT OptTS+active-atoms. Raw IRC B=open-fructose (exact), F=product (exact). REFUTES the earlier impossible conclusion.",
+    "time": "2026-06-19"
+  },
+  "O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)=CC(O)C(O)CO": {
+    "name": "dh1g",
+    "reactant": "open-glucose",
+    "product": "3-DG enol O=CC(O)=CC(O)C(O)CO",
+    "coproduct": "O",
+    "ts_imag_cm-1": -1410.08,
+    "status": "STRICT",
+    "note": "aldose-side 1st dehydration, simple 1,2-beta. IRC F=open-glucose, B=3-DG-enol, both exact. On the consistent connected route.",
+    "time": "2026-06-19"
+  },
+  "O=CC(O)=CC(O)C(O)CO>>O=CC(=O)CC(O)C(O)CO": {
+    "name": "taut3",
+    "reactant": "3-DG enol",
+    "product": "3-DG",
+    "ts_imag_cm-1": -1449.78,
+    "status": "STRICT",
+    "note": "keto-enol taut, direct concerted. IRC F=enol B=3-DG both exact.",
+    "time": "2026-06-20"
+  },
+  "O=CC1(O)C=CC(CO)O1>>O=Cc1ccc(CO)o1": {
+    "reactant": "O=CC1(O)C=CC(CO)O1",
+    "product": "O=Cc1ccc(CO)o1",
+    "coproduct": "O",
+    "ts_imag_cm-1": -830.39,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isProduct": true,
+      "B_isReactant": true
+    },
+    "note": "aromatizing anomeric cyclo-dehydration; aromatization driving force gives concerted neutral TS",
+    "time": "2026-06-21"
+  }
+}

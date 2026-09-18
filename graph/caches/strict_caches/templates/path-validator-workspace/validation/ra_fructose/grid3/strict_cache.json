@@ -1,0 +1,22 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>O=CC(O)CO": {
+    "name": "raf_defgrid3",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "O=CC(O)CO",
+    "coproduct": "OC=C(O)CO",
+    "charge": 0,
+    "status": "STRICT",
+    "ts_imag_cm-1": -758.07,
+    "ts_imag_all": [
+      -758.07
+    ],
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "note": "DEFGRID3 single imaginary; IRC fructose<->glyceraldehyde+DHA-enol",
+    "time": "2026-07-06"
+  }
+}

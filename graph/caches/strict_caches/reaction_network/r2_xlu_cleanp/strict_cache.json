@@ -1,0 +1,22 @@
+{
+  "O=C(CO)C(O)C(O)CO>>O=CCO": {
+    "name": "xlu_retroaldol_HAA",
+    "reactant": "O=C(CO)C(O)C(O)CO",
+    "product": "O=CCO",
+    "coproduct": "OC=C(O)CO",
+    "charge": 0,
+    "ts_imag_cm-1": -540.8,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-19",
+    "ts_imag_all": [
+      -540.8
+    ],
+    "note": "ketone-activated retro-aldol of D-xylulose -> glycolaldehyde(HAA) + C3-enediol; DEFGRID3 single imaginary; strict neutral double-end IRC (soft -50 mode cleaned)"
+  }
+}

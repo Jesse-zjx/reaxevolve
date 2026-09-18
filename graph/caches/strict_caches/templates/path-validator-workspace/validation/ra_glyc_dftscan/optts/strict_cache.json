@@ -1,0 +1,24 @@
+{
+  "O=CC(O)CO>>OC=CO": {
+    "name": "ra_glyc_retroaldol_dft",
+    "reactant": "O=CC(O)CO",
+    "product": "OC=CO",
+    "coproduct": "C=O",
+    "charge": 0,
+    "status": "STRICT",
+    "ts_imag_cm-1": -942.1,
+    "ts_imag_all": [
+      -942.1
+    ],
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "barrier_kcal": 31.5,
+    "dE_kcal": 23.0,
+    "note": "retro-aldol C-C cleavage; forward IRC = formaldehyde + glycolaldehyde ENOL (OC=CO). Keto glycolaldehyde needs a subsequent enol->keto tautomerization.",
+    "time": "2026-07-05 11:03"
+  }
+}

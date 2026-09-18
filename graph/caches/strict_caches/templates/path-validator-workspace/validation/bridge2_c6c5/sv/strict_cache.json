@@ -1,0 +1,22 @@
+{
+  "OCC(O)C(O)C(=O)C(O)CO>>OCC(O)C(O)C(O)=CO": {
+    "name": "b2",
+    "reactant": "OCC(O)C(O)C(=O)C(O)CO",
+    "product": "OCC(O)C(O)C(O)=CO",
+    "coproduct": "C=O",
+    "charge": 0,
+    "ts_imag_cm-1": -932.28,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-07-09 01:49",
+    "ts_imag_all": [
+      -932.28
+    ],
+    "note": "DEFGRID3 single imaginary (HMF-parity; A2/B via CREST OH-conformer presearch)"
+  }
+}

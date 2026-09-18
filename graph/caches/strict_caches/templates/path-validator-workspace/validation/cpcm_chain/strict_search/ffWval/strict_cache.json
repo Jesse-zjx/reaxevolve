@@ -1,0 +1,17 @@
+{
+  "OCC1OC(O)(CO)C(O)C1O>>OC=C1OC(CO)C(O)C1O": {
+    "name": "ffw",
+    "reactant": "OCC1OC(O)(CO)C(O)C1O",
+    "product": "OC=C1OC(CO)C(O)C1O",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -182.8,
+    "status": "NOT_CLEAN_TS (imag modes=[-182.8, -34.52])",
+    "endpoint_match": null,
+    "time": "2026-06-22 00:08",
+    "ts_imag_all": [
+      -182.8,
+      -34.52
+    ]
+  }
+}

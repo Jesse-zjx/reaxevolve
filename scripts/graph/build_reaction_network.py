@@ -14,6 +14,7 @@ from __future__ import annotations
 import glob
 import json
 import os
+import re
 import sys
 import time
 
@@ -91,6 +92,26 @@ def load_json(path, default):
     return default
 
 
+_STATUS_WITH_DETAIL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*\((.+)\)\s*$")
+
+
+def split_status(raw):
+    """Separate a status token from free text some drivers appended to it.
+
+    Several older cache entries carry the observed imaginary modes inside the status
+    string, e.g. `NOT_CLEAN_TS (imag modes=[-248.0])`. That turns one status into as many
+    distinct values as there were runs, so any per-status count becomes unreadable. The
+    token and the detail are separated here; the status vocabulary is not remapped and no
+    judgement is changed — `graph_views.bucket()` remains the only place that reduces a
+    status to the documented four.
+    """
+    s = (raw or "").strip()
+    m = _STATUS_WITH_DETAIL.match(s)
+    if not m:
+        return s or "unresolved", None
+    return m.group(1), m.group(2).strip()
+
+
 def collect_caches():
     patterns = [
         os.path.join(CP.RUNS, "**", "strict_cache.json"),
@@ -117,6 +138,68 @@ def collect_caches():
                     vv["_cache_path"] = path
                     out[k] = vv
     return out
+
+
+def apply_readjudication(net) -> dict:
+    """Overlay recorded re-adjudications on top of the merged cache evidence.
+
+    A `strict_cache.json` entry is raw evidence: what one driver run observed. A
+    re-adjudication is a judgement made later, under a named acceptance version, over
+    that evidence. Judgements outrank raw evidence, so they are applied last.
+
+    Without this step the rebuild silently re-promotes every edge a later audit demoted:
+    the audit rewrote the network and the pin but not the caches, so merging caches alone
+    reports the pre-audit count. The original cache entry is preserved untouched and the
+    edge records both what was observed and what was decided.
+
+    Reads (append-only, never rewritten here):
+      evidence/audit/readjudication.jsonl        kept   -> new_status
+      evidence/audit/demoted_from_pin_v5.jsonl   demoted -> new_status + reason
+    """
+    ledgers = [
+        ("readjudication", os.path.join(_PKG, "evidence", "audit", "readjudication.jsonl")),
+        ("demotion", os.path.join(_PKG, "evidence", "audit", "demoted_from_pin_v5.jsonl")),
+    ]
+    edges = net.get("edges") or {}
+    applied, unmatched = [], []
+    for kind, path in ledgers:
+        if not os.path.isfile(path):
+            continue
+        for line in open(path):
+            if not line.strip():
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            new_status = rec.get("new_status")
+            r, p = canon(rec.get("reactant")), canon(rec.get("product"))
+            if not new_status or not r or not p:
+                continue
+            i = eid(r, p)
+            e = edges.get(i)
+            if e is None:
+                unmatched.append({"ledger": kind, "edge": f"{r}>>{p}"})
+                continue
+            before = e.get("status")
+            e["status"] = new_status
+            e["readjudication"] = {
+                "ledger": kind,
+                "strict_version": rec.get("strict_version") or "v5",
+                "status_from_cache": before,
+                "new_status": new_status,
+                "judgement_source": rec.get("judgement_source"),
+                "reason": rec.get("reason") or rec.get("notes"),
+            }
+            if before != new_status:
+                applied.append({"edge": f"{r}>>{p}", "from": before, "to": new_status})
+    return {
+        "n_records_applied": len(applied),
+        "n_status_changes": len(applied),
+        "n_unmatched": len(unmatched),
+        "changes": applied,
+        "unmatched": unmatched,
+    }
 
 
 def ensure_seed(net):
@@ -223,10 +306,11 @@ def main():
         if not r or not p:
             continue
         i = eid(r, p)
-        st = rec.get("status") or "unresolved"
+        st, st_detail = split_status(rec.get("status"))
         prev = edges.get(i)
         if prev and STATUS_RANK.get(prev.get("status"), -9) > STATUS_RANK.get(st, -9):
             continue
+        detail = rec.get("detail") or st_detail
         edges[i] = {
             "id": i,
             "reactant": r,
@@ -236,7 +320,7 @@ def main():
             "coproduct": rec.get("coproduct"),
             "kind": rec.get("kind") or (prev or {}).get("kind") or "unknown",
             "status": st,
-            "detail": rec.get("detail"),
+            "detail": detail,
             "ts_imag_cm-1": rec.get("ts_imag_cm-1"),
             "source": "strict_cache",
             "cache_path": rec.get("_cache_path"),
@@ -277,6 +361,9 @@ def main():
                 "hypothesis_id": h.get("id"),
             }
 
+    # Judgements last: raw cache evidence first, then any recorded re-adjudication of it.
+    readj = apply_readjudication(net)
+
     net["meta"]["built_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     net["meta"]["n_nodes"] = len(net.get("nodes", {}))
     net["meta"]["n_edges"] = len(edges)
@@ -288,6 +375,11 @@ def main():
     # Kept so older readers do not silently see None; it means "at least one target".
     net["meta"]["target_reachable_strict_from_glucose"] = any(reach.values())
     net["meta"]["expander"] = "tools/expand/templates_expand.py"
+    net["meta"]["readjudication_applied"] = {
+        "status_changes": readj["n_status_changes"],
+        "unmatched": readj["n_unmatched"],
+        "ledgers": ["evidence/audit/readjudication.jsonl", "evidence/audit/demoted_from_pin_v5.jsonl"],
+    }
 
     dest = a.out or path
     json.dump(net, open(dest, "w"), indent=2, ensure_ascii=False)
@@ -302,6 +394,10 @@ def main():
         "n_targets_reachable_strict": net["meta"]["n_targets_reachable_strict"],
         "strict_distance_to_targets": net["meta"]["strict_distance_to_targets"],
         "caches_merged": len(caches),
+        "readjudication": {
+            "status_changes": readj["n_status_changes"],
+            "unmatched": readj["n_unmatched"],
+        },
     }
     print(json.dumps(summary, indent=2))
     return 0

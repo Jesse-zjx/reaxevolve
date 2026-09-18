@@ -1,0 +1,13 @@
+{
+  "OCC1OC(O)C(O)C(O)C1O>>O=CC(O)C(O)C(O)C(O)CO": {
+    "name": "glc_n0",
+    "reactant": "OCC1OC(O)C(O)C(O)C1O",
+    "product": "O=CC(O)C(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "TS_FAILED",
+    "endpoint_match": null,
+    "time": "2026-06-27 16:10"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "OC=C1C=CC(O)(CO)O1>>O=C(C=CC(O)=CO)CO": {
+    "name": "ringclose_16open",
+    "reactant": "OC=C1C=CC(O)(CO)O1",
+    "product": "O=C(C=CC(O)=CO)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -266.21,
+    "status": "NOT_CLEAN_TS (imag modes=[-266.21, -45.83, -17.3])",
+    "endpoint_match": null,
+    "time": "2026-06-25 19:52",
+    "ts_imag_all": [
+      -266.21,
+      -45.83,
+      -17.3
+    ]
+  }
+}

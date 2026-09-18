@@ -1,0 +1,22 @@
+{
+  "OC1CO1>>O=CCO": {
+    "name": "glycolaldehyde_oxiranol_dft",
+    "reactant": "OC1CO1",
+    "product": "O=CCO",
+    "coproduct": null,
+    "charge": 0,
+    "status": "STRICT",
+    "ts_imag_cm-1": -479.77,
+    "ts_imag_all": [
+      -479.77
+    ],
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "note": "serendipitous: dry NEB for enol->keto instead found glycolaldehyde <-> 2-hydroxyoxirane ring closure. Both endpoints exact neutral.",
+    "time": "2026-07-05 11:37"
+  }
+}

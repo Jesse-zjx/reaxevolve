@@ -1,0 +1,18 @@
+{
+  "OC=C1C=CC(O)(CO)O1>>O=C(C=CC(O)=CO)CO": {
+    "name": "ringclose_16open",
+    "reactant": "OC=C1C=CC(O)(CO)O1",
+    "product": "O=C(C=CC(O)=CO)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "PARTIAL_MATCH",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-25 21:24"
+  }
+}

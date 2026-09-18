@@ -1,0 +1,22 @@
+{
+  "O=C(CO)C(O)C(O)CO>>OCC(=O)CO": {
+    "name": "ra_t0_2d",
+    "reactant": "O=C(CO)C(O)C(O)CO",
+    "product": "OCC(=O)CO",
+    "coproduct": "O=CCO",
+    "charge": 0,
+    "ts_imag_cm-1": -540.99,
+    "status": "PARTIAL_MATCH",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-07-18 16:32",
+    "ts_imag_all": [
+      -540.99,
+      -50.32
+    ]
+  }
+}

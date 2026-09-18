@@ -1,0 +1,22 @@
+{
+  "O=CC(O)C(O)C(=O)C(O)CO>>O=CC(=O)C(O)CO": {
+    "name": "OeCCOCOCeOCOCO__OeCCeOCOCO_g3",
+    "reactant": "O=CC(O)C(O)C(=O)C(O)CO",
+    "product": "O=CC(=O)C(O)CO",
+    "coproduct": "O=CCO",
+    "charge": 0,
+    "ts_imag_cm-1": -784.78,
+    "status": "PARTIAL_MATCH",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-07-02 00:04",
+    "ts_imag_all": [
+      -784.78,
+      -10.66
+    ]
+  }
+}

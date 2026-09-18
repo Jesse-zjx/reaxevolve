@@ -1,0 +1,22 @@
+{
+  "O=CC1=CCC(O)(CO)O1>>O=Cc1ccc(CO)o1": {
+    "name": "dh_L_HMF_r0_dual_2.2_1.5",
+    "reactant": "O=CC1=CCC(O)(CO)O1",
+    "product": "O=Cc1ccc(CO)o1",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -1461.13,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-06-29 00:36",
+    "ts_imag_all": [
+      -1461.13,
+      -64.61
+    ]
+  }
+}

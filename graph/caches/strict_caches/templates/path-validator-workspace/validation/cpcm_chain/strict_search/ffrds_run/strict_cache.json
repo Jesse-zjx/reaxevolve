@@ -1,0 +1,22 @@
+{
+  "OCC1OC(O)(CO)C(O)C1O>>OC=C1OC(CO)C(O)C1O": {
+    "name": "ffrds",
+    "reactant": "OCC1OC(O)(CO)C(O)C1O",
+    "product": "OC=C1OC(CO)C(O)C1O",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -839.3,
+    "status": "PARTIAL_MATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-21 23:10",
+    "ts_imag_all": [
+      -839.3,
+      -188.8
+    ]
+  }
+}

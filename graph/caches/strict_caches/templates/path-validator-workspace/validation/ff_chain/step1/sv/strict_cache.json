@@ -1,0 +1,22 @@
+{
+  "O=CC(O)C(O)C(O)CO>>O=CC(O)=CC(O)CO": {
+    "name": "ff1",
+    "reactant": "O=CC(O)C(O)C(O)CO",
+    "product": "O=CC(O)=CC(O)CO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -1459.8,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-07-07 02:11",
+    "ts_imag_all": [
+      -1459.8
+    ],
+    "note": "DEFGRID3 single imaginary (soft grid-torsion removed by displacement+reopt where present)"
+  }
+}

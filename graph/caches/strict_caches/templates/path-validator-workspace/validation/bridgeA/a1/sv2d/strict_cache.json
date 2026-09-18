@@ -1,0 +1,23 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>OCC(O)=C(O)C(O)C(O)CO": {
+    "name": "a12d",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "OCC(O)=C(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -2041.19,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": true,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": true
+    },
+    "time": "2026-07-09 22:16",
+    "ts_imag_all": [
+      -2041.19,
+      -4.05
+    ],
+    "note": "DEFGRID3-optimized; single dominant reactive imaginary -2041; residual -4.05 cm-1 hydroxyl-torsion (numerical-zero, irreducible on flat OH-torsion PES of fully-hydroxylated hexose)"
+  }
+}

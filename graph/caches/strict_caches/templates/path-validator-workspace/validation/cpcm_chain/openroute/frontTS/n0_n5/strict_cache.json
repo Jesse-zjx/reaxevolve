@@ -1,0 +1,21 @@
+{
+  "OCC1OC(O)C(O)C(O)C1O>>OCC1=CC(O)C(O)C(O)O1": {
+    "name": "n0_n5",
+    "reactant": "OCC1OC(O)C(O)C(O)C1O",
+    "product": "OCC1=CC(O)C(O)C(O)O1",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -1950.1,
+    "status": "MISMATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-26 13:05",
+    "ts_imag_all": [
+      -1950.1
+    ]
+  }
+}

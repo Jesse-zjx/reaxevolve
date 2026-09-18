@@ -1,0 +1,16 @@
+{
+  "OC=CO>>O=CCO": {
+    "name": "OCeCO__OeCCO_g1",
+    "reactant": "OC=CO",
+    "product": "O=CCO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -126.62,
+    "status": "NOT_CLEAN_TS (imag modes=[-126.62])",
+    "endpoint_match": null,
+    "time": "2026-07-25 19:25",
+    "ts_imag_all": [
+      -126.62
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "O=CC(O)C(O)C(O)C(O)CO>>O=CCO": {
+    "name": "E1_glucose_retroaldol_HAA_t0_r3",
+    "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+    "product": "O=CCO",
+    "coproduct": "O=CC(O)C(O)CO",
+    "charge": 0,
+    "ts_imag_cm-1": -27.07,
+    "status": "NOT_CLEAN_TS (imag modes=[-27.07])",
+    "endpoint_match": null,
+    "time": "2026-07-01 05:06",
+    "ts_imag_all": [
+      -27.07
+    ]
+  }
+}

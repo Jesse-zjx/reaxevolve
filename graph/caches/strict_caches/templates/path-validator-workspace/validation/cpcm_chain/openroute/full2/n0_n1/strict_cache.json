@@ -1,0 +1,18 @@
+{
+  "O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)C(O)=CC(O)CO": {
+    "name": "n0_n1",
+    "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+    "product": "O=CC(O)C(O)=CC(O)CO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-06-25 20:45"
+  }
+}

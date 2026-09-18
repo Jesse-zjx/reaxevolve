@@ -1,0 +1,18 @@
+{
+  "OCC1OC=C(O)C(O)C1O>>OCC1OC=C(O)C=C1O": {
+    "name": "e1_diene",
+    "reactant": "OCC1OC=C(O)C(O)C1O",
+    "product": "OCC1OC=C(O)C=C1O",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": null,
+    "status": "MISMATCH",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-06-27 09:34"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "O=CC(O)CO>>O=CCO": {
+    "name": "E3_glyceraldehyde_retroaldol_HAA_t0_r3",
+    "reactant": "O=CC(O)CO",
+    "product": "O=CCO",
+    "coproduct": "C=O",
+    "charge": 0,
+    "ts_imag_cm-1": -130.86,
+    "status": "NOT_CLEAN_TS (imag modes=[-130.86, -50.5, -39.63])",
+    "endpoint_match": null,
+    "time": "2026-07-01 03:28",
+    "ts_imag_all": [
+      -130.86,
+      -50.5,
+      -39.63
+    ]
+  }
+}

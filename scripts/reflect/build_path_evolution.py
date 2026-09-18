@@ -25,7 +25,7 @@ PKG = HERE.parents[1]
 sys.path.insert(0, str(PKG / "tools"))
 import chem_paths as CP  # noqa: E402
 
-OUT = PKG / "evidence"
+OUT = PKG / "evidence" / "state"
 
 # Capability-demo paths for §4.2 case studies (HAA_R2 is a second HAA route; tracked separately).
 PATHS = {
@@ -257,7 +257,7 @@ def build_path(path_id, dep, index, assets, dep_dates):
                 "asset_touched": probe,
                 "update_or_reuse": ure,
                 "outcome": None,
-                "evidence_ptr": "evidence/timeline.jsonl",
+                "evidence_ptr": "evidence/state/timeline.jsonl",
                 "notes": f"bracket_turns={a.get('bracket_turns')}; session={a.get('session')}",
             }
         )

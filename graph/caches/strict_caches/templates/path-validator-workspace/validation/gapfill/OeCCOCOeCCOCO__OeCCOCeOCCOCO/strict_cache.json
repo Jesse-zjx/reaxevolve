@@ -1,0 +1,30 @@
+{
+ "O=CC(O)C(O)=CC(O)CO>>O=CC(O)C(=O)CC(O)CO": {
+  "name": "gapA_clean",
+  "reactant": "O=CC(O)C(O)=CC(O)CO",
+  "product": "O=CC(O)C(=O)CC(O)CO",
+  "coproduct": null,
+  "charge": 0,
+  "ts_imag_cm-1": -2051.06,
+  "status": "STRICT",
+  "endpoint_match": {
+   "F_isReactant": false,
+   "F_isProduct": true,
+   "B_isReactant": true,
+   "B_isProduct": false
+  },
+  "time": "2026-08-04 05:03",
+  "ts_imag_all": [
+   -2051.06
+  ],
+  "ts_out": "gapA_g2_clean/tight.out",
+  "ts_xyz": "gapA_g2_clean/tight.xyz",
+  "hess": "gapA_g2_clean/tight.hess",
+  "irc_f": "gapA_clean_irc_IRC_F.xyz",
+  "irc_b": "gapA_clean_irc_IRC_B.xyz",
+  "grid_ts": "DEFGRID3",
+  "grid_irc": "ORCA default (须在 DEFGRID3 重跑方可进交付包)",
+  "gate": "check_strict_bar.py VERDICT PASS (clauses 2-4 = 1/1)",
+  "note": "干式 1,3-质子位移（C3=C4 烯醇 -> 3-酮-4-脱氧）。原图中被登记为一步的 O=CC(O)C(O)=CC(O)CO -> O=CC(=O)C(O)CC(O)CO 实为两步，此为其中第一步；2026-06-26 的 PARTIAL_MATCH 系产物指认错误所致。TS 经 soft_mode_cleanup 由 [-2056.13,-83.32] 清理为单虚频。"
+ }
+}

@@ -20,18 +20,24 @@ runs/
 # repository accompanying the paper. 35 MB working tree, ~11 MB packed, largest file 3.3 MB.
 # ORCA scratch that produced them is not tracked (see runs/).
 
-# Other campaign products. Kept out of version control for now; which parts are small and
-# important enough to track is a separate decision.
-graph/canonical/*
-graph/caches/*
+# Graph Memory: the state and the per-attempt judgements are tracked, because the STRICT
+# count and every claim resting on it have to be checkable from a clone. Regenerated views
+# (the *.html / *.png network renders) are not — they come back from the tracked state.
 graph/derived/*
-!graph/canonical/.gitkeep
-!graph/caches/.gitkeep
 !graph/derived/.gitkeep
-evidence/**
-!evidence/**/.gitkeep
-evolution/snapshots/*
-!evolution/snapshots/.gitkeep
+graph/canonical/*.html
+graph/canonical/*.png
+
+# Evidence: the audited state, the timelines and the audit ledgers are tracked. Session
+# transcripts, per-round loop scratch and anything holding an API key are not.
+evidence/state/loop/
+evidence/chemical_messages.json
+evidence/interventions*.json
+evidence/**/KEY.private.json
+evidence/memory/experience/*.jsonl
+
+# Pre-change asset snapshots are tracked: they are what an EVOLUTION_LOG entry is diffed
+# against, so without them the ledger is unverifiable.
 
 # Supplementary evaluation lanes: local corpora and run outputs, never vendored.
 # The convention is that each lane keeps a tracked README stating its own criterion.
@@ -42,8 +48,13 @@ tsbench/*
 **/__pycache__/
 *.pyc
 
-# Regenerated views
-*.html
-*.png
-!docs/**/*.png
+# Regenerated network views only. A blanket *.html rule is wrong here: the deposit
+# reports under deposits/*/00_report/ are primary evidence and the first thing a reviewer
+# opens, and they are .html too.
+graph/**/network*.html
+graph/**/strict_network*.html
+graph/**/strict_network*.png
+graph/**/accepted_network.html
+results_showcase.html
+
 .DS_Store

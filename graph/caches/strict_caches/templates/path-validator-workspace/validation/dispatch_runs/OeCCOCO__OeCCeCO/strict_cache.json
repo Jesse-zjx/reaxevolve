@@ -1,0 +1,21 @@
+{
+  "O=CC(O)CO>>O=CC=CO": {
+    "name": "OeCCOCO__OeCCeCO_g3",
+    "reactant": "O=CC(O)CO",
+    "product": "O=CC=CO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -1296.23,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-07-13 08:45",
+    "ts_imag_all": [
+      -1296.23
+    ]
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "schema": "audited_strict_edges/v1",
+  "description": "Audited STRICT edge set mirrored from graph/reaction_network.json. Refresh with scripts/reflect/repin_state.py after expansion.",
+  "n_strict": 30,
+  "pinned_at": "2026-09-19",
+  "edges": [
+    {
+      "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+      "product": "O=C(C=C(O)CO)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+      "product": "OC=C(O)C(O)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(C=C(O)CO)C(O)CO",
+      "product": "O=C(CO)CC(=O)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+      "product": "O=C(CO)C(O)=CC(O)CO",
+      "reaction_kind": "dehydration",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+      "product": "O=CC(O)CO",
+      "reaction_kind": "retro_aldol",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+      "product": "OC=C(O)C(O)C(O)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+      "product": "OCC(O)=C(O)C(O)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)CO",
+      "product": "O=C(C=C(O)CO)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)CO",
+      "product": "O=CC(O)C(O)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)CO",
+      "product": "O=CCO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(=O)C=CC(O)CO",
+      "product": "O=CC1(O)C=CC(CO)O1",
+      "reaction_kind": "ring_closure",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(=O)C=CCO",
+      "product": "O=CC1(O)C=CCO1",
+      "reaction_kind": "ring_opening",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(=O)CC(O)C(O)CO",
+      "product": "O=CC(=O)C=CC(O)CO",
+      "reaction_kind": "dehydration",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(=O)CC(O)CO",
+      "product": "O=CC(=O)C=CCO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)=CC(O)C(O)CO",
+      "product": "O=CC(=O)CC(O)C(O)CO",
+      "reaction_kind": "tautomerization",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)=CC(O)CO",
+      "product": "O=CC(=O)CC(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)C(=O)CC(O)CO",
+      "product": "O=CC(=O)C(O)CC(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)C(O)=CC(O)CO",
+      "product": "O=CC(O)C(=O)CC(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+      "product": "O=C(CO)C(O)C(O)C(O)CO",
+      "reaction_kind": "isomerization",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+      "product": "O=CC(O)=CC(O)C(O)CO",
+      "reaction_kind": "dehydration",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)C(O)C(O)CO",
+      "product": "O=CC(O)=CC(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC(O)CO",
+      "product": "OC=CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC1(O)C=CC(CO)O1",
+      "product": "O=Cc1ccc(CO)o1",
+      "reaction_kind": "aromatization",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CC1(O)C=CCO1",
+      "product": "O=Cc1ccco1",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "O=CCC=O",
+      "product": "O=CC=CO",
+      "reaction_kind": "keto_to_enol",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "OC1CO1",
+      "product": "O=CCO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "OC=C(O)C(O)C(O)CO",
+      "product": "O=C(CO)C(O)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "OC=C1C=CC(O)(CO)O1",
+      "product": "O=CC1=CCC(O)(CO)O1",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "OC=CO",
+      "product": "O=CCO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    },
+    {
+      "reactant": "OCC(O)=C(O)C(O)C(O)CO",
+      "product": "O=C(C(O)CO)C(O)C(O)CO",
+      "reaction_kind": "unknown",
+      "source": "strict_cache"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>O=CC(O)CO": {
+    "name": "raf",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "O=CC(O)CO",
+    "coproduct": "OC=C(O)CO",
+    "charge": 0,
+    "ts_imag_cm-1": -758.07,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-07-06 13:44",
+    "ts_imag_all": [
+      -758.07
+    ],
+    "note": "DEFGRID3 re-opt: single imaginary mode (removed -13.5 grid-noise soft mode)"
+  }
+}

@@ -11,6 +11,7 @@ stay aligned with the live graph. smoke_test then checks pin ≡ graph STRICT
 rather than a hard-coded count.
 """
 import argparse
+import collections
 import json
 import os
 import subprocess
@@ -27,9 +28,11 @@ import chem_paths as CP  # noqa: E402
 
 PIN = os.path.join(CP.GRAPH, 'audited_strict_edges.json')
 NET = os.path.join(CP.GRAPH, 'reaction_network.json')
-STATE_JSON = os.path.join(PKG, 'evidence', 'NETWORK_STATE.json')
-STATE_MD = os.path.join(PKG, 'evidence', 'NETWORK_STATE.md')
-TIMELINE = os.path.join(PKG, 'evidence', 'timeline.jsonl')
+STATE_DIR = os.path.join(PKG, 'evidence', 'state')
+STATE_JSON = os.path.join(STATE_DIR, 'NETWORK_STATE.json')
+STATE_MD = os.path.join(STATE_DIR, 'NETWORK_STATE.md')
+TIMELINE = os.path.join(STATE_DIR, 'timeline.jsonl')
+BUILD_NETWORK = os.path.join(PKG, 'scripts', 'graph', 'build_reaction_network.py')
 
 
 def run(cmd, timeout=900):
@@ -47,14 +50,25 @@ def load_json(path, default=None):
         return json.load(f)
 
 
+def edge_records(net):
+    """Edges as a list, whichever container the graph file uses.
+
+    Graph Memory keys edges by id; iterating the dict directly would yield its keys.
+    """
+    e = net.get('edges')
+    if isinstance(e, dict):
+        return [v for v in e.values() if isinstance(v, dict)]
+    return [v for v in (e or []) if isinstance(v, dict)]
+
+
 def strict_pairs(net):
     out = []
-    for e in net.get('edges', []):
+    for e in edge_records(net):
         if e.get('status') == 'STRICT' or str(e.get('status', '')).startswith('STRICT'):
             out.append({
                 'reactant': e['reactant'],
                 'product': e['product'],
-                'reaction_kind': e.get('reaction_kind'),
+                'reaction_kind': e.get('kind') or e.get('reaction_kind'),
                 'source': e.get('source'),
             })
     out.sort(key=lambda x: (x['reactant'], x['product']))
@@ -90,8 +104,20 @@ def dated_strict_from_timeline():
 
 
 def write_network_state(net, pairs, dated, prev_pairs):
-    by = (net.get('stats') or {}).get('edges_by_status') or {}
-    reach = net.get('target_reachable_strict_from_glucose') or {}
+    # Counted from the edge records, never read from a stored summary. A cached
+    # `stats.edges_by_status` block once survived a re-adjudication unchanged and reported
+    # eight more STRICT edges than the audit had left in place.
+    meta = net.get('meta') or {}
+    records = edge_records(net)
+    by = dict(collections.Counter(e.get('status') or 'unknown' for e in records))
+    # The documented four-value vocabulary. Raw statuses are kept beside it because the
+    # distinction between, say, `failed` and `NOT_CLEAN_TS` is what Reflect diagnoses on.
+    sys.path.insert(0, HERE)
+    import graph_views as _GV  # noqa: WPS433
+    by_bucket = dict(collections.Counter(_GV.bucket(e.get('status')) for e in records))
+    reach = meta.get('targets_reachable_strict') or net.get(
+        'target_reachable_strict_from_glucose') or {}
+    dist = meta.get('strict_distance_to_targets') or {}
     added = sorted(set((p['reactant'], p['product']) for p in pairs) - prev_pairs)
     removed = sorted(prev_pairs - set((p['reactant'], p['product']) for p in pairs))
     undated = [p for p in pairs if (p['reactant'], p['product']) not in dated]
@@ -101,7 +127,10 @@ def write_network_state(net, pairs, dated, prev_pairs):
         'n_edges': len(net.get('edges') or []),
         'n_strict': len(pairs),
         'edges_by_status': by,
+        'edges_by_bucket': by_bucket,
         'targets_reachable_strict': reach,
+        'strict_distance_to_targets': dist,
+        'readjudication_applied': meta.get('readjudication_applied') or {},
         'n_strict_dated': len(pairs) - len(undated),
         'n_strict_undated': len(undated),
         'delta_vs_previous_pin': {
@@ -109,7 +138,7 @@ def write_network_state(net, pairs, dated, prev_pairs):
             'removed': [{'reactant': a, 'product': b} for a, b in removed],
             'd_strict': len(pairs) - len(prev_pairs),
         },
-        'pin_path': 'graph/audited_strict_edges.json',
+        'pin_path': 'graph/canonical/audited_strict_edges.json',
         'note': (
             'Single source for prose counts. Prefer this file over HANDOVER/README '
             'literals. Refresh via scripts/reflect/repin_state.py.'
@@ -131,19 +160,36 @@ def write_network_state(net, pairs, dated, prev_pairs):
             state['n_nodes'], state['n_edges'], state['n_strict']),
         '- STRICT dated (timeline): **%d / %d**' % (
             state['n_strict_dated'], state['n_strict']),
-        '- Pin: `graph/audited_strict_edges.json`',
+        '- Pin: `graph/canonical/audited_strict_edges.json`',
         '',
         '## Targets reachable (STRICT from glucose)',
         '',
+        '| Target | Reachable | Shortest STRICT chain |',
+        '|---|---|---|',
     ]
     for name, ok in sorted(reach.items()):
-        lines.append('- %s: %s' % (name, 'yes' if ok else 'no'))
+        d = dist.get(name)
+        lines.append('| %s | %s | %s |' % (
+            name, 'yes' if ok else 'no', '%d steps' % d if d is not None else '—'))
     lines += [
         '',
-        '## Edges by status',
+        '## Edges by bucket',
+        '',
+        'The documented vocabulary (`CONTEXT.md`): accepted = STRICT, evidence_ok = QM-backed',
+        'but not delivery grade, rejected = scientific negative, unresolved = incomplete.',
+        '',
+        '| Bucket | Edges |',
+        '|---|---|',
+    ] + [
+        '| %s | %d |' % (k, v) for k, v in sorted(by_bucket.items(), key=lambda kv: -kv[1])
+    ] + [
+        '',
+        '## Edges by raw status',
+        '',
+        'Driver-level statuses, kept for diagnosis. These are not acceptance categories.',
         '',
         '```json',
-        json.dumps(by, ensure_ascii=False, indent=2),
+        json.dumps(dict(sorted(by.items(), key=lambda kv: -kv[1])), ensure_ascii=False, indent=2),
         '```',
         '',
         '## Delta vs previous pin',
@@ -189,7 +235,7 @@ def main():
     if not a.skip_build:
         print('== build_reaction_network ==')
         out = run([sys.executable,
-                   os.path.join(CP.RN, 'build_reaction_network.py')])
+                   BUILD_NETWORK])
         for ln in out.splitlines():
             if ln.startswith('nodes ') or ln.startswith('by status') or ln.startswith('targets'):
                 print(ln)
