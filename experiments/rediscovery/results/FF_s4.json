@@ -1,0 +1,27 @@
+{
+ "id": "FF_s4",
+ "route": "FF",
+ "dep": "glucose_ff_review_v1",
+ "step": "step_4_retro_aldol",
+ "kind": "retro-aldol C-C cleavage",
+ "R": "O=C(C(O)CO)C(O)C(O)CO",
+ "P": "OC=C(O)C(O)C(O)CO",
+ "Rname": "node_3_3ketohexose",
+ "Pname": "node_4_C5_enediol",
+ "coproduct": "C=O",
+ "spectator": null,
+ "imag_ref": -932.28,
+ "barrier_ref": 29.8,
+ "dkind": "retro_aldol",
+ "natoms": 24,
+ "Pfull": "C=O.OC=C(O)C(O)C(O)CO",
+ "Rfull": "O=C(C(O)CO)C(O)C(O)CO",
+ "wall_s": 27337.8,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -869.65,
+ "imag_all": [
+  -869.65
+ ],
+ "n_imag": 1
+}

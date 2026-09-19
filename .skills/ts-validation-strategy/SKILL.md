@@ -18,13 +18,13 @@ description: >-
 > Acceptance clauses: `policy/acceptance/STRICT.md` (v5). This skill does not redefine them.
 
 ## STRICT-bar campaign experience (2026-06)
-> Background reading: `templates/yarp-workspace/STRICT_ROUTE_STRATEGY.md` — the campaign-era strategy
-> record. It sits in the YARP workspace for historical reasons; route search itself no longer goes
-> through YARP enumeration.
+> Background reading: the campaign-era route-strategy note is not distributed with this
+> repository. Route search no longer goes through template enumeration of that era; the
+> operating recipe below is the part worth keeping.
 
 - **Bar**: every step's raw IRC ends must equal the neutral reactant and the neutral product, and the
   next step's reactant is the previous step's product.
-- **Tool**: `resources/strict_validate.py` (OptTS + NumFreq + IRC, RDKit-constitution endpoint check;
+- **Tool**: `tools/workflow/validate_candidate.py` (OptTS + NumFreq + IRC, RDKit-constitution endpoint check;
   `--active-atoms` focuses the TS mode).
 
 > SUPERSEDED for new work (post-furfural review): the bar is **exactly one imaginary mode** — a small
@@ -136,7 +136,7 @@ Is it a dehydration step?
 > xTB-era shortcut and has been removed: it cannot produce a validated edge under the current bar.
 
 ### Phase-2 queue scoring (2026-08)
-`tools/reaction_network/templates_expand.py` `motif_score` now **penalizes dehydration when the
+`tools/expand/templates_expand.py` `motif_score` now **penalizes dehydration when the
 reactant is not an enol** (`[OX2H][#6X3]=[#6]`). Candidates remain enumerable, but the QM budget
 prefers E1cb-like enol→alkene dehydrations that match the proven STRICT motif. Non-enol
 dehydrations were the main source of `dehydration` / `no_match` in `failure_digest`. Expectation
@@ -157,7 +157,7 @@ When identifying which C–OH to break for dehydration:
 - **β-H distance alone is unreliable**: closest β-H ≠ correct reaction site
 - **Product similarity matching** works better: simulate dehydration at each C–OH,
   compare simulated product to expected product via Tanimoto similarity
-- **Atom mapping** (`resources/tools/map_reaction_atoms.py`) is best when it works, but fails
+- **Atom mapping** (`tools/geometry/map_reaction_atoms.py`) is best when it works, but fails
   for ~40% of SMILES pairs → always have an RDKit fallback
 
 ### 3. A plausible SMILES transformation is not an elementary step
@@ -202,7 +202,7 @@ saddle connects two genuine neutral species, just not the pair that was proposed
 - This rescue is how the D-xylulose retro-aldol became a STRICT edge (−540.8, single
   imaginary, exact endpoints): it first scored PARTIAL against a guessed DHA product,
   and the real IRC gave glycolaldehyde plus the C3-enediol. That edge carries HAA route 2;
-  record in `reaction_network/r2_xlu_cleanp/strict_cache.json` (it is not one of the three
+  record in `graph/caches/strict_caches/reaction_network/r2_xlu_cleanp/strict_cache.json` (it is not one of the three
   deposits, so verify it there rather than under a deposit).
 
 `validate_candidate.harvest_endpoints()` does this automatically, writing the perceived
@@ -216,11 +216,11 @@ pair into `discovered_cache.json` so the network grows even from a mismatch.
 
 | File | Purpose |
 |------|---------|
-| `resources/strict_validate.py` | The acceptance gate: OptTS + NumFreq + IRC + strict endpoint match |
-| `resources/constrained_scan_guess.py` | Dual constrained-scan TS guesses (dehydration / aromatization) |
-| `resources/dry_proton_guess.py` | Dry proton-transfer TS guesses (tautomerization / enolization) |
-| `resources/auto_guess.py` | Reaction-agnostic interpolation guesses; fallback only |
-| `resources/auto_validate_driver.py` | Orchestrates validation pipeline |
-| `resources/orca_xtb_workflow.py` | ORCA+xTB TS opt → freq → IRC workflow |
-| `resources/smi_to_xyz.py` | SMILES → 3D XYZ via RDKit+xTB |
-| `validation/path_queue.json` | xTB-era pending-step queue, read by `auto_guess.py --all-pending`. Batch work now runs through `reaction_network/auto_loop.py` and `dispatch_cache.json` |
+| `tools/workflow/validate_candidate.py` | The acceptance gate: OptTS + NumFreq + IRC + strict endpoint match |
+| `tools/guess/constrained_scan_guess.py` | Dual constrained-scan TS guesses (dehydration / aromatization) |
+| `tools/guess/dry_proton_guess.py` | Dry proton-transfer TS guesses (tautomerization / enolization) |
+| `tools/guess/auto_guess.py` | Reaction-agnostic interpolation guesses; fallback only |
+| _(retired)_ `auto_validate_driver.py` | Orchestrated the validation pipeline under the old workspace layout; replaced by `loop/run_loop.py` |
+| `tools/workflow/orca_xtb_workflow.py` | ORCA+xTB TS opt → freq → IRC workflow |
+| `tools/geometry/smi_to_xyz.py` | SMILES → 3D XYZ via RDKit+xTB |
+| _(retired)_ `path_queue.json` | xTB-era pending-step queue. Batch work now runs through `loop/run_loop.py` and `graph/caches/candidate_queue.json` |

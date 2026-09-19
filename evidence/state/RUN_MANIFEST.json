@@ -1,8 +1,8 @@
 {
   "workspace": "/root/inno-agent/workspaces/reaxevolve",
   "event": "update",
-  "updated_at": "2026-09-18T17:42:30Z",
-  "started_at": "2026-09-17T19:25:06Z",
+  "updated_at": "2026-09-19T10:25:39Z",
+  "started_at": "2026-09-19T10:23:27Z",
   "ended_at": null,
   "pi_version": "missing",
   "strict_bar_version": "v5",
@@ -16,11 +16,11 @@
     "note": "Monotonic version per evolvable asset. Attempts record this whole vector, so a verdict can be traced to the asset set that produced it. Bumped only through scripts/reflect/asset_snapshot.py --bump, which also writes evolution/snapshots/ and appends evolution/EVOLUTION_LOG.jsonl. Files under policy/, scripts/ and loop/ are not assets and do not appear here.",
     "asset_set": "final",
     "skills": {
-      "pathway-method": "v1",
-      "strict-edge-criterion": "v1",
-      "ts-validation-strategy": "v1",
-      "strict-chain-assembly": "v1",
-      "qm-reaction-validation": "v1",
+      "pathway-method": "v2",
+      "strict-edge-criterion": "v2",
+      "ts-validation-strategy": "v2",
+      "strict-chain-assembly": "v2",
+      "qm-reaction-validation": "v2",
       "memory-and-reflection": "v1"
     },
     "tools": {
@@ -45,11 +45,13 @@
       "workflow/run_qm_step.py": "v0",
       "workflow/orca_xtb_workflow.py": "v1",
       "workflow/validate_candidate.py": "v1",
-      "workflow/soft_mode_cleanup.py": "v1",
-      "workflow/prepare_step.py": "v1",
-      "workflow/auto_validate_driver.py": "v1"
+      "workflow/soft_mode_cleanup.py": "v1"
+    },
+    "retired": {
+      "workflow/prepare_step.py": "depends on the retired path-validator workspace layout",
+      "workflow/auto_validate_driver.py": "depends on the retired path-validator workspace layout"
     }
   },
   "core_hours": 0.0,
-  "git_head": "23fb9c4"
+  "git_head": "3d1f097"
 }

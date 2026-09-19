@@ -1,0 +1,27 @@
+{
+ "id": "HMF_s1",
+ "route": "HMF",
+ "dep": "glucose_hmf_review_v3",
+ "step": "step_1_dehydration",
+ "kind": "dehydration",
+ "R": "O=CC(O)C(O)C(O)C(O)CO",
+ "P": "O=CC(O)=CC(O)C(O)CO",
+ "Rname": "node_0_glucose",
+ "Pname": "node_1",
+ "coproduct": "O",
+ "spectator": null,
+ "imag_ref": -1410.08,
+ "barrier_ref": 50.2,
+ "dkind": "dehydration",
+ "natoms": 24,
+ "Pfull": "O.O=CC(O)=CC(O)C(O)CO",
+ "Rfull": "O=CC(O)C(O)C(O)C(O)CO",
+ "wall_s": 11124.2,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -1488.79,
+ "imag_all": [
+  -1488.79
+ ],
+ "n_imag": 1
+}

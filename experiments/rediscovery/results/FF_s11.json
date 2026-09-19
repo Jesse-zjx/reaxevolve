@@ -1,0 +1,27 @@
+{
+ "id": "FF_s11",
+ "route": "FF",
+ "dep": "glucose_ff_review_v1",
+ "step": "step_11_aromatization",
+ "kind": "aromatizing dehydration",
+ "R": "O=CC1(O)C=CCO1",
+ "P": "O=Cc1ccco1",
+ "Rname": "node_10_furanic_hemiketal",
+ "Pname": "node_11_furfural",
+ "coproduct": "O",
+ "spectator": null,
+ "imag_ref": -872.91,
+ "barrier_ref": 50.0,
+ "dkind": "aromatization",
+ "natoms": 14,
+ "Pfull": "O.O=Cc1ccco1",
+ "Rfull": "O=CC1(O)C=CCO1",
+ "wall_s": 18448.5,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -850.57,
+ "imag_all": [
+  -850.57
+ ],
+ "n_imag": 1
+}

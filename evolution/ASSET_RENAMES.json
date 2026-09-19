@@ -38,9 +38,7 @@
       "tools/guess/proton_scan.py",
       "tools/workflow/orca_xtb_workflow.py",
       "tools/workflow/validate_candidate.py",
-      "tools/workflow/soft_mode_cleanup.py",
-      "tools/workflow/prepare_step.py",
-      "tools/workflow/auto_validate_driver.py"
+      "tools/workflow/soft_mode_cleanup.py"
     ],
     "unchanged": [
       "tools/geometry/builder.py",
@@ -51,7 +49,12 @@
       "tools/geometry/xyz_to_smiles.py",
       "tools/record_update.py",
       "tools/workflow/run_qm_step.py"
-    ]
+    ],
+    "retired_after_layout_change": {
+      "tools/guess/smi_to_xyz.py": "duplicate of geometry/smi_to_xyz.py (same implementation)",
+      "tools/workflow/prepare_step.py": "depends on the retired path-validator workspace layout",
+      "tools/workflow/auto_validate_driver.py": "depends on the retired path-validator workspace layout"
+    }
   },
   "layout": {
     "note": "Directory moves that are not asset changes; kept so old paths in archived records resolve.",

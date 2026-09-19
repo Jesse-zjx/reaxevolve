@@ -64,6 +64,7 @@ so nothing in this repository assumes a carbon-preserving route. Full statement:
 | `graph/` | Graph Memory: `canonical/` state, `caches/`, `derived/` views |
 | `evidence/` | Experience Memory, loop state, audits, archives |
 | `deposits/` | Expert-confirmable delivery packages |
+| `experiments/rediscovery/` | Rebuilding the delivered routes from SMILES alone — the hard baseline |
 | `preregistration/` | Saturation rule and the fixed-asset comparison protocol |
 | `docs/paper`, `docs/adr` | Method contract, outline, decision ledger, architecture decisions |
 | `tsbench/` | Supplementary transfer evaluation. Separate acceptance criterion; see its README |
@@ -97,9 +98,19 @@ python loop/select_candidates.py --top 8          # what the next round would co
 Reading the evidence without running anything:
 
 ```bash
-python policy/acceptance/check_strict_bar.py --deposit deposits/<name>
-python scripts/reflect/graph_query.py --mode summary
-cat evolution/EVOLUTION_LOG.md
+python policy/acceptance/check_strict_bar.py --deposit deposits/<name>   # as-built, per step
+python scripts/graph/build_reaction_network.py                           # re-derive the counts
+python scripts/qa/check_doc_paths.py                                     # every documented path resolves
+cat evidence/state/NETWORK_STATE.md                                      # the only source for counts
+cat evidence/controls.md                                                 # does the bar have resolution?
+cat experiments/rediscovery/REPRODUCTION_REPORT.md                       # from SMILES alone
+cat evolution/EVOLUTION_LOG.md                                           # what changed, on what evidence
+```
+
+Spending real CPU to prove the toolchain works end to end (needs ORCA and xTB):
+
+```bash
+python scripts/qm_smoke.py     # r²SCAN-3c / CPCM(water) on a molecule that finishes in seconds
 ```
 
 A real round spends ORCA and API budget:

@@ -1,0 +1,27 @@
+{
+ "id": "FF_s6",
+ "route": "FF",
+ "dep": "glucose_ff_review_v1",
+ "step": "step_6_isomerization",
+ "kind": "ketose-aldose isomerization",
+ "R": "O=C(CO)C(O)C(O)CO",
+ "P": "O=CC(O)C(O)C(O)CO",
+ "Rname": "node_5_xylulose",
+ "Pname": "node_6_open_xylose",
+ "coproduct": null,
+ "spectator": null,
+ "imag_ref": -766.5,
+ "barrier_ref": 38.5,
+ "dkind": "isomerization",
+ "natoms": 20,
+ "Pfull": "O=CC(O)C(O)C(O)CO",
+ "Rfull": "O=C(CO)C(O)C(O)CO",
+ "wall_s": 16730.1,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -800.75,
+ "imag_all": [
+  -800.75
+ ],
+ "n_imag": 1
+}

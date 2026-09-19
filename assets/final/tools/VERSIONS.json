@@ -32,8 +32,10 @@
     "workflow/run_qm_step.py": "v0",
     "workflow/orca_xtb_workflow.py": "v1",
     "workflow/validate_candidate.py": "v1",
-    "workflow/soft_mode_cleanup.py": "v1",
-    "workflow/prepare_step.py": "v1",
-    "workflow/auto_validate_driver.py": "v1"
+    "workflow/soft_mode_cleanup.py": "v1"
+  },
+  "retired": {
+    "workflow/prepare_step.py": "depends on the retired path-validator workspace layout",
+    "workflow/auto_validate_driver.py": "depends on the retired path-validator workspace layout"
   }
 }

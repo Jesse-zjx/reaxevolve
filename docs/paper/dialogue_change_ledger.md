@@ -3,7 +3,8 @@
 > **范围**：从相关对话与其沉淀文档中，只提取会影响**研究问题、方法、贡献、实验设计、章节结构**的决定。  
 > **不做**：不把助理建议自动升格为作者决定（除非作者明确采纳）。  
 > **主要来源**：方法文案评审对话；auto_loop/agentic 叙事讨论；本文件修订轮作者指示。  
-> **对照文稿**：现行大纲 `Nature_Communications_Chinese_Outline_v4.md`（已按 D-24 + Method Framework 再对齐）；方法 `Method_Framework_for_Review.md` / `Method_Framework_BLIND.md`；v3 仅存档。以本 ledger **最新确认**为准。
+> **对照文稿**：现行大纲 `Nature_Communications_Chinese_Outline_v4.md`（已按 D-24 + Method Framework 再对齐）；方法契约 `Method_Framework_for_Review.md`。以本 ledger **最新确认**为准。
+> **本仓库只分发现行版本**：v1–v3 各版大纲、盲审副本与逐轮评审记录属写作过程材料，不随代码仓库分发；下文提及它们时仅作决定来源的说明。
 
 ---
 
@@ -16,7 +17,7 @@
 | D-01 | 目标期刊为 Nature Communications；中心贡献是**系统/方法**，不是宣称某条糖转化路径化学首次发现。 | 研究问题、贡献、章节语气 | 大纲定位；方法文案定位沿用 |
 | D-02 | 方法评审**不盯实验数字**（网络条数、回路轮次、复用计数、phase 状态、账本条数等），评方法设计文案。 | 评审流程、方法章写法 | 用户要求抽取 Method/Framework 做评审 |
 | D-03 | 评价对象是**方法设计文案**；不以当前代码完备度否决设计主张。 | 方法、实验叙事边界 | 用户重申 |
-| D-04 | 方法文案工作版为 `Method_Framework_for_Review.md`；盲审副本为 `Method_Framework_BLIND.md`（内容需按本 ledger 最新口径再同步）。 | 文档结构 | 用户确认「目前整理好的方法文案」 |
+| D-04 | 方法文案工作版为 `Method_Framework_for_Review.md`。盲审副本不随本仓库分发；若再送审须按本 ledger 最新口径重新生成。 | 文档结构 | 用户确认「目前整理好的方法文案」 |
 
 ### 1.2 验收标准与边界
 
@@ -131,7 +132,7 @@
 
 | ID | 问题 | 卡住什么 |
 |---|---|---|
-| U-01（基本完成） | Outline v4 与 Method Framework 已对齐四步主循环 / C1–C2 / §4；BLIND 副本若再送审需再刷 | 若再盲审则刷 BLIND |
+| U-01（基本完成） | Outline v4 与 Method Framework 已对齐四步主循环 / C1–C2 / §4 | 若再盲审则按现行口径重新生成盲审副本 |
 | U-02 | 删除 auto_loop 后，探索—验证环节的论文用语（避免读者以为验证 worker 内有 LLM） | §2/§3 清晰度 |
 | U-03（已裁定） | → **D-28**；仍待填：诊断面板 attempt 列表 | 预注册表 |
 | U-04（已裁定） | → **D-29**；仍待填：held-out 路径 ID、每臂核时帽 | 预注册表 |
@@ -156,4 +157,4 @@
 
 1. ~~D-24 改纲~~；~~T-01/U-04 方案选择~~（已为 **D-28/D-29**）。  
 2. 写预注册表：诊断面板 attempt 列表；C2 的 1–2 条路径 ID + 每臂核时帽；初始/最终资产 tag。  
-3. 单一 STRICT 口径**重算网络数字**后再锁结果章。
+3. ~~单一 STRICT 口径重算网络数字~~ — **已完成（2026-09-19）**：243 节点 / 325 边 / 30 验收边，三目标全部可达；数字取 `evidence/state/NETWORK_STATE.md`，重建顺序与 38→30 的关系见 `graph/README.md`。

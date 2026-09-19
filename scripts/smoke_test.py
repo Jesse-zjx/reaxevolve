@@ -313,7 +313,8 @@ def main():
          str(PKG / "loop"), str(PKG / "scripts")],
         text=True, capture_output=True,
     ).stdout
-    exempt = ("isolation_audit", "smoke_test")  # these name the lane in order to fence it
+    # These name the lane in order to fence it off, not to depend on it.
+    exempt = ("isolation_audit", "smoke_test", "check_doc_paths")
     offenders = [l for l in hits.splitlines() if not any(e in l for e in exempt)]
     if offenders:
         fail(f"main loop depends on the tsbench lane: {offenders[:2]}")
@@ -321,6 +322,14 @@ def main():
         ok("no dependency from loop/ or scripts/ on the tsbench lane")
 
     section("13. QA sub-checks")
+    r = subprocess.run(
+        [sys.executable, str(PKG / "scripts" / "qa" / "check_doc_paths.py")],
+        cwd=str(PKG), text=True, capture_output=True,
+    )
+    if r.returncode == 0:
+        ok("every documented repo path resolves")
+    else:
+        fail(f"documented paths do not resolve:\n{r.stdout.strip()[-600:]}")
     for script in ["scripts/qa/isolation_audit.py", "scripts/qa/run_manifest.py"]:
         r = subprocess.run([sys.executable, str(PKG / script)], cwd=str(PKG), capture_output=True)
         if r.returncode in (0, 1):  # audit returns 1 on violations

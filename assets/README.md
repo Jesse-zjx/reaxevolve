@@ -7,10 +7,10 @@ them comparable.
 | | `initial/` | `final/` |
 |---|---|---|
 | Skills | 5, declarative and general-purpose: generate a TS guess, diagnose why it failed, run the QM step, assemble a chain, keep memory | 6, campaign-shaped: per-reaction-kind guess ladder, which motifs can pass the bar, chain assembly and packaging discipline |
-| Candidate enumerator | **absent** | `expand/templates_expand.py` — four reaction SMARTS plus graph-based ring close/open |
-| Candidate scoring | **absent** | `motif_score` (inside the enumerator) plus `screen/diversity.py` novelty |
+| Candidate enumerator | **absent** | `tools/expand/templates_expand.py` — four reaction SMARTS plus graph-based ring close/open |
+| Candidate scoring | **absent** | `motif_score` (inside the enumerator) plus `tools/screen/diversity.py` novelty |
 | Guess generators | **absent** | `guess/` — constrained scan, dual scan, 2D scan, dry proton transfer, water relay, NEB |
-| QM driver | `workflow/run_qm_step.py` | same driver plus the ORCA/xTB workflow, soft-mode cleanup and candidate validator |
+| QM driver |  `tools/workflow/run_qm_step.py` | same driver plus the ORCA/xTB workflow, soft-mode cleanup and candidate validator |
 | Geometry toolkit | identical | identical |
 
 The largest single difference is not wording inside a skill file. It is the presence or

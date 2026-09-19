@@ -23,7 +23,7 @@ DEFGRID3 was phased in over the campaign; as-built parameters in `reference.md` 
 ## Acceptance bar (pointer only)
 
 **`policy/acceptance/STRICT.md` (v5)** + **`policy/acceptance/check_strict_bar.py`**.
-This skill's `scripts/check_strict_bar.py` is a shim. Do not restate the four clauses here.
+This skill's `policy/acceptance/check_strict_bar.py` is a shim. Do not restate the four clauses here.
 Clause 4 is the discrete water test (catalytic shuttle allowed; spectator rejected).
 
 ## Mechanism-selection rules
@@ -75,11 +75,11 @@ Copy this checklist and track progress:
 - [ ] OptTS from peak, then interpolated guesses if it drifts
 - [ ] IRC → confirm endpoints are the intended neutral species (no zwitterion, no phantom water)
 - [ ] soft-mode cleanup → exactly one imaginary; DEFGRID3 IRC from the clean TS
-- [ ] Gate: `scripts/check_strict_bar.py` reports PASS (see below) — do not proceed on a FAIL
+- [ ] Gate: `policy/acceptance/check_strict_bar.py` reports PASS (see below) — do not proceed on a FAIL
 ```
 
 ## Bundled script (execute it; don't re-derive the checks by hand)
-**`scripts/check_strict_bar.py`** — verifies clauses 1-4 against the actual ORCA output and the
+**`policy/acceptance/check_strict_bar.py`** — verifies clauses 1-4 against the actual ORCA output and the
 raw IRC endpoint geometries. Two modes, matching the policy that the bar governs new work and does
 not reopen accepted deposits:
 ```bash
@@ -97,19 +97,19 @@ gate of every new step, and after assembling any deposit. Requires `rdkit` for c
 reports 11/11 with a uniform DEFGRID3.
 
 ## External tools (canonical locations — not bundled, they are part of the running pipeline)
-- `templates/path-validator-workspace/resources/strict_validate.py` — OptTS+NumFreq+IRC + strict
+- `tools/workflow/validate_candidate.py` — OptTS+NumFreq+IRC + strict
   endpoint check (`--active-atoms`, `--spectators`). Its `endpoint_matches()` compares the
   multiset of stereo-stripped neutral canonical SMILES of the IRC fragments and forces
   `DetermineBonds(charge=0)`, so charged and zwitterionic endpoints cannot match; use
   `sv.endpoint_matches(xyz,[smi])` for ad-hoc checks. (`EXACT_SMILES_ONLY=1` is the equivalent
   switch in `orca_xtb_workflow.classify_endpoint_match`, not a flag of this script.)
-- `.../resources/dry_proton_guess.py` — automatic dry proton-transfer guesses (atom-maps R→P, locates the
+- `.../tools/guess/dry_proton_guess.py` — automatic dry proton-transfer guesses (atom-maps R→P, locates the
   migrating H, GFN2 H→acceptor scan + a concerted donor-H/H-acceptor grid). **Primary method for new
   proton-transfer edges**; it is what replaced the water relay.
 - `.../validation/ff_chain/proton_scan.py` — 1D DFT relaxed scan of a forming bond (dry proton shift),
   hand-indexed. Used for the deposited tautomerizations; keep for one-off DFT scans.
 - `.../validation/bridge_stepC/iso5b/scan2d.py` — 2D scan of two forming bonds (concerted hydride+proton).
-- `.../resources/tools/xyz_to_smiles.py` — perceive SMILES of an xyz (spots zwitterions).
+- `.../tools/geometry/xyz_to_smiles.py` — perceive SMILES of an xyz (spots zwitterions).
 - `.../validation/ff_finalize/{assemble_review_v1,gen_report,cross_consistency}.py` — build the deposit.
 - Deposit self-test: `<deposit>/05_docs/build_scripts/self_check.py` (reads only deposited files;
   prints `SINGLE-IMAGINARY n/n · STRICT-IRC n/n · VERDICT PASS`).
@@ -123,7 +123,7 @@ reports 11/11 with a uniform DEFGRID3.
 `README_FOR_EXPERT.md`. Always end by running `self_check.py` → must print `VERDICT PASS`.
 
 ## Diversity layer (find multiple distinct routes, not one)
-`reaction_network/diversity.py` prevents the search collapsing to one route per target
+`tools/screen/diversity.py` prevents the search collapsing to one route per target
 (novelty search + Quality-Diversity/MAP-Elites + a Reasoning-Path-Divergence gate):
 - **novelty scoring**: `templates_expand` scores `motif + NOVELTY_WEIGHT*novelty` (novelty =
   1 − max Tanimoto of the product vs already-explored species) → pushes QM into new space.

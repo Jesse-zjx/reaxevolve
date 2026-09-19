@@ -1,0 +1,27 @@
+{
+ "id": "HMF_s5",
+ "route": "HMF",
+ "dep": "glucose_hmf_review_v3",
+ "step": "step_5_aromatization",
+ "kind": "aromatizing dehydration",
+ "R": "O=CC1(O)C=CC(CO)O1",
+ "P": "O=Cc1ccc(CO)o1",
+ "Rname": "node_4_M",
+ "Pname": "node_5_HMF",
+ "coproduct": "O",
+ "spectator": null,
+ "imag_ref": -830.39,
+ "barrier_ref": 51.1,
+ "dkind": "aromatization",
+ "natoms": 18,
+ "Pfull": "O.O=Cc1ccc(CO)o1",
+ "Rfull": "O=CC1(O)C=CC(CO)O1",
+ "wall_s": 13439.7,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -828.93,
+ "imag_all": [
+  -828.93
+ ],
+ "n_imag": 1
+}

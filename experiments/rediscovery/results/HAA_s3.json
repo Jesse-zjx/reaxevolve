@@ -1,0 +1,27 @@
+{
+ "id": "HAA_s3",
+ "route": "HAA",
+ "dep": "glucose_haa_review_v1",
+ "step": "step_3",
+ "kind": "retro-aldol (C-C cleavage)",
+ "R": "O=CC(O)CO",
+ "P": "OC=CO",
+ "Rname": "node_2_glyceraldehyde",
+ "Pname": "node_3_glycolaldehyde_enol",
+ "coproduct": "formaldehyde",
+ "spectator": null,
+ "imag_ref": -942.1,
+ "barrier_ref": 31.5,
+ "dkind": "retro_aldol",
+ "natoms": 12,
+ "Pfull": "C=O.OC=CO",
+ "Rfull": "O=CC(O)CO",
+ "wall_s": 10873.0,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -1014.95,
+ "imag_all": [
+  -1014.95
+ ],
+ "n_imag": 1
+}

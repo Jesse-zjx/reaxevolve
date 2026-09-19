@@ -44,6 +44,16 @@ evidence/memory/experience/*.jsonl
 tsbench/*
 !tsbench/README.md
 
+# Experiments: the runner, the scored data and the generated report are tracked, because a
+# reported number has to be re-derivable. Per-run scratch, live monitoring and single-host
+# launch scripts are not — they describe one machine, not the experiment.
+experiments/**/caches/
+experiments/**/logs/
+experiments/**/pass1/
+experiments/**/start_*.sh
+experiments/**/stop_*.sh
+experiments/**/jobs*.json
+
 # Byte-compiled
 **/__pycache__/
 *.pyc

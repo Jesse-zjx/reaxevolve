@@ -19,7 +19,7 @@ description: >-
 Prereq: each elementary edge validated to the STRICT bar (single imaginary mode +
 raw IRC endpoints = exact neutral reactant/product). See skills `qm-reaction-validation`,
 `strict-edge-criterion`, `ts-validation-strategy`. Bar enforced by
-`templates/path-validator-workspace/resources/strict_validate.py`.
+`tools/workflow/validate_candidate.py`.
 
 > Acceptance clauses: `policy/acceptance/STRICT.md` (v5). This skill does not redefine them.
 
@@ -162,11 +162,12 @@ drift out of sync. The deposit is untracked and has no git history, so archive i
 `gen_report_v3.py` (HTML from files). Hand-indexed DFT proton/2D scans: `proton_scan.py`,
 `scan2d.py`.
 
-For new proton-transfer edges the dispatcher now calls `resources/dry_proton_guess.py`
+For new proton-transfer edges the dispatcher now calls `tools/guess/dry_proton_guess.py`
 automatically and only falls back to `water_relay_guess.py` if the dry scan yields nothing;
 the spectator-water allowance (`--spectators O`) is asserted only on that fallback, so a dry
 saddle is judged without it. `water_relay_guess.py` is otherwise retained only for reproducing
 the older HAA step — DEPRECATED, do not use for new edges. Generic driver:
-`resources/auto_validate_driver.py` (combined NEB+scan+interp guess plan,
-continue-past-failure, EXACT_SMILES_ONLY); its water-relay branch is likewise deprecated
-under the current bar.
+the generic driver that combined NEB, scan and interpolation guess plans with
+continue-past-failure has been retired along with the workspace layout it assumed; batch
+validation now runs through `loop/run_loop.py`. Its water-relay branch was in any case
+deprecated under the current bar.

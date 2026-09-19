@@ -33,6 +33,10 @@ canonical state         canonical/reaction_network.json
 reported numbers        evidence/state/NETWORK_STATE.md
 ```
 
+The two audit ledgers are produced by `scripts/graph/audit_pinned_edges.py`, which re-checks
+every pinned edge against the current clauses and may demote. That script is what makes the
+accepted-edge count re-derivable rather than merely asserted.
+
 Judgements are applied **after** the cache merge, because a cache entry records what one
 run observed while a re-adjudication records what a later audit decided about that
 observation. Getting this order wrong is not a cosmetic bug: the audit under the current

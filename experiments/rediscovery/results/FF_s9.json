@@ -1,0 +1,27 @@
+{
+ "id": "FF_s9",
+ "route": "FF",
+ "dep": "glucose_ff_review_v1",
+ "step": "step_9_dehydration",
+ "kind": "dehydration",
+ "R": "O=CC(=O)CC(O)CO",
+ "P": "O=CC(=O)C=CCO",
+ "Rname": "node_8_3deoxyxylosone",
+ "Pname": "node_9_xylo_dicarbonyl_ene",
+ "coproduct": "O",
+ "spectator": null,
+ "imag_ref": -1541.14,
+ "barrier_ref": 43.4,
+ "dkind": "dehydration",
+ "natoms": 17,
+ "Pfull": "O.O=CC(=O)C=CCO",
+ "Rfull": "O=CC(=O)CC(O)CO",
+ "wall_s": 9865.4,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -1545.74,
+ "imag_all": [
+  -1545.74
+ ],
+ "n_imag": 1
+}

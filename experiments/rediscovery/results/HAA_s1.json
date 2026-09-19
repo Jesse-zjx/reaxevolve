@@ -1,0 +1,29 @@
+{
+ "id": "HAA_s1",
+ "route": "HAA",
+ "dep": "glucose_haa_review_v1",
+ "step": "step_1",
+ "kind": "isomerization",
+ "R": "O=CC(O)C(O)C(O)C(O)CO",
+ "P": "O=C(CO)C(O)C(O)C(O)CO",
+ "Rname": "node_0_open_glucose",
+ "Pname": "node_1_open_fructose",
+ "coproduct": null,
+ "spectator": null,
+ "imag_ref": -474.1,
+ "barrier_ref": 35.9,
+ "dkind": "isomerization",
+ "natoms": 24,
+ "Pfull": "O=C(CO)C(O)C(O)C(O)CO",
+ "Rfull": "O=CC(O)C(O)C(O)C(O)CO",
+ "wall_s": 34065.0,
+ "exit": 0,
+ "status": "STRICT",
+ "imag_got": -706.05,
+ "imag_all": [
+  -706.05,
+  -101.83,
+  -68.51
+ ],
+ "n_imag": 3
+}

@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Re-adjudicate pinned STRICT edges under STRICT(v5).
+"""Re-audit the pinned STRICT edge set under the current acceptance version.
+
+This is the script that produces evidence/audit/readjudication.jsonl and (via the pin diff)
+demoted_from_pin_v5.jsonl — the two ledgers build_reaction_network.py applies on top of the
+raw cache evidence. Without it the accepted-edge count is a number the repository asserts
+but cannot re-derive.
+
+It may demote: a pinned edge whose stored evidence does not meet the clauses is recorded as
+unresolved or rejected, with the reason.
 
 Judgement-source priority (plan):
   1. deposits/*/04_orca_inp_out_hess  (as-built PASS preferred)
