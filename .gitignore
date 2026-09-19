@@ -28,13 +28,14 @@ graph/derived/*
 graph/canonical/*.html
 graph/canonical/*.png
 
-# Evidence: the audited state, the timelines and the audit ledgers are tracked. Session
-# transcripts, per-round loop scratch and anything holding an API key are not.
+# Evidence: the audited state, the timelines, the audit ledgers and Experience Memory are
+# tracked — Experience Memory is one of the two memories the method is about, so a clone
+# without it cannot check that half of the claim. Session transcripts, per-round loop
+# scratch and anything holding an API key are not tracked.
 evidence/state/loop/
 evidence/chemical_messages.json
 evidence/interventions*.json
 evidence/**/KEY.private.json
-evidence/memory/experience/*.jsonl
 
 # Pre-change asset snapshots are tracked: they are what an EVOLUTION_LOG entry is diffed
 # against, so without them the ledger is unverifiable.

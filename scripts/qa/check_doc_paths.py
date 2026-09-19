@@ -26,8 +26,9 @@ PATH_RE = re.compile(r"`([A-Za-z0-9_][A-Za-z0-9_./@-]*\.(?:py|md|json|jsonl|sh|t
 
 # Paths that legitimately do not exist in a clean checkout.
 SKIP_PREFIX = (
-    "runs/",            # QM scratch, created by a run
-    "tsbench/",         # supplementary lane, gitignored by design
+    "runs/",                    # QM scratch, created by a run
+    "evidence/state/loop/",     # per-round loop state, written while a run is in progress
+    "tsbench/",                 # supplementary lane, gitignored by design
     "node_modules/",
     ".agentcfg/sessions/",
 )
@@ -56,6 +57,26 @@ def tracked_markdown() -> list[str]:
     return [l for l in out.splitlines() if l.strip()]
 
 
+def tracked_paths() -> set[str]:
+    """Everything a clone would have, files and the directories containing them.
+
+    Resolution is checked against this rather than against the local disk: a reference can
+    point at something that exists here but is gitignored, which reads as fine locally and
+    breaks for everyone else. That is how three skill references and one outline reference
+    to untracked files survived an earlier pass.
+    """
+    out = subprocess.run(
+        ["git", "ls-files"], cwd=PKG, text=True, capture_output=True
+    ).stdout
+    files = {l for l in out.splitlines() if l.strip()}
+    dirs = set()
+    for f in files:
+        parts = f.split("/")
+        for i in range(1, len(parts)):
+            dirs.add("/".join(parts[:i]))
+    return files | dirs
+
+
 def default_scope() -> list[str]:
     files = []
     for rel in tracked_markdown():
@@ -81,6 +102,7 @@ def main() -> int:
     a = ap.parse_args()
 
     files = tracked_markdown() if a.all else default_scope()
+    tracked = tracked_paths()
     missing: list[tuple[str, int, str]] = []
     checked = 0
     for rel in files:
@@ -95,12 +117,14 @@ def main() -> int:
                 if not interesting(tok):
                     continue
                 checked += 1
+                if tok in tracked:
+                    continue
                 # A skill may reference a file it bundles, relative to its own directory.
-                if os.path.exists(os.path.join(PKG, tok)):
+                sibling = os.path.normpath(os.path.join(os.path.dirname(rel), tok))
+                if sibling in tracked:
                     continue
-                if os.path.exists(os.path.join(os.path.dirname(p), tok)):
-                    continue
-                missing.append((rel, i, tok))
+                on_disk = os.path.exists(os.path.join(PKG, tok))
+                missing.append((rel, i, tok + ("  [present but untracked]" if on_disk else "")))
 
     print(f"scanned {len(files)} documents, {checked} repo-relative path references")
     if missing:
