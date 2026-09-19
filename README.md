@@ -95,6 +95,15 @@ python loop/mass_balance.py                       # audit the graph for conserva
 python loop/select_candidates.py --top 8          # what the next round would compute
 ```
 
+One command that clones this repository and checks everything a reader receives — deposits
+verify as built, the accepted count re-derives from the shipped evidence, the network agrees
+with the audited pin, every documented path resolves, the generated reports match their data,
+and the loop wires up. No DFT, no API:
+
+```bash
+bash scripts/qa/verify_clone.sh
+```
+
 Reading the evidence without running anything:
 
 ```bash
