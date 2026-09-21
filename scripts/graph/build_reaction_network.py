@@ -48,17 +48,46 @@ TARGETS = {
 GLUCOSE = "OCC1OC(O)C(O)C(O)C1O"
 GLUCOSE_OPEN = "O=CC(O)C(O)C(O)C(O)CO"
 
+# Precedence when two attempt records exist for one (reactant, product): the stronger
+# judgement wins, which implements the aggregation rule "if any attempt qualified under the
+# current acceptance version, the edge is STRICT; else evidence_ok; else rejected; else
+# unresolved". Every status a driver can emit is listed, because an unlisted one used to fall
+# to a sentinel below `failed` — so a QM-seen negative lost to a bare crash and the graph kept
+# the less informative record.
 STATUS_RANK = {
-    "STRICT": 4,
-    "evidence_ok": 3,
-    "validated": 3,
-    "qm_real": 2,
-    # QM-seen unresolved/rejected outrank mere Explore proposals
-    "rejected": 1,
-    "unresolved": 1,
+    "STRICT": 6,
+    # QM-backed positive signal short of delivery grade.
+    "evidence_ok": 5,
+    "validated": 5,
+    "qm_real": 4,
+    # Scientific negatives: the calculation ran and said no. More informative than a
+    # non-result, so they outrank it.
+    "rejected": 3,
+    "MISMATCH": 3,
+    "PARTIAL_MATCH": 3,
+    "pruned_endothermic": 3,
+    # Ran, but reached no verdict: incomplete rather than negative.
+    "unresolved": 2,
+    "NOT_CLEAN_TS": 2,
+    "no_strict": 2,
+    "TS_FAILED": 2,
+    "WALL_TIME": 1,
+    # Never produced a usable record.
+    "failed": 1,
+    # Explore output only; no attempt yet.
     "proposed": 0,
-    "failed": -1,
 }
+_UNKNOWN_STATUS_RANK = 1  # treat like a non-result, not like something below one
+
+
+def rank(status) -> int:
+    """Precedence of a status, with any free text stripped off first.
+
+    Some drivers appended detail to the status (`NOT_CLEAN_TS (imag modes=[...])`), which made
+    every such record a distinct unlisted value.
+    """
+    token, _detail = split_status(status)
+    return STATUS_RANK.get(token, _UNKNOWN_STATUS_RANK)
 
 
 def canon(s):
@@ -131,9 +160,7 @@ def collect_caches():
                 if not isinstance(v, dict):
                     continue
                 prev = out.get(k)
-                if prev is None or STATUS_RANK.get(v.get("status"), -9) >= STATUS_RANK.get(
-                    prev.get("status"), -9
-                ):
+                if prev is None or rank(v.get("status")) >= rank(prev.get("status")):
                     vv = dict(v)
                     vv["_cache_path"] = path
                     out[k] = vv
@@ -308,7 +335,7 @@ def main():
         i = eid(r, p)
         st, st_detail = split_status(rec.get("status"))
         prev = edges.get(i)
-        if prev and STATUS_RANK.get(prev.get("status"), -9) > STATUS_RANK.get(st, -9):
+        if prev and rank(prev.get("status")) > rank(st):
             continue
         detail = rec.get("detail") or st_detail
         edges[i] = {

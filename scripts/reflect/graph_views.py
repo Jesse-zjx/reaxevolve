@@ -80,9 +80,13 @@ def as_node(s, nodes):
 
 
 def is_confirmed_edge(edge, confirmed=CONFIRMED):
-    """True if the edge seeds the confirmed frontier (status or in_chain)."""
-    if edge.get('in_chain'):
-        return True
+    """True if the edge seeds the expansion frontier.
+
+    Verdict only. `in_chain` — membership of a delivered route — used to short-circuit this,
+    but it is a packaging fact rather than a judgement, so it let an edge seed the frontier
+    without a verdict admitting it. The formal definition is
+    F = seeds ∪ {v | ∃e ∋ v, verdict(e) ∈ {STRICT, evidence_ok}}, and nothing else.
+    """
     st = edge.get('status') or ''
     if st in confirmed:
         return True

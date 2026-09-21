@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import sys
 
@@ -24,6 +25,38 @@ SNAP = os.path.join(EVO, "snapshots")
 LOG = os.path.join(EVO, "EVOLUTION_LOG.jsonl")
 LOG_MD = os.path.join(EVO, "EVOLUTION_LOG.md")
 VERSIONS = os.path.join(PKG, "tools", "VERSIONS.json")
+TAXONOMY = os.path.join(PKG, "policy", "failure_modes.json")
+
+
+def load_taxonomy() -> tuple[set[str], str]:
+    """Allowed failure-mode ids and the taxonomy version, from policy/.
+
+    The taxonomy is a protected input: a free-text label makes "the same failure class"
+    undecidable, and the transfer arm of the capability claim is exactly a comparison across
+    independently drawn instances of one class.
+    """
+    with open(TAXONOMY) as fh:
+        tax = json.load(fh)
+    ids: set[str] = set()
+    for section in ("chemistry", "process"):
+        ids |= set((tax.get(section) or {}).get("modes") or {})
+    return ids, str(tax.get("taxonomy_version") or "unknown")
+
+
+def check_failure_modes(raw: str) -> tuple[list[str], str]:
+    """Validate a comma-separated failure-mode list against the taxonomy."""
+    ids, version = load_taxonomy()
+    given = [x.strip() for x in (raw or "").split(",") if x.strip()]
+    if not given:
+        raise SystemExit("--failure-mode is required; see policy/failure_modes.md")
+    bad = [x for x in given if x not in ids]
+    if bad:
+        raise SystemExit(
+            f"failure mode(s) not in taxonomy {version}: {', '.join(bad)}\n"
+            f"allowed: {', '.join(sorted(ids))}\n"
+            f"see policy/failure_modes.md — the taxonomy is human-set and not evolvable"
+        )
+    return given, version
 
 
 def load_versions():
@@ -131,40 +164,80 @@ def main():
         "reorganization: rename/split/merge of the asset surface",
     )
     ap.add_argument("--bump", action="store_true", help="increment tools/VERSIONS.json")
+    ap.add_argument(
+        "--snapshot-only",
+        action="store_true",
+        help="copy the pre-change asset and stop: no version bump, no ledger entry. Use this "
+        "before attempting a patch, then --record once the patch has been validated.",
+    )
+    ap.add_argument(
+        "--record",
+        metavar="SNAPSHOT_DIR",
+        help="append the ledger entry for an earlier --snapshot-only, and bump if the "
+        "outcome is `applied`",
+    )
+    ap.add_argument(
+        "--outcome",
+        choices=("applied", "rolled_back"),
+        default="applied",
+        help="rolled_back records the attempt without bumping: a revision that did not land "
+        "must not appear in the ledger as one that did",
+    )
     a = ap.parse_args()
 
     os.makedirs(SNAP, exist_ok=True)
     asset_id = normalize_asset_id(a.asset_id)
     vers = load_versions()
     before, slot = read_version(vers, asset_id)
-    after = before + 1 if a.bump else before
-    seq = next_seq()
-    tag = asset_id.replace("/", "_").lstrip(".")
-    dest = os.path.join(SNAP, f"{seq:03d}__{tag}__v{before}")
-    os.makedirs(dest, exist_ok=True)
-    src = a.path if os.path.isabs(a.path) else os.path.join(PKG, a.path)
-    if os.path.isdir(src):
-        shutil.copytree(src, os.path.join(dest, os.path.basename(src.rstrip("/"))))
-    else:
-        shutil.copy2(src, os.path.join(dest, os.path.basename(src)))
+    modes, taxonomy_version = check_failure_modes(a.failure_mode)
 
-    if a.bump:
+    # ---- phase 1: snapshot the pre-change asset ----
+    if a.record:
+        dest = a.record if os.path.isabs(a.record) else os.path.join(PKG, a.record)
+        if not os.path.isdir(dest):
+            raise SystemExit(f"--record: no such snapshot directory: {a.record}")
+        m = re.match(r"(\d+)__", os.path.basename(dest.rstrip("/")))
+        seq = int(m.group(1)) if m else next_seq()
+    else:
+        seq = next_seq()
+        tag = asset_id.replace("/", "_").lstrip(".")
+        dest = os.path.join(SNAP, f"{seq:03d}__{tag}__v{before}")
+        os.makedirs(dest, exist_ok=True)
+        src = a.path if os.path.isabs(a.path) else os.path.join(PKG, a.path)
+        if os.path.isdir(src):
+            shutil.copytree(src, os.path.join(dest, os.path.basename(src.rstrip("/"))), dirs_exist_ok=True)
+        else:
+            shutil.copy2(src, os.path.join(dest, os.path.basename(src)))
+        if a.snapshot_only:
+            print(json.dumps({"snapshot": os.path.relpath(dest, PKG), "seq": seq,
+                              "asset_id": asset_id, "version_before": before}, indent=2))
+            return 0
+
+    # ---- phase 2: the revision landed (or did not); record it ----
+    applied = a.outcome == "applied"
+    after = before + 1 if (a.bump and applied) else before
+    if a.bump and applied:
         write_version(vers, asset_id, slot, after)
         save_versions(vers)
 
     rec = {
         "seq": seq,
         "class": a.revision_class,
+        "outcome": a.outcome,
         "asset_id": asset_id,
         "asset_version_before": before,
         "asset_version_after": after,
-        "failure_mode": a.failure_mode,
+        "failure_mode": modes,
+        "taxonomy_version": taxonomy_version,
         "trigger_evidence": a.trigger_evidence,
         "intended_effect": a.intended_effect,
         "scope": a.scope,
         "activation_point": a.activation_point,
         "diff": a.diff,
         "snapshot": os.path.relpath(dest, PKG),
+        # Filled by scripts/reflect/close_revisions.py once downstream evidence exists.
+        "first_downstream_use": None,
+        "expectation_met": None,
         "asset_versions_at_revision": {
             **{f".skills/{k}": v for k, v in (vers.get("skills") or {}).items()},
             **{f"tools/{k}": v for k, v in (vers.get("tools") or {}).items()},
@@ -175,9 +248,11 @@ def main():
     with open(LOG, "a") as f:
         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
     with open(LOG_MD, "a") as f:
+        arrow = f"v{before}→v{after}" if applied else f"v{before} (rolled back)"
         f.write(
-            f"- `{seq:03d}` **{asset_id}** v{before}→v{after} [{a.revision_class}]: "
-            f"{a.intended_effect} (snap `{os.path.relpath(dest, PKG)}`)\n"
+            f"- `{seq:03d}` **{asset_id}** {arrow} [{a.revision_class}] "
+            f"({','.join(modes)}@{taxonomy_version}): {a.intended_effect} "
+            f"(snap `{os.path.relpath(dest, PKG)}`)\n"
         )
     print(json.dumps(rec, indent=2))
     return 0

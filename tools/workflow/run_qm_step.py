@@ -116,7 +116,12 @@ def _final_imag_values(out):
 def _save(res, status=None, detail=None):
     key = f"{res['reactant']}>>{res['product']}"
     st = status if status is not None else res.get("status") or "unresolved"
-    written = _VW.write_strict_cache("strict_cache.json", key, res, st, detail)
+    # Hash the guess this attempt started from, so the record identifies the job and not just
+    # the edge: two attempts on one edge differ precisely in their starting geometry.
+    inputs = [p for p in (res.get("guess_path"), res.get("xtb_xyz")) if p and os.path.isfile(p)]
+    written = _VW.write_strict_cache(
+        "strict_cache.json", key, res, st, detail, input_paths=inputs
+    )
     res.clear()
     res.update(written)
 

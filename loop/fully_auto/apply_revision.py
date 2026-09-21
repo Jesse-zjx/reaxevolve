@@ -30,19 +30,37 @@ sys.path.insert(0, os.path.join(PKG, "scripts", "lib"))
 
 ALLOWED_PREFIXES = (
     ".skills/",
-    "tools/geometry/",
     "tools/guess/",
     "tools/expand/",
     "tools/screen/",
     "tools/workflow/",
     "tools/VERSIONS.json",
     "tools/record_update.py",
+    # tools/geometry/ is listed per file, not by prefix: two of its modules read the
+    # evidence and must not be writable. See PROTECTED below.
+    "tools/geometry/builder.py",
+    "tools/geometry/inquire.py",
+    "tools/geometry/smi_to_xyz.py",
+    "tools/geometry/map_reaction_atoms.py",
     "tools/builder.py",
     "tools/inquire.py",
     "tools/map_reaction_atoms.py",
+    "tools/smi_to_xyz.py",
+)
+
+# Evidence parsers. These decide what the calculation *says* — the frequencies and the
+# endpoint identities that clauses 2 and 3 are evaluated against — so a revision to one could
+# change a verdict without changing any chemistry. The method's write matrix puts them in the
+# protected set for exactly that reason, and the argument that an evolvable tool "cannot dress
+# a wrong physical result up as a pass" holds for templates and schedulers but not for the
+# module that reads the frequency out of the output file.
+#
+# Guess-side geometry tools stay evolvable: they propose structures, they do not judge them.
+PROTECTED = (
+    "tools/geometry/parse_orca_output.py",
+    "tools/geometry/xyz_to_smiles.py",
     "tools/parse_orca_output.py",
     "tools/xyz_to_smiles.py",
-    "tools/smi_to_xyz.py",
 )
 
 # Modules whose revision changes what Explore proposes. A syntax check is not enough:
@@ -90,6 +108,8 @@ def normalize_rel(rel: str) -> str:
 
 def allowed(rel: str) -> bool:
     rel = normalize_rel(rel)
+    if rel in PROTECTED:
+        return False
     if rel == "tools/VERSIONS.json":
         return True
     return any(rel.startswith(p) for p in ALLOWED_PREFIXES if p.endswith("/")) or rel in ALLOWED_PREFIXES
@@ -164,6 +184,16 @@ def main():
     if isinstance(asset_id, str):
         asset_id = normalize_rel(asset_id)
 
+    if rel in PROTECTED:
+        print(json.dumps({
+            "ok": False,
+            "error": "protected evidence parser",
+            "path": rel,
+            "raw_path": raw_path,
+            "why": "this module decides what the calculation says; it is outside the editable "
+                   "surface by design (see PROTECTED in this file and policy/)",
+        }))
+        return 2
     if not allowed(rel):
         print(json.dumps({"ok": False, "error": "path not on whitelist", "path": rel, "raw_path": raw_path}))
         return 2
@@ -179,28 +209,52 @@ def main():
     json.dump(prop, open(a.proposal, "w"), indent=2)
     open(a.proposal, "a").write("\n")
 
-    snap_cmd = [
-        sys.executable,
-        os.path.join(PKG, "scripts", "reflect", "asset_snapshot.py"),
-        "--asset-id",
-        asset_id,
-        "--path",
-        rel,
-        "--bump",
-        "--trigger-evidence",
-        str(prop.get("trigger_evidence") or "fully_auto"),
-        "--failure-mode",
-        str(prop.get("failure_mode") or "unknown"),
-        "--intended-effect",
-        str(prop.get("intended_effect") or "unknown"),
-        "--scope",
-        str(prop.get("scope") or "fully_auto"),
-        "--diff",
-        "fully_auto_proposal",
-        "--activation-point",
-        rel,
-    ]
-    subprocess.run(snap_cmd, cwd=PKG, check=False)
+    # The ledger entry and the version bump come *after* the patch has been validated. Doing
+    # them first meant a revision that failed its checks and was rolled back still appeared in
+    # the ledger as one that landed, and VERSIONS.json claimed a version no file had — in the
+    # record that is the primary evidence for the capability claim.
+    def snapshot_args(*extra):
+        return [
+            sys.executable,
+            os.path.join(PKG, "scripts", "reflect", "asset_snapshot.py"),
+            "--asset-id", asset_id,
+            "--path", rel,
+            "--trigger-evidence", str(prop.get("trigger_evidence") or "reflect"),
+            "--failure-mode", str(prop.get("failure_mode") or ""),
+            "--intended-effect", str(prop.get("intended_effect") or "unknown"),
+            "--scope", str(prop.get("scope") or "reflect"),
+            "--diff", "reflect_proposal",
+            "--activation-point", rel,
+            *extra,
+        ]
+
+    snap = subprocess.run(
+        snapshot_args("--snapshot-only"), cwd=PKG, text=True, capture_output=True
+    )
+    if snap.returncode != 0:
+        # A failure-mode outside the taxonomy lands here: refuse rather than record free text.
+        print(json.dumps({
+            "ok": False,
+            "error": "snapshot refused",
+            "detail": (snap.stderr or snap.stdout or "").strip()[-500:],
+        }))
+        return 7
+    try:
+        snapshot_dir = json.loads(snap.stdout)["snapshot"]
+    except (json.JSONDecodeError, KeyError):
+        print(json.dumps({"ok": False, "error": "unparseable snapshot output",
+                          "tail": (snap.stdout or "")[-300:]}))
+        return 7
+
+    def record(outcome: str, reason: str | None = None):
+        extra = ["--record", snapshot_dir, "--outcome", outcome]
+        if outcome == "applied":
+            extra.append("--bump")
+        r = subprocess.run(snapshot_args(*extra), cwd=PKG, text=True, capture_output=True)
+        if r.returncode != 0:
+            sys.stderr.write((r.stderr or r.stdout or "")[-400:])
+        return reason
+
     backup = abs_path + ".bak_fully_auto"
     shutil.copy2(abs_path, backup)
 
@@ -228,28 +282,35 @@ def main():
                 open(abs_path, "w").write(diff)
             else:
                 shutil.copy2(backup, abs_path)
+                record("rolled_back")
                 print(json.dumps({
                     "ok": False,
                     "error": "patch failed",
                     "restored": True,
+                    "recorded_as": "rolled_back",
                     "stderr": (r.stderr or "")[-500:],
                 }))
                 return 3
     else:
+        # Nothing was written, so there is no revision attempt to record.
         print(json.dumps({"ok": False, "error": "empty diff"}))
         return 2
 
     ok, msg = syntax_ok(abs_path)
     if not ok:
         shutil.copy2(backup, abs_path)
-        print(json.dumps({"ok": False, "error": "syntax", "detail": msg, "restored": True}))
+        record("rolled_back")
+        print(json.dumps({"ok": False, "error": "syntax", "detail": msg, "restored": True,
+                          "recorded_as": "rolled_back"}))
         return 4
     ok, msg = expander_smoke_ok(rel)
     if not ok:
         shutil.copy2(backup, abs_path)
+        record("rolled_back")
         print(
             json.dumps(
-                {"ok": False, "error": "expander smoke failed", "detail": msg, "restored": True}
+                {"ok": False, "error": "expander smoke failed", "detail": msg,
+                 "restored": True, "recorded_as": "rolled_back"}
             )
         )
         return 6
@@ -260,8 +321,11 @@ def main():
         )
         if r.returncode != 0:
             shutil.copy2(backup, abs_path)
-            print(json.dumps({"ok": False, "error": "smoke failed", "restored": True}))
+            record("rolled_back")
+            print(json.dumps({"ok": False, "error": "smoke failed", "restored": True,
+                              "recorded_as": "rolled_back"}))
             return 5
+    record("applied")
     os.remove(backup)
     print(json.dumps({"ok": True, "path": rel, "asset_id": asset_id, "raw_path": raw_path}))
     return 0

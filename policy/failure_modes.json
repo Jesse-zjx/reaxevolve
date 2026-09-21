@@ -1,0 +1,79 @@
+{
+  "taxonomy_version": "v1",
+  "authority": "policy/failure_modes.md",
+  "note": "Human-set, versioned failure-mode taxonomy. A protected input resource: Reflect may summarise over it and must cite ids from it, but may not add, rename or redefine an id. Every revision record names (failure_mode, taxonomy_version) so that 'the same failure class' is machine-decidable — which is what the transfer-replay arm of the capability claim rests on. Changing this file is a human act and starts taxonomy v2.",
+  "chemistry": {
+    "note": "Assigned by scripts/reflect/failure_digest.py::classify from the recorded attempt, never by a model. scripts/qa/test_failure_taxonomy.py asserts the classifier emits nothing outside this table.",
+    "modes": {
+      "ok": {
+        "meaning": "The attempt met the endpoint criterion; not a failure.",
+        "implicates": null
+      },
+      "ts_not_converged": {
+        "meaning": "OptTS never landed on a saddle.",
+        "implicates": "guess geometry or scan coordinate, not the mechanism"
+      },
+      "multiple_imaginary": {
+        "meaning": "More than one imaginary mode beyond the contaminant threshold.",
+        "implicates": "soft-mode cleanup: displace along the mode and reoptimise"
+      },
+      "no_dominant_mode": {
+        "meaning": "Only soft modes; a floppy minimum rather than a saddle.",
+        "implicates": "the guess did not cross the reaction coordinate"
+      },
+      "no_endpoint_record": {
+        "meaning": "No IRC endpoint record: the run never reached IRC, or the record is missing.",
+        "implicates": "driver or IRC settings, not the mechanism"
+      },
+      "both_ends_reactant": {
+        "meaning": "Both IRC ends optimise to the reactant.",
+        "implicates": "the saddle sits on the wrong side of the intended barrier"
+      },
+      "both_ends_product": {
+        "meaning": "Both IRC ends optimise to the product.",
+        "implicates": "as above, opposite direction"
+      },
+      "one_end_only": {
+        "meaning": "One end matches, the other wanders.",
+        "implicates": "coordinate direction roughly right; the other end needs pre-organisation or a tighter constraint"
+      },
+      "no_match": {
+        "meaning": "Neither end is a target species.",
+        "implicates": "the saddle connects a pair nobody asked for; the mechanistic hypothesis may not hold"
+      },
+      "wall_time": {
+        "meaning": "Abandoned on the per-guess wall clock before a verdict could be reached.",
+        "implicates": "cost, not chemistry; carries no evidence about the step"
+      },
+      "mass_unbalanced": {
+        "meaning": "Refused before any calculation: reactant atoms do not equal product plus coproduct.",
+        "implicates": "the proposal itself; no IRC could connect the stated endpoints"
+      }
+    }
+  },
+  "process": {
+    "note": "Failures of the machinery rather than of a chemical hypothesis. A revision attributed to one of these is `plumbing` class and supports no capability claim.",
+    "modes": {
+      "tool_crash_reported_as_result": {
+        "meaning": "A tool failed to run and its output was recorded as a chemical negative.",
+        "implicates": "the tool must fail loudly; a crash is not evidence"
+      },
+      "stale_path_reference": {
+        "meaning": "A documented or hard-coded path does not exist in this repository.",
+        "implicates": "layout drift"
+      },
+      "path_alias": {
+        "meaning": "A written path used an alias the filesystem does not have.",
+        "implicates": "the apply step's path normalisation"
+      },
+      "low_candidate_yield": {
+        "meaning": "Explore produced too few admissible candidates to keep validation busy.",
+        "implicates": "the candidate source, not the bar"
+      },
+      "near_duplicate_spend": {
+        "meaning": "Budget went to candidates that are near-duplicates of what was already explored.",
+        "implicates": "batch selection / diversity"
+      }
+    }
+  }
+}

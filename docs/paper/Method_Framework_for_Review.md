@@ -122,8 +122,10 @@
 |---|---|---|---|
 | **Explore** | Graph **扩展前沿** \(F\)；资产版本 \(V\)；预算 \(B\) | 边假设集合 \(H\)（含机制假设） | 可写边假设 / 扩展前沿索引 |
 | **Validate** | \(H\)；**预注册 QM 协议**；STRICT 版本 | 每次计算尝试的 evidence/endpoint；边级 verdict | 仅确定性脚本写 attempt 与 verdict |
-| **Remember** | 本轮 attempt/verdict 与失败签名 | Experience 检索视图；**不新增** Graph 事实字段（边级更新已由 Validate 写入） | 仅 Experience 可追加事件 |
+| **Remember** | 本轮 attempt/verdict 与失败签名 | Experience 检索视图；**不新增** Graph 事实字段（边级更新已由 Validate 写入） | 仅 Experience 可追加事件；Graph 侧只做**投影物化**（见下） |
 | **Reflect** | Graph 摘要 + Experience；**版本化**失败模式库 | 可选修订 \(\Delta\)；修订记录 \(R\) | 仅 Skills/Tools（可编辑面内）+ Experience 账本 |
+
+**关于 Remember 与 Graph 的写入关系（实现层限定，避免误读）**：事实字段（attempt 的 evidence/endpoint、边级 verdict）全部由 Validate 的确定性写入口产生并落在 attempt 记录与判决档案中。Remember 阶段调用图构建器，但该构建器**不产生新判断**：它把已记录的事实投影成图，并在缓存证据之上叠加**已记录的**重判结果。因此「Remember 不新增 Graph 事实字段」与「图文件在 Remember 阶段被写出」并不矛盾——后者是物化，不是判定。顺序不可颠倒：原始缓存先合并，已记录的重判后叠加（判决高于观察）。
 
 停止条件（设计）：目标路径集合达成 **或** 资源耗尽 **或** 达到预注册的饱和统计（§10）。停止后可进入固定资产评价条件，而非切换到第二套方法。
 
@@ -157,7 +159,8 @@ hypothesis → has attempts → verdict ∈ {STRICT, evidence_ok, rejected, unre
 \(F_{t} = F_0 \cup \{v \mid \exists e\ni v,\ \mathrm{verdict}(e)\in\{\mathrm{STRICT},\mathrm{evidence\_ok}\} \}\)。  
 **扩展前沿 ≠ 验收投影**。
 
-**失败模式库**：人类预定义的**版本化输入资源**（受保护引用，不计入可演化 Skills 产物，也不算记忆贡献）；每次归因必须点名 `(failure_mode_id, taxonomy_version)`。Experience 可归纳摘要，但不得无版本地改写分类法本身。  
+**失败模式库**：人类预定义的**版本化输入资源**（受保护引用，不计入可演化 Skills 产物，也不算记忆贡献）；每次归因必须点名 `(failure_mode_id, taxonomy_version)`。Experience 可归纳摘要，但不得无版本地改写分类法本身。
+实现对应 `policy/failure_modes.md` / `.json`（v1，11 个化学模式 + 5 个过程模式）；化学模式由确定性分类器从已记录 attempt 指派，写入时校验，未声明的 id 被拒而非作为自由文本接受；`scripts/qa/test_failure_taxonomy.py` 断言分类器与分类法不发生漂移。过程模式描述机制而非化学结论，归因于它的修订记为 `plumbing`，不支撑能力主张。  
 **修订内容来源（防「只是执行手写规则表」）**：Methods 须区分 (a) 专家预置的失败→动作模板库；(b) 反思环节在可编辑面内**生成或选择**的具体修订（参数/模板/组合/规则条文）。主张「自演化」时，C1/C2 证据必须覆盖 (b)，而不能只演示 (a) 的查表执行。
 
 **失败归因（Reflect 最小程序）**：

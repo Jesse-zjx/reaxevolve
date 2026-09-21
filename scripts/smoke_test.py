@@ -235,15 +235,39 @@ def main():
 
     section("9. editable surface matches what is declared")
     text = (PKG / "loop" / "fully_auto" / "apply_revision.py").read_text()
-    for want in (".skills/", "tools/geometry/", "tools/guess/", "tools/expand/", "tools/screen/", "tools/workflow/"):
+    # Declared by prefix. tools/geometry/ is deliberately absent: it is listed per file so the
+    # two evidence parsers inside it can be excluded.
+    for want in (".skills/", "tools/guess/", "tools/expand/", "tools/screen/", "tools/workflow/"):
         if f'"{want}"' in text:
             ok(f"whitelisted {want}")
         else:
             fail(f"{want} missing from the apply whitelist")
+    if '"tools/geometry/"' in text:
+        fail("tools/geometry/ is whitelisted by prefix, which would include the evidence parsers")
     for banned in ("policy/", "scripts/", "loop/"):
         if f'"{banned}"' in text:
             fail(f"{banned} must never be on the apply whitelist")
     ok("policy/, scripts/ and loop/ are not writable by Reflect")
+
+    # Evidence parsers decide what the calculation says. A revision to one could change a
+    # verdict without changing any chemistry, so they sit outside the editable surface.
+    sys.path.insert(0, str(PKG / "loop" / "fully_auto"))
+    try:
+        import apply_revision as AR  # noqa: WPS433
+
+        for parser in ("tools/geometry/parse_orca_output.py", "tools/geometry/xyz_to_smiles.py",
+                       "tools/parse_orca_output.py", "tools/xyz_to_smiles.py"):
+            if AR.allowed(parser):
+                fail(f"evidence parser is writable by Reflect: {parser}")
+        else:
+            ok("evidence parsers are outside the editable surface")
+        for evolvable in ("tools/geometry/builder.py", "tools/guess/ladder.py",
+                          "tools/expand/templates_expand.py", ".skills/pathway-method/SKILL.md"):
+            if not AR.allowed(evolvable):
+                fail(f"asset should be evolvable but is not on the whitelist: {evolvable}")
+        ok("guess, enumeration and skill assets remain evolvable")
+    except Exception as e:
+        fail(f"could not check the editable surface: {e}")
     if "expander_smoke_ok" in text:
         ok("revisions to the enumerator/scorer are exercised before they stand")
     else:
@@ -322,14 +346,18 @@ def main():
         ok("no dependency from loop/ or scripts/ on the tsbench lane")
 
     section("13. QA sub-checks")
-    r = subprocess.run(
-        [sys.executable, str(PKG / "scripts" / "qa" / "check_doc_paths.py")],
-        cwd=str(PKG), text=True, capture_output=True,
-    )
-    if r.returncode == 0:
-        ok("every documented repo path resolves")
-    else:
-        fail(f"documented paths do not resolve:\n{r.stdout.strip()[-600:]}")
+    for script, label in (
+        ("check_doc_paths.py", "every documented repo path resolves"),
+        ("test_failure_taxonomy.py", "failure taxonomy and classifier agree"),
+    ):
+        r = subprocess.run(
+            [sys.executable, str(PKG / "scripts" / "qa" / script)],
+            cwd=str(PKG), text=True, capture_output=True,
+        )
+        if r.returncode == 0:
+            ok(label)
+        else:
+            fail(f"{script}:\n{(r.stdout or r.stderr).strip()[-600:]}")
     for script in ["scripts/qa/isolation_audit.py", "scripts/qa/run_manifest.py"]:
         r = subprocess.run([sys.executable, str(PKG / script)], cwd=str(PKG), capture_output=True)
         if r.returncode in (0, 1):  # audit returns 1 on violations

@@ -8,6 +8,7 @@ STRICT is granted only when policy/acceptance/check_strict_bar.check_step(...).p
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import sys
@@ -105,8 +106,36 @@ def adjudicate_with_policy(
     return r
 
 
-def stamp(record: MutableMapping[str, Any], status: str, detail: Optional[str] = None) -> dict:
-    """Mutate and return record with status/detail/strict_version/asset_versions."""
+def hypothesis_id(reactant: str, product: str) -> str:
+    """Stable hypothesis key, matching scripts/graph/add_hypothesis.py."""
+    return "H_" + hashlib.sha1(f"{reactant}>>{product}".encode()).hexdigest()[:12]
+
+
+def input_fingerprint(paths) -> Optional[dict]:
+    """Content hashes of the files this attempt was computed from.
+
+    An attempt is identified by hypothesis, guess method, asset versions, QM protocol and the
+    job itself. Without a hash of the inputs the last part is missing, so two attempts that
+    differ only in their starting geometry are indistinguishable in the record — and a replay
+    cannot prove it re-ran the same job.
+    """
+    out = {}
+    for p in paths or []:
+        try:
+            with open(p, "rb") as fh:
+                out[os.path.basename(p)] = hashlib.sha256(fh.read()).hexdigest()[:16]
+        except OSError:
+            continue
+    return out or None
+
+
+def stamp(
+    record: MutableMapping[str, Any],
+    status: str,
+    detail: Optional[str] = None,
+    input_paths=None,
+) -> dict:
+    """Mutate and return record with status/detail/strict_version/asset_versions/identity."""
     st, det = normalize_status(status, detail)
     if st not in ALLOWED:
         raise ValueError(f"illegal status {st!r}")
@@ -117,6 +146,12 @@ def stamp(record: MutableMapping[str, Any], status: str, detail: Optional[str] =
         record.pop("detail", None)
     record["strict_version"] = read_strict_version()
     record["asset_versions"] = read_asset_versions()
+    r, p = record.get("reactant"), record.get("product")
+    if r and p and "hypothesis_id" not in record:
+        record["hypothesis_id"] = hypothesis_id(r, p)
+    fp = input_fingerprint(input_paths)
+    if fp:
+        record.setdefault("input_fingerprint", fp)
     if "time" not in record:
         record["time"] = time.strftime("%Y-%m-%d %H:%M")
     return dict(record)
@@ -128,6 +163,7 @@ def write_strict_cache(
     record: Mapping[str, Any],
     status: str,
     detail: Optional[str] = None,
+    input_paths=None,
 ) -> dict:
     """Write one attempt into a run-local strict_cache.json via the unique entry point."""
     data: dict = {}
@@ -136,7 +172,7 @@ def write_strict_cache(
             data = json.load(open(cache_path))
         except json.JSONDecodeError:
             data = {}
-    rec = stamp(dict(record), status, detail)
+    rec = stamp(dict(record), status, detail, input_paths=input_paths)
     data[edge_key] = rec
     os.makedirs(os.path.dirname(os.path.abspath(cache_path)) or ".", exist_ok=True)
     json.dump(data, open(cache_path, "w"), indent=2)

@@ -22,7 +22,7 @@ driver and no batch expansion mode.
 
 | | Contents | Evolvable |
 |---|---|---|
-| `policy/` | STRICT(v5) acceptance clauses, QM protocol, targets and budget | **no** |
+| `policy/` | STRICT(v5) acceptance clauses, QM protocol, targets and budget, failure-mode taxonomy | **no** |
 | `scripts/` | graph writer, verdict writer, evidence parsers, evolution bookkeeping, QA | **no** |
 | `loop/` | the four stages and their scheduling | **no** |
 | `.skills/` | declarative domain workflows | yes |
@@ -31,9 +31,20 @@ driver and no batch expansion mode.
 A revision can change what gets proposed and in what order. It cannot change what counts
 as a pass: edge status is written only by `scripts/validate/verdict_writer.py` under
 `policy/acceptance/STRICT.md`, so a bad template or a bad weight costs compute and cannot
-manufacture a verdict. Every revision is snapshotted and appended to
-`evolution/EVOLUTION_LOG.jsonl` before it lands; every attempt records the full asset
-version vector from `tools/VERSIONS.json`.
+manufacture a verdict.
+
+Two exclusions make that boundary real rather than nominal. The **evidence parsers**
+(`parse_orca_output.py`, `xyz_to_smiles.py`) are outside the editable surface: they decide what
+the calculation *says* — the frequencies and endpoint identities the clauses are evaluated
+against — so a revision to one could change a verdict without changing any chemistry. And the
+**failure-mode taxonomy** lives in `policy/`, because a system that could relabel its own
+failures could not be held to an attribution.
+
+Every revision is snapshotted, and the version bump and ledger entry happen only after the
+patch passes its checks — a revision that fails and is rolled back is recorded as
+`rolled_back`, not as one that landed. Every attempt records the full asset version vector
+from `tools/VERSIONS.json`, which is what makes "revise, then reuse" a lookup rather than a
+claim. See `evolution/README.md`.
 
 ## Acceptance
 
@@ -114,6 +125,8 @@ cat evidence/state/NETWORK_STATE.md                                      # the o
 cat evidence/controls.md                                                 # does the bar have resolution?
 cat experiments/rediscovery/REPRODUCTION_REPORT.md                       # from SMILES alone
 cat evolution/EVOLUTION_LOG.md                                           # what changed, on what evidence
+cat policy/failure_modes.md                                              # the labels attribution quantifies over
+python scripts/reflect/close_revisions.py                                # which revisions can be closed, and why not
 ```
 
 Spending real CPU to prove the toolchain works end to end (needs ORCA and xTB):
