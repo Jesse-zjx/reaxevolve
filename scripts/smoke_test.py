@@ -349,6 +349,7 @@ def main():
     for script, label in (
         ("check_doc_paths.py", "every documented repo path resolves"),
         ("test_failure_taxonomy.py", "failure taxonomy and classifier agree"),
+        ("test_preregistration.py", "panel is disjoint from the C2 task and still resolves"),
     ):
         r = subprocess.run(
             [sys.executable, str(PKG / "scripts" / "qa" / script)],

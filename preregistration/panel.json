@@ -1,0 +1,124 @@
+{
+  "schema": "reaxevolve-saturation-panel.v1",
+  "authority": "preregistration/saturation_panel.md",
+  "locked_at_commit": "2f85913",
+  "note": "Machine-readable form of the preregistered diagnostic panel, so the stopping rule reads the same nine edges every window instead of whatever a round happened to produce. Disjoint from the C2 task route by construction; scripts/qa/test_preregistration.py enforces that.",
+  "stopping_rule": {
+    "window_rounds": 3,
+    "epsilon_relative_growth": 0.05,
+    "sufficient_condition": "d_strict == 0 for all K rounds",
+    "report_which_fired": true
+  },
+  "classes": {
+    "concerted_dehydration": {
+      "limitation": "no STRICT edge available: every dehydration meeting the bar lies on the C2 route and is excluded. This class can detect improvement but not regression.",
+      "edges": [
+        {
+          "id": "D1",
+          "reactant": "OCC1OC(O)(CO)C(O)C1O",
+          "product": "OC=C1OC(CO)C(O)C1O",
+          "coproduct": null,
+          "kind": "dehydration",
+          "status_at_locking": "validated",
+          "ts_imag_cm-1": -1035.93
+        },
+        {
+          "id": "D2",
+          "reactant": "OC=C1C=CC(O)(CO)O1",
+          "product": "O=Cc1ccc(CO)o1",
+          "coproduct": "O",
+          "kind": "dehydration",
+          "status_at_locking": "PARTIAL_MATCH",
+          "ts_imag_cm-1": -502.72
+        },
+        {
+          "id": "D3",
+          "reactant": "OC=C1C=CC(O)(CO)O1",
+          "product": "OC=c1ccc(=CO)o1",
+          "coproduct": "O",
+          "kind": "dehydration",
+          "status_at_locking": "NOT_CLEAN_TS",
+          "ts_imag_cm-1": -154.07
+        }
+      ]
+    },
+    "dry_proton_transfer": {
+      "edges": [
+        {
+          "id": "P1",
+          "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+          "product": "O=C(CO)C(O)C(O)C(O)CO",
+          "coproduct": null,
+          "kind": "isomerization",
+          "status_at_locking": "STRICT",
+          "ts_imag_cm-1": -434.65
+        },
+        {
+          "id": "P2",
+          "reactant": "OCC1OC(O)C(O)C(O)C1O",
+          "product": "O=CC(O)C(O)C(O)C(O)CO",
+          "coproduct": null,
+          "kind": "isomerization",
+          "status_at_locking": "validated",
+          "ts_imag_cm-1": -201.11
+        },
+        {
+          "id": "P3",
+          "reactant": "O=CC(O)C(O)C(O)=CO",
+          "product": "OC=C(O)C(O)C(O)=CO",
+          "coproduct": null,
+          "kind": "keto_to_enol",
+          "status_at_locking": "NOT_CLEAN_TS",
+          "ts_imag_cm-1": -248.0
+        }
+      ]
+    },
+    "retro_aldol": {
+      "edges": [
+        {
+          "id": "R1",
+          "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+          "product": "O=CC(O)CO",
+          "coproduct": "O",
+          "kind": "retro_aldol",
+          "status_at_locking": "STRICT",
+          "ts_imag_cm-1": -758.07
+        },
+        {
+          "id": "R2",
+          "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+          "product": "O=CC(O)C(O)CO",
+          "coproduct": "O",
+          "kind": "retro_aldol",
+          "status_at_locking": "PARTIAL_MATCH",
+          "ts_imag_cm-1": -386.37
+        },
+        {
+          "id": "R3",
+          "reactant": "O=CC(O)C(O)C(O)C(O)CO",
+          "product": "O=CCO",
+          "coproduct": "O",
+          "kind": "retro_aldol",
+          "status_at_locking": "NOT_CLEAN_TS",
+          "ts_imag_cm-1": -27.07,
+          "note": "one-step C6->C2 cleavage; implausible as an elementary step and recorded with a near-zero mode. Present as a hard negative, not a route candidate."
+        }
+      ]
+    }
+  },
+  "c2_task_route": {
+    "note": "Excluded from the panel. Source: the STRICT shortest path glucose -> HMF, identical to the deposit chain.",
+    "target": "O=Cc1ccc(CO)o1",
+    "steps": [
+      ["O=CC(O)C(O)C(O)C(O)CO", "O=CC(O)=CC(O)C(O)CO"],
+      ["O=CC(O)=CC(O)C(O)CO", "O=CC(=O)CC(O)C(O)CO"],
+      ["O=CC(=O)CC(O)C(O)CO", "O=CC(=O)C=CC(O)CO"],
+      ["O=CC(=O)C=CC(O)CO", "O=CC1(O)C=CC(CO)O1"],
+      ["O=CC1(O)C=CC(CO)O1", "O=Cc1ccc(CO)o1"]
+    ]
+  },
+  "c2_arms": {
+    "initial": {"path": "assets/initial", "vector_sha256_16": "94458f7c2a70ad9c"},
+    "final": {"path": "assets/final", "vector_sha256_16": "7d9a93b062b2f80a"}
+  }
+}

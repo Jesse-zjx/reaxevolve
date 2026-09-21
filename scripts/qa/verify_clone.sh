@@ -51,6 +51,9 @@ echo "=== 4. every documented path exists in the clone ==="
 echo "=== 5. rediscovery report matches its data ==="
 ( cd "$C" && $PY experiments/rediscovery/render_report.py --check ) | sed 's/^/  /' || rc=1
 
+echo "=== 5b. preregistration is consistent ==="
+( cd "$C" && $PY scripts/qa/test_preregistration.py | tail -2 ) | sed 's/^/  /' || rc=1
+
 echo "=== 6a. failure taxonomy and classifier agree ==="
 ( cd "$C" && $PY scripts/qa/test_failure_taxonomy.py | tail -2 ) | sed 's/^/  /' || rc=1
 
