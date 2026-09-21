@@ -40,26 +40,54 @@ This ordering matters because it was once the other way round: the bump and the 
 came first, so a revision that failed its checks and was reverted still appeared in the ledger
 as one that landed, and `tools/VERSIONS.json` claimed a version no file had.
 
-## What the historical record can and cannot show
+## Two version lineages, and why records carry `origin_*`
 
-Of 63 revisions, **7 close with a measurement** and **55 are explicitly `not_closable`**. The
-reason is stated per record; it is one of two things, and neither is "nothing reused it":
+The early ledger used two id spellings for one skill — `.skills/x` and `.skills/x/SKILL.md` —
+and each kept its own counter, in two different places in `VERSIONS.json`: the `skills`
+section, keyed by bare name, and a flat top-level key. The attempts recorded both.
 
-**The version numbering was renumbered.** The early ledger carried two id spellings for one
-skill (`.skills/x` and `.skills/x/SKILL.md`), which produced two parallel version lineages for
-the same file. Merging them into one lineage renumbered the versions — but the attempts in
-`attempt_vectors.jsonl` record the *original* numbers, so for the merged asset the ledger's
-`v42` and an attempt's `v2` are not comparable. `close_revisions.py` refuses to compare them
-rather than reporting a lower bound as a result.
+Merging them into one readable lineage renumbered the versions, which briefly made the ledger
+and the attempts incomparable and left 55 records un-closable. Each record therefore also
+carries the identifiers the attempts actually use:
 
-**No vectored attempt records that asset.** Attempts from before the asset-version vector was
-introduced cannot say which version they ran under, so they are invisible to this analysis.
+| Field | Which numbering |
+|---|---|
+| `asset_id`, `asset_version_before/after` | the merged, readable lineage |
+| `origin_asset_id`, `origin_version_before/after` | what the attempt vectors carry |
 
-The consequence for the capability claim is worth stating plainly: the repair/transfer analysis
-is supported for the revisions that close, and for anything run in this repository from here on
-(`verdict_writer.stamp` records the full vector on every attempt). It is *not* recoverable for
-the renumbered stretch of the historical ledger. Reporting those 55 as "no downstream use"
-would be a measurement claim the data does not support.
+`close_revisions.py` resolves against `origin_*`, which is what restored 50 of the 63.
+
+## What the historical record shows
+
+**50 of 63 close**, and 12 are `not_closable` with the reason recorded per record — the
+remaining one is the reorganization entry, which has no failure mode to measure. The two
+reasons are "no vectored attempt records this asset" (the tool revisions and the later skill
+work, which post-date the attempt stream) and "the revised version is above the highest any
+attempt records" (the campaign stopped before an attempt ran under it). Neither means nothing
+reused the asset.
+
+Of the 50, **37 give a direction**: the targeted failure mode fell after 15 revisions and rose
+or held after 22. That distribution is the point. A ledger in which every revision met its
+expectation would be evidence of nothing except that the expectations were written loosely.
+
+## `expectation_met` is observational, not a replay
+
+Read it as a weak signal and nothing more. It compares the last 12 attempts before a revision
+with the first 12 after, both restricted to attempts that record the asset. The method's causal
+arm is the repair/transfer replay, which re-runs *the same instance* under the old and the new
+asset version with everything else held fixed; that is a separate experiment and this is not a
+substitute for it.
+
+The windows are bounded and balanced deliberately. Computed the obvious way — every attempt
+before against every attempt after — it produced 39 apparent failures whose `rate_after` climbed
+monotonically as the sample fell from 57 to 2, because consecutive revisions then share almost
+their entire before-window and the after-window collapses toward the end of a campaign. That
+number described where each revision sat in the run, not what it did. Below six attempts on
+either side the field reports `inconclusive` rather than a direction.
+
+A revision attributed to a process mode reports `not_applicable`: the chemistry classifier
+cannot emit process modes, so scoring one against attempt failure rates would compare a
+category against one it cannot contain and always report failure.
 
 ## Why `attempt_vectors.jsonl` is here and not under `graph/`
 

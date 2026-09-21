@@ -41,9 +41,16 @@ LOG = os.path.join(PKG, "evolution", "EVOLUTION_LOG.jsonl")
 # into the network would mix two campaigns' reaction data. See evolution/README.md.
 ATTEMPT_VECTORS = os.path.join(PKG, "evolution", "attempt_vectors.jsonl")
 
-# An improvement below this is not distinguishable from noise at these sample sizes; the
-# field records `inconclusive` rather than a flattering true.
-MIN_AFTER_ATTEMPTS = 5
+# Comparison window, in attempts, on each side of the revision.
+#
+# Bounded and balanced on purpose. Comparing "every attempt before" against "every attempt
+# after" looks rigorous and is not: consecutive revisions then share almost their entire
+# before-window, so the measurements are not independent, and the after-window collapses
+# toward the end of a campaign — the last revision gets judged on two attempts. Run once that
+# way, this produced 39 apparent failures whose `rate_after` climbed monotonically as `n` fell,
+# which is a description of where each revision sat in the campaign rather than of the revision.
+WINDOW = 12
+MIN_SIDE = 6  # below this on either side, report inconclusive rather than a direction
 
 
 def load_ledger() -> list[dict]:
@@ -99,18 +106,30 @@ def attempt_records() -> list[dict]:
 
 
 def asset_version_of(rec: dict, asset_id: str):
-    """Version of one asset as recorded on an attempt, or None if not recorded."""
+    """Version of one asset as recorded on an attempt, or None if not recorded.
+
+    Two lookups, because the early campaign kept two counters for one skill in two places: the
+    `skills` section, keyed by bare name, and a flat top-level key spelled with `/SKILL.md`.
+    A revision belongs to exactly one of those lineages, so the caller passes the id form the
+    revision was written under (`origin_asset_id`) and this resolves it against the matching
+    key. Looking only in the sections is what made the SKILL.md-lineage revisions appear to
+    have no downstream evidence.
+    """
     vec = rec.get("asset_versions") or {}
-    rel = asset_id.strip("./")
+    rel = (asset_id or "").strip()
+    # Exact flat key first: it is unambiguous when present.
+    for candidate in (rel, rel.lstrip("./"), f"./{rel}"):
+        if candidate in vec and not isinstance(vec[candidate], dict):
+            return str(vec[candidate])
+    bare = rel.strip("./")
     for section in ("skills", "tools"):
         table = vec.get(section)
         if not isinstance(table, dict):
             continue
         for k, v in table.items():
-            if rel.endswith(k) or rel.split("/")[-1] == k.split("/")[-1]:
+            if bare.endswith(k) or bare.split("/")[-1] == k.split("/")[-1]:
                 return str(v)
-    flat = vec.get(rel) or vec.get(asset_id)
-    return str(flat) if flat is not None else None
+    return None
 
 
 def parse_v(v) -> int | None:
@@ -148,8 +167,13 @@ def close(rows: list[dict], attempts: list[dict]) -> tuple[list[dict], list[dict
             continue
         if row.get("closed_status"):
             continue
-        asset = row.get("asset_id") or ""
-        after = row.get("asset_version_after")
+        # Compare against the identifier and numbering the attempts actually carry. For
+        # revisions from the two-lineage era that is `origin_*`; the merged `asset_id` and
+        # `asset_version_*` are the readable lineage and are not comparable with the vectors.
+        asset = row.get("origin_asset_id") or row.get("asset_id") or ""
+        after = row.get("origin_version_after")
+        if after is None:
+            after = row.get("asset_version_after")
         if after is None:
             continue
 
@@ -175,27 +199,25 @@ def close(rows: list[dict], attempts: list[dict]) -> tuple[list[dict], list[dict
             row["expectation_met"] = None
             row["closed_status"] = "not_closable"
             row["closed_reason"] = (
-                f"ledger version v{after} exceeds the highest version recorded on any attempt "
-                f"(v{hi}); this asset's numbering was renumbered when two id lineages were "
-                f"merged, so the two are not comparable"
+                f"the revised version v{after} of `{asset}` is above the highest version any "
+                f"attempt records (v{hi}): the campaign stopped before an attempt ran under it"
             )
             changes.append({"seq": row.get("seq"), "asset_id": asset,
                             "first_downstream_use": False, "expectation_met": "not_closable"})
             continue
 
-        # first_downstream_use: earliest attempt recorded at or above the revised version.
-        first = None
-        after_recs, before_recs = [], []
+        # Attempts that record this asset, in the order they ran, split at the revision.
+        indexed = []
         for rec in attempts:
             v = parse_v(asset_version_of(rec, asset))
-            if v is None:
-                continue
-            if v >= int(after):
-                after_recs.append(rec)
-                if first is None:
-                    first = rec
-            else:
-                before_recs.append(rec)
+            if v is not None:
+                indexed.append((v, rec))
+        before_all = [r for v, r in indexed if v < int(after)]
+        after_all = [r for v, r in indexed if v >= int(after)]
+        first = after_all[0] if after_all else None
+        # Bounded, balanced windows: the last W before and the first W after.
+        before_recs = before_all[-WINDOW:]
+        after_recs = after_all[:WINDOW]
 
         targeted = [m for m in (row.get("failure_mode") or []) if m]
         # Process modes describe the machinery, not a chemical outcome, so the attempt
@@ -215,7 +237,12 @@ def close(rows: list[dict], attempts: list[dict]) -> tuple[list[dict], list[dict
                 return sum(c[m] for m in targeted) / len(recs)
 
             rate_before, rate_after = rate(before_recs), rate(after_recs)
-            if len(after_recs) < MIN_AFTER_ATTEMPTS or rate_before is None:
+            if (
+                len(after_recs) < MIN_SIDE
+                or len(before_recs) < MIN_SIDE
+                or rate_before is None
+                or rate_after is None
+            ):
                 met = "inconclusive"
             else:
                 met = bool(rate_after < rate_before)
@@ -237,12 +264,20 @@ def close(rows: list[dict], attempts: list[dict]) -> tuple[list[dict], list[dict
             new["closed_reason"] = "no attempt recorded at or above the revised version"
         if targeted:
             new["expectation_evidence"] = {
+                # Observational, not a replay: it compares neighbouring attempts rather than
+                # re-running the same instance under both asset versions. The method's causal
+                # arm is the repair/transfer replay, which fixes everything except the asset
+                # version; this is the weaker signal available from the existing record.
+                "measurement": "observational_balanced_window",
                 "targeted_failure_modes": targeted,
+                "window": WINDOW,
+                "min_side": MIN_SIDE,
                 "attempts_before": len(before_recs),
                 "attempts_after": len(after_recs),
+                "attempts_before_total": len(before_all),
+                "attempts_after_total": len(after_all),
                 "rate_before": round(rate_before, 3) if rate_before is not None else None,
                 "rate_after": round(rate_after, 3) if rate_after is not None else None,
-                "min_after_attempts": MIN_AFTER_ATTEMPTS,
             }
         if new != row:
             changes.append({"seq": row.get("seq"), "asset_id": asset,

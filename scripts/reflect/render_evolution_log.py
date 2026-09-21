@@ -49,12 +49,16 @@ def render(rows: list[dict]) -> str:
         "",
         "## What the ledger supports",
         "",
-        f"- **{len(closed)}** revisions close with a measurement: "
+        f"- **{len(closed)}** revisions have a downstream link: "
         + ", ".join(f"expectation_met={k} ×{v}" for k, v in sorted(met.items())),
         f"- **{len(not_closable)}** cannot be closed. This is not the same as "
-        "\"nothing reused them\" — the reason is recorded per record, and the two causes are "
-        "a renumbered version lineage and attempts that predate the asset-version vector. "
-        "See `evolution/README.md`.",
+        "\"nothing reused them\" — the reason is recorded per record: either no vectored "
+        "attempt records that asset, or the campaign stopped before an attempt ran under the "
+        "revised version.",
+        "",
+        "`expectation_met` is **observational**: a balanced window of attempts either side of "
+        "the revision, not a replay. The causal arm is the repair/transfer replay, which holds "
+        "everything except the asset version fixed. See `evolution/README.md`.",
         "",
         "Only `qm_feedback` revisions carry a claim about capability. `plumbing` fixes a path",
         "or a format; `reorganization` renames or splits the asset surface.",

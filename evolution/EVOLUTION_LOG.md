@@ -11,8 +11,10 @@ triggered each one, and the pre-change snapshot it can be diffed against.
 
 ## What the ledger supports
 
-- **7** revisions close with a measurement: expectation_met=False ×1, expectation_met=True ×5, expectation_met=not_applicable ×1
-- **55** cannot be closed. This is not the same as "nothing reused them" — the reason is recorded per record, and the two causes are a renumbered version lineage and attempts that predate the asset-version vector. See `evolution/README.md`.
+- **50** revisions have a downstream link: expectation_met=False ×27, expectation_met=True ×16, expectation_met=inconclusive ×6, expectation_met=not_applicable ×1
+- **12** cannot be closed. This is not the same as "nothing reused them" — the reason is recorded per record: either no vectored attempt records that asset, or the campaign stopped before an attempt ran under the revised version.
+
+`expectation_met` is **observational**: a balanced window of attempts either side of the revision, not a replay. The causal arm is the repair/transfer replay, which holds everything except the asset version fixed. See `evolution/README.md`.
 
 Only `qm_feedback` revisions carry a claim about capability. `plumbing` fixes a path
 or a format; `reorganization` renames or splits the asset surface.
@@ -56,7 +58,7 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
 - `001` **.skills/qm-execution** v0→v1 [qm_feedback]
   - failure mode: `no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce 'no_endpoint_record' failures by ensuring IRC endpoints are recorded before proceeding to verdict; expected to increase pass rate and enable more STRICT edges.
-  - **expectation met: True**; targeted-mode rate 0.25 → 0.188 over 96 later attempts
+  - **expectation met: False**; targeted-mode rate 0.083 → 0.333 over 12 later attempts
   - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>O=CC=C(O)C(O)C(O)CO` (unresolved)
   - snapshot: `evolution/snapshots/001__skills_qm-execution__v0`
 - `002` **.skills/qm-execution** v1→v2 [plumbing]
@@ -68,252 +70,295 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
 - `003` **.skills/generate-ts-guesses** v0→v1 [plumbing]
   - failure mode: `no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the number of guess attempts with no endpoint record by at least 50% in the next Validate round, by generating fewer, higher-quality TS guesses that are constrained to yield clear IRC paths. This should increase the proportion of STRICT edges from validated calculations.
-  - **expectation met: True**; targeted-mode rate 0.273 → 0.181 over 94 later attempts
+  - **expectation met: False**; targeted-mode rate 0.167 → 0.25 over 12 later attempts
   - first downstream use: `O=C(CO)C(O)C(O)C(O)CO>>O=C(CO)C(O)C=C(O)CO` (unresolved)
   - snapshot: `evolution/snapshots/003__skills_generate-ts-guesses__v0`
 - `004` **.skills/diagnose-ts-failures** v0→v1 [qm_feedback]
   - failure mode: `no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce IRC endpoint record failures by giving explicit re-guess strategy, leading to more successful IRC endpoints and increasing chance of STRICT edges.
-  - **expectation met: True**; targeted-mode rate 0.333 → 0.163 over 92 later attempts
+  - **expectation met: True**; targeted-mode rate 0.25 → 0.083 over 12 later attempts
   - first downstream use: `OC=C(O)C(O)C(O)C(O)CO>>O=CC=C(O)C(O)C(O)CO` (unresolved)
   - snapshot: `evolution/snapshots/004__skills_diagnose-ts-failures__v0`
 - `005` **.skills/generate-ts-guesses** v1→v2 [qm_feedback]
   - failure mode: `no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the rate of 'no_endpoint_record' failures by 50% or more in the next Validate round, increasing the number of validated edges and potentially adding STRICT edges.
-  - **expectation met: True**; targeted-mode rate 0.273 → 0.169 over 83 later attempts
-  - first downstream use: `OCC(O)=CC(O)C(O)CO>>OCC1C=CC1(O)CO` (rejected)
+  - **expectation met: inconclusive**
+  - first downstream use: `OCC1OC(O)C(O)C1O>>OCC1OC(O)=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/005__skills_generate-ts-guesses__v1`
 - `006` **.skills/diagnose-ts-failures** v1→v2 [qm_feedback]
   - failure mode: `no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the 'no_endpoint_record' failure rate by providing actionable diagnosis, leading to more successful IRC endpoint records and potentially more STRICT edges.
-  - **expectation met: True**; targeted-mode rate 0.31 → 0.161 over 87 later attempts
+  - **expectation met: True**; targeted-mode rate 0.333 → 0.0 over 12 later attempts
   - first downstream use: `O=C(C=CC(O)CO)CO>>OCC1(O)C=CC(O)(CO)O1` (rejected)
   - snapshot: `evolution/snapshots/006__skills_diagnose-ts-failures__v1`
 - `007` **.skills/diagnose-ts-failures** v2→v3 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Next Validate round will have more specific recovery actions for missing endpoints and soft modes, leading to fewer repeated failures and potentially new STRICT edges.
-  - **expectation met: False**; targeted-mode rate 0.484 → 0.565 over 85 later attempts
+  - **expectation met: True**; targeted-mode rate 0.667 → 0.333 over 12 later attempts
   - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>OC=CC(O)C(O)C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/007__skills_diagnose-ts-failures__v2`
 - `008` **.skills/generate-ts-guesses** v2→v3 [plumbing]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the rate of unattributed and no_endpoint_record failures by ensuring TS guesses have a single dominant imaginary frequency, leading to higher IRC completion rates and more validated TS edges, ultimately increasing d_strict.
-  - not closable: ledger version v3 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.583 → 0.25 over 12 later attempts
+  - first downstream use: `OCC(O)=CC(O)C(O)CO>>OCC1C=CC1(O)CO` (rejected)
   - snapshot: `evolution/snapshots/008__skills_generate-ts-guesses__v2`
 - `009` **.skills/generate-ts-guesses** v3→v4 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that yield no IRC endpoint record or only soft modes. Expect more guesses to produce at least one endpoint match, increasing the chance of a STRICT edge from Validate.
-  - not closable: ledger version v4 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.556 → 0.333 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)C(O)C=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/009__skills_generate-ts-guesses__v3`
 - `010` **.skills/diagnose-ts-failures** v3→v4 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce no_endpoint_record failures by re-running IRC with robust settings; reduce soft-mode no_dominant_mode failures by perturbing along the imaginary mode vector; increase the rate of IRC endpoint records and valid TS matches, ultimately leading to more STRICT edges.
-  - not closable: ledger version v4 exceeds the highest version recorded on any attempt (v3); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: inconclusive**
+  - first downstream use: `OCC(O)=CC(O)C(O)CO>>OCC(O)=CC=C(O)CO` (STRICT)
   - snapshot: `evolution/snapshots/010__skills_diagnose-ts-failures__v3`
 - `011` **.skills/generate-ts-guesses** v4→v5 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the number of submitted guesses, increase the fraction with a single dominant imaginary mode, and thereby raise the probability of successful IRC and endpoint recording, leading to more STRICT edges.
-  - not closable: ledger version v5 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.417 → 0.167 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>OCC1OC(O)C(O)C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/011__skills_generate-ts-guesses__v4`
 - `012` **.skills/diagnose-ts-failures** v4→v5 [qm_feedback]
   - failure mode: `no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the number of no_endpoint_record failures by providing concrete next-guess instructions, leading to more successful IRC endpoints and thus more potential STRICT edges.
-  - not closable: ledger version v5 exceeds the highest version recorded on any attempt (v3); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: inconclusive**; targeted-mode rate 0.0 → 0.417 over 12 later attempts
+  - first downstream use: `OCC(O)=CC(O)C(O)CO>>OCC=CC=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/012__skills_diagnose-ts-failures__v4`
 - `013` **.skills/qm-execution** v2→v3 [qm_feedback]
   - failure mode: `no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the rate of no_endpoint_record failures from ~40% to near 0% by verifying IRC endpoints after each run and re-running with longer IRC paths if missing, thereby increasing the chance of STRICT edge validation.
-  - not closable: ledger version v3 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: inconclusive**
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>OCC(O)=C(O)C(O)C(O)CO` (unresolved)
   - snapshot: `evolution/snapshots/013__skills_qm-execution__v2`
 - `014` **.skills/generate-ts-guesses** v5→v6 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of guesses that lack a genuine saddle point (no dominant imaginary mode). Expect more TS guesses to pass IRC and yield endpoint records, increasing the success rate of Validate rounds and eventually adding new STRICT edges.
-  - not closable: ledger version v6 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.167 → 0.333 over 12 later attempts
+  - first downstream use: `OCC1OC(O)C(O)C(O)C1O>>OCC1OC(O)C(O)=C(O)C1O` (unresolved)
   - snapshot: `evolution/snapshots/014__skills_generate-ts-guesses__v5`
 - `015` **.skills/generate-ts-guesses** v6→v7 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Next Validate round will see a higher fraction of TS guesses yielding a single dominant imaginary mode and successfully completing IRC to both endpoints, reducing the dominant failure modes and increasing the chance of new STRICT edges
-  - not closable: ledger version v7 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.583 → 0.333 over 12 later attempts
+  - first downstream use: `OCC1OC(O)(CO)CC1O>>O=C1CC(O)C(CO)O1` (rejected)
   - snapshot: `evolution/snapshots/015__skills_generate-ts-guesses__v6`
 - `016` **.skills/generate-ts-guesses** v7→v8 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce failed attempts by generating fewer, higher-quality guesses that focus on early-path reactions and single-imag modes, leading to increase in STRICT edges in next Validate round.
-  - not closable: ledger version v8 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.583 → 0.25 over 12 later attempts
+  - first downstream use: `OCC1OC(O)(CO)CC1O>>OCC1OC(O)(CO)C=C1O` (rejected)
   - snapshot: `evolution/snapshots/016__skills_generate-ts-guesses__v7`
 - `017` **.skills/generate-ts-guesses** v8→v9 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Reduce the number of TS guesses per edge from up to 5 to max 2, focusing on chemically plausible mechanisms for dehydration and tautomerization. Expect fewer failed attempts with no_dominant_mode and no_endpoint_record, and increase the chance of STRICT edges in the next Validate round.
-  - not closable: ledger version v9 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.583 → 0.25 over 12 later attempts
+  - first downstream use: `OCC1OC(O)C(O)C(O)C1O>>OCC1OC(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/017__skills_generate-ts-guesses__v8`
 - `018` **.skills/generate-ts-guesses** v9→v10 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Increase the proportion of guesses that yield a single dominant imaginary mode and successful IRC endpoint records, thereby increasing the chance of new STRICT edges.
-  - not closable: ledger version v10 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.667 → 0.333 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)C=C(O)C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/018__skills_generate-ts-guesses__v9`
 - `019` **.skills/generate-ts-guesses** v10→v11 [plumbing]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce no_dominant_mode failures by ensuring TS guesses have a single significant imaginary mode (>200 cm⁻¹) and correct endpoint matching. This will increase validation pass rate for isomerization/tautomerization edges, leading to more STRICT edges and faster progress toward HMF.
-  - not closable: ledger version v11 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.333 → 0.333 over 12 later attempts
+  - first downstream use: `OCC1OC(O)C(O)C(O)C1O>>OCC1OC(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/019__skills_generate-ts-guesses__v10`
 - `020` **.skills/generate-ts-guesses** v11→v12 [plumbing]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Increase the fraction of TS guesses that yield a single imaginary frequency with dominant mode connecting reactant and product, and that produce valid IRC endpoints. Expect a measurable reduction in 'no_dominant_mode' and 'no_endpoint_record' failures in the next Validate round.
-  - not closable: ledger version v12 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.25 → 0.333 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)C(O)C(O)C=CO` (rejected)
   - snapshot: `evolution/snapshots/020__skills_generate-ts-guesses__v11`
 - `021` **.skills/generate-ts-guesses** v12→v13 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the number of no_dominant_mode failures for tautomerization guesses by at least 50% in the next Validate round, by ensuring that the initial guess places the migrating hydrogen at the donor-acceptor midpoint, which is expected to be closer to the saddle point.
-  - not closable: ledger version v13 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.25 → 0.417 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)C=C(O)C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/021__skills_generate-ts-guesses__v12`
 - `022` **.skills/generate-ts-guesses** v13→v14 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that result in no_dominant_mode by providing geometries that are closer to the true saddle point. This should increase the number of successfully validated TS edges and potentially lead to new STRICT edges over the next few rounds.
-  - not closable: ledger version v14 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.25 → 0.5 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>O=CC(O)C(O)C=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/022__skills_generate-ts-guesses__v13`
 - `023` **.skills/generate-ts-guesses** v14→v15 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that fail with no_dominant_mode (soft mode) by at least 50% in the next Validate round, enabling more valid TS and increasing chance of new STRICT edges.
-  - not closable: ledger version v15 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.25 → 0.5 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>OCC1OC(O)C(O)C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/023__skills_generate-ts-guesses__v14`
 - `024` **.skills/generate-ts-guesses** v15→v16 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that yield no_dominant_mode from ~50% to <25% in the next Validate round, increasing the number of valid saddle points and enabling IRC endpoint analysis.
-  - not closable: ledger version v16 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.25 → 0.5 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>OCC1OC(O)C(O)C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/024__skills_generate-ts-guesses__v15`
 - `025` **.skills/generate-ts-guesses** v16→v17 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that result in no_dominant_mode by providing chemical intuition guidelines and explicit failure-learning instructions. This should increase the number of validated guesses and eventually raise the number of STRICT edges.
-  - not closable: ledger version v17 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.25 → 0.5 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>OCC1OC(O)C(O)C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/025__skills_generate-ts-guesses__v16`
 - `026` **.skills/generate-ts-guesses** v17→v18 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that are soft minima or have multiple imaginary modes, leading to more valid TS optimizations and IRC endpoints, thus increasing the chance of new STRICT edges.
-  - not closable: ledger version v18 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.333 → 0.417 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>O=C(CO)C(O)C(O)C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/026__skills_generate-ts-guesses__v17`
 - `027` **.skills/generate-ts-guesses** v18→v19 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of guesses that converge to minima instead of true transition states. Expect higher proportion of TS candidates with exactly one imaginary frequency, leading to more validated edges and potentially new STRICT edges in the next Validate round.
-  - not closable: ledger version v19 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.417 → 0.333 over 12 later attempts
+  - first downstream use: `O=CC(O)C(O)C(O)C(O)CO>>OCC1OC(O)C(O)C(O)C1O` (unresolved)
   - snapshot: `evolution/snapshots/027__skills_generate-ts-guesses__v18`
 - `028` **.skills/generate-ts-guesses** v19→v20 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the rate of no_dominant_mode failures by providing tighter initial guesses for tautomerization and isomerization, thereby increasing the chance of validated edges and new STRICT edges.
-  - not closable: ledger version v20 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.333 → 0.417 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C(O)CO>>O=CC=C(O)C(O)C=CO` (STRICT)
   - snapshot: `evolution/snapshots/028__skills_generate-ts-guesses__v19`
 - `029` **.skills/generate-ts-guesses** v20→v21 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the number of TS guesses that result in soft‑mode failures, especially for tautomerization and isomerization. The expected outcome is that more validated edges will pass the STRICT check (dominant imaginary mode, endpoint match) and the number of strict edges will increase, driving the reaction graph toward HMF.
-  - not closable: ledger version v21 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.333 → 0.417 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C=CO>>O=CC=C(O)C=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/029__skills_generate-ts-guesses__v20`
 - `030` **.skills/diagnose-ts-failures** v5→v6 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Validation will receive explicit guidance to regenerate guesses with larger displacement or different reaction kind when no_dominant_mode occurs, potentially reducing wasteful retries and increasing the chance of finding a true saddle.
-  - not closable: ledger version v6 exceeds the highest version recorded on any attempt (v3); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.417 → 0.417 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C=CO>>O=CC=C(O)C=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/030__skills_diagnose-ts-failures__v5`
 - `031` **.skills/generate-ts-guesses** v21→v22 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the no_dominant_mode failure rate for isomerization/tautomerization and unattributed edges by ensuring guesses are positioned away from local minima, with sufficient gradient norm and RMSD from endpoints, encouraging a single imaginary mode > 100 cm⁻¹.
-  - not closable: ledger version v22 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.5 → 0.417 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C=CO>>O=CC=C(O)C=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/031__skills_generate-ts-guesses__v21`
 - `032` **.skills/generate-ts-guesses** v22→v23 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses rejected due to no_dominant_mode by at least 30% in the next Validate round.
-  - not closable: ledger version v23 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.5 → 0.333 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C(O)CO>>OCC1OC=C(O)C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/032__skills_generate-ts-guesses__v22`
 - `033` **.skills/generate-ts-guesses** v23→v24 [plumbing]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce soft-mode guesses for tautomerization and isomerization reactions, leading to a higher proportion of TS guesses with a dominant imaginary mode and correct endpoint matching, thereby increasing the chance of new STRICT edges.
-  - not closable: ledger version v24 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.417 → 0.417 over 12 later attempts
+  - first downstream use: `O=CC(O)C=C(O)C=CO>>O=CC1C=C(O)C=CO1` (rejected)
   - snapshot: `evolution/snapshots/033__skills_generate-ts-guesses__v23`
 - `034` **.skills/generate-ts-guesses** v24→v25 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the rate of 'no_dominant_mode' failures by generating fewer, better-staged guesses that are more likely to possess a single imaginary frequency > 100 cm⁻¹. Expect an increase in validated_n per round (e.g., from 2 to 3-4) and a higher chance of new STRICT edges in the next 3 rounds.
-  - not closable: ledger version v25 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.333 → 0.333 over 12 later attempts
+  - first downstream use: `OCC1OC(O)C=C(O)C1O>>OCC1OC=C(O)C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/034__skills_generate-ts-guesses__v24`
 - `035` **.skills/generate-ts-guesses** v25→v26 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of guesses with soft modes or multiple imaginary frequencies; increase the number of genuine TS with a single imaginary mode, leading to more successful IRC and STRICT edges in subsequent Validate rounds.
-  - not closable: ledger version v26 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.417 → 0.417 over 12 later attempts
+  - first downstream use: `OCC1OC(O)C=C(O)C1O>>OCC1OC=C(O)C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/035__skills_generate-ts-guesses__v25`
 - `036` **.skills/generate-ts-guesses** v26→v27 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the proportion of TS guesses that fail with 'no_dominant_mode' by at least 30% in the next Validate round, increasing the validated TS count and thus the chance of new STRICT edges.
-  - not closable: ledger version v27 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.5 → 0.333 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C=CO>>O=CC1C(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/036__skills_generate-ts-guesses__v26`
 - `037` **.skills/generate-ts-guesses** v27→v28 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the rate of no_dominant_mode failures for tautomerization/isomerization edges by at least 30%, leading to more validated TS proposals and eventually new STRICT edges.
-  - not closable: ledger version v28 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.5 → 0.333 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C=CO>>O=CC1C(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/037__skills_generate-ts-guesses__v27`
 - `038` **.skills/generate-ts-guesses** v28→v29 [qm_feedback]
   - failure mode: `no_dominant_mode,no_endpoint_record` (v1-backfilled)
   - intended effect: Increase the fraction of guesses that yield a single dominant imaginary mode and complete IRC endpoints, thereby raising the validation pass rate for isomerization, tautomerization, dehydrogenation, and dehydration.
-  - not closable: ledger version v29 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.5 → 0.75 over 12 later attempts
+  - first downstream use: `O=CC=C(O)C(O)C=CO>>O=CC1C(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/038__skills_generate-ts-guesses__v28`
 - `039` **.skills/generate-ts-guesses** v29→v30 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of soft-mode TS guesses (imaginary frequency < 300 cm⁻¹) by 50%, increasing the pass rate for isomerization/tautomerization from 26/72 to >40/72 in the next 5 rounds, leading to more STRICT edges.
-  - not closable: ledger version v30 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.417 → 0.583 over 12 later attempts
+  - first downstream use: `O=CC(O)C=C(O)C=CO>>O=CC=C(O)C=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/039__skills_generate-ts-guesses__v29`
 - `040` **.skills/generate-ts-guesses** v30→v31 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the number of isomerization/tautomerization TS guesses that result in soft modes (no_dominant_mode) by ensuring only chemically meaningful guesses are proposed. Expect a measurable increase in successful TS validation (endpoint record, dominant mode) and an increase in STRICT edges for this reaction kind.
-  - not closable: ledger version v31 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.333 → 0.583 over 12 later attempts
+  - first downstream use: `O=C(C=C(O)C=CO)CO>>O=CC1C(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/040__skills_generate-ts-guesses__v30`
 - `041` **.skills/generate-ts-guesses** v31→v32 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that result in soft modes (no_dominant_mode) and no_endpoint_record, increasing validation pass rate for isomerization/tautomerization and dehydration, thereby enabling new STRICT edges and progress toward HMF.
-  - not closable: ledger version v32 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.417 → 0.583 over 12 later attempts
+  - first downstream use: `O=CC1C(O)C=C(O)C1O>>O=CC1C=C(O)C=CO1` (unresolved)
   - snapshot: `evolution/snapshots/041__skills_generate-ts-guesses__v31`
 - `042` **.skills/generate-ts-guesses** v32→v33 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Increase the fraction of TS guesses for isomerization/tautomerization that exhibit a dominant imaginary frequency (>|300| cm-1), leading to more successful IRC endpoint matching and fewer rejected TS attempts.
-  - not closable: ledger version v33 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.333 → 0.667 over 12 later attempts
+  - first downstream use: `O=CC1C(O)C=C(O)C1O>>O=CC1C=C(O)C=CO1` (rejected)
   - snapshot: `evolution/snapshots/042__skills_generate-ts-guesses__v32`
 - `043` **.skills/generate-ts-guesses** v33→v34 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Increase TS guess quality: reduce soft-mode failures and no-endpoint-record failures, raising pass rate from 26/108 (24%) to >40% in the next Validate round, and enabling more STRICT edges.
-  - not closable: ledger version v34 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.417 → 0.667 over 12 later attempts
+  - first downstream use: `O=C(C=C(O)C(O)CO)CO>>O=C(C=C(O)C=CO)CO` (rejected)
   - snapshot: `evolution/snapshots/043__skills_generate-ts-guesses__v33`
 - `044` **.skills/generate-ts-guesses** v34→v35 [plumbing]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of soft-mode failures by at least 30%, leading to more TS optimizations with a single dominant imaginary frequency and correct endpoint connectivity, thereby increasing the probability of new STRICT edges.
-  - not closable: ledger version v35 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.583 → 0.583 over 12 later attempts
+  - first downstream use: `O=CC(O)C=C(O)C=CO>>O=CC1C(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/044__skills_generate-ts-guesses__v34`
 - `045` **.skills/generate-ts-guesses** v35→v36 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce no_dominant_mode failures by at least 30% over the next 5 rounds, increasing the yield of valid TS guesses that lead to IRC endpoints and STRICT edges.
-  - not closable: ledger version v36 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.583 → 0.636 over 11 later attempts
+  - first downstream use: `O=CC(O)C=C(O)C=CO>>O=CC1C(O)C=C(O)C1O` (unresolved)
   - snapshot: `evolution/snapshots/045__skills_generate-ts-guesses__v35`
 - `046` **.skills/generate-ts-guesses** v36→v37 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the number of guesses that result in only soft imaginary frequencies; increase the proportion of true TS saddles found from isomerization/tautomerization guesses, thereby improving STRICT edge yield.
-  - not closable: ledger version v37 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.583 → 0.667 over 9 later attempts
+  - first downstream use: `O=CC(O)C=C(O)C=CO>>O=CC1C(O)C=C(O)C1O` (rejected)
   - snapshot: `evolution/snapshots/046__skills_generate-ts-guesses__v36`
 - `047` **.skills/generate-ts-guesses** v37→v38 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce soft-mode failures by at least 50% in the next 2 validation rounds, leading to a new STRICT edge within 3 rounds.
-  - not closable: ledger version v38 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: True**; targeted-mode rate 0.667 → 0.571 over 7 later attempts
+  - first downstream use: `O=C(C=C(O)C(O)CO)CO>>O=C(C=C(O)C=CO)CO` (rejected)
   - snapshot: `evolution/snapshots/047__skills_generate-ts-guesses__v37`
 - `048` **.skills/generate-ts-guesses** v38→v39 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Sharply reduce the number of TS guesses that yield soft, multi‑imaginary modes. Expect a higher fraction of guesses to pass with a dominant mode and correct endpoint match, thereby increasing the chance of successful validation and STRICT edges.
-  - not closable: ledger version v39 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: False**; targeted-mode rate 0.667 → 0.667 over 6 later attempts
+  - first downstream use: `O=C(C=C(O)C(O)CO)CO>>O=CC=C(O)C=C(O)CO` (rejected)
   - snapshot: `evolution/snapshots/048__skills_generate-ts-guesses__v38`
 - `049` **.skills/generate-ts-guesses** v39→v40 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of TS guesses that yield a soft imaginary mode (no_dominant_mode) from ~50% to under 20%, especially for isomerization/tautomerization. This should increase the number of validated TS edges, potentially adding new STRICT edges toward HMF.
-  - not closable: ledger version v40 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: inconclusive**; targeted-mode rate 0.667 → 0.75 over 4 later attempts
+  - first downstream use: `O=CC(O)C=C(O)C(O)CO>>O=CC(O)C=C(O)C=CO` (rejected)
   - snapshot: `evolution/snapshots/049__skills_generate-ts-guesses__v39`
 - `050` **.skills/generate-ts-guesses** v40→v41 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of no_dominant_mode failures in TS guesses, increasing the chance of finding a proper saddle point with a large imaginary frequency, leading to more STRICT validations.
-  - not closable: ledger version v41 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - **expectation met: inconclusive**; targeted-mode rate 0.667 → 0.5 over 2 later attempts
+  - first downstream use: `O=CC(O)C(O)C=C(O)CO>>O=CC(O)C=C(O)C=CO` (unresolved)
   - snapshot: `evolution/snapshots/050__skills_generate-ts-guesses__v40`
 - `051` **.skills/generate-ts-guesses** v41→v42 [qm_feedback]
   - failure mode: `no_dominant_mode` (v1-backfilled)
   - intended effect: Reduce the fraction of guesses that produce soft modes (< 200 cm⁻¹) from ~30% to < 15%, thereby increasing the number of guesses that pass the STRICT criteria for dominant imaginary mode and endpoint matching, ultimately leading to new STRICT edges.
-  - not closable: ledger version v42 exceeds the highest version recorded on any attempt (v2); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - not closable: the revised version v40 of `.skills/generate-ts-guesses/SKILL.md` is above the highest version any attempt records (v39): the campaign stopped before an attempt ran under it
   - snapshot: `evolution/snapshots/051__skills_generate-ts-guesses__v41`
 - `052` **tools/workflow/soft_mode_cleanup.py** v0→v1 [qm_feedback]
   - failure mode: `multiple_imaginary` (v1-backfilled)
@@ -360,7 +405,7 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
 - `062` **.skills/strict-chain-assembly** v1→v2 [plumbing]
   - failure mode: `stale_path_reference` (v1-backfilled)
   - intended effect: Every repo-relative path named in a skill resolves in a clean checkout; retired tools are marked as retired instead of linked; the cache instruction points at verdicts.jsonl and strict_caches/, which are distributed. Enforced by scripts/qa/check_doc_paths.py.
-  - not closable: ledger version v2 exceeds the highest version recorded on any attempt (v0); this asset's numbering was renumbered when two id lineages were merged, so the two are not comparable
+  - not closable: the revised version v2 of `.skills/strict-chain-assembly` is above the highest version any attempt records (v0): the campaign stopped before an attempt ran under it
   - snapshot: `evolution/snapshots/062__skills_strict-chain-assembly__v1`
 - `063` **.skills/qm-reaction-validation** v1→v2 [plumbing]
   - failure mode: `stale_path_reference` (v1-backfilled)
