@@ -7,7 +7,7 @@ Revisions are ordered by `seq` and versioned per asset. There are no wall-clock
 timestamps: what has to be checkable is the order of revisions, the evidence that
 triggered each one, and the pre-change snapshot it can be diffed against.
 
-**63 revision records** — qm_feedback 50, plumbing 12, reorganization 1 · applied 63
+**66 revision records** — qm_feedback 50, plumbing 15, reorganization 1 · applied 66
 
 ## What the ledger supports
 
@@ -27,12 +27,13 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
 |---|---|
 | `no_dominant_mode` | 44 |
 | `no_endpoint_record` | 16 |
-| `stale_path_reference` | 5 |
+| `stale_path_reference` | 7 |
 | `no_match` | 2 |
 | `path_alias` | 1 |
 | `multiple_imaginary` | 1 |
 | `low_candidate_yield` | 1 |
 | `near_duplicate_spend` | 1 |
+| `tool_crash_reported_as_result` | 1 |
 
 ## Revisions per asset
 
@@ -48,7 +49,9 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
 | `.skills/strict-edge-criterion` | 1 | v2 |
 | `.skills/ts-validation-strategy` | 1 | v2 |
 | `tools/expand/templates_expand.py` | 2 | v2 |
-| `tools/guess/` | 1 | v1 |
+| `tools/geometry/map_reaction_atoms.py` | 1 | v1 |
+| `tools/guess/` | 2 | v1 |
+| `tools/guess/auto_guess.py` | 1 | v2 |
 | `tools/guess/scan2d_guess.py` | 1 | v1 |
 | `tools/screen/diversity.py` | 1 | v1 |
 | `tools/workflow/soft_mode_cleanup.py` | 1 | v1 |
@@ -412,3 +415,15 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
   - intended effect: Every repo-relative path named in a skill resolves in a clean checkout; retired tools are marked as retired instead of linked; the cache instruction points at verdicts.jsonl and strict_caches/, which are distributed. Enforced by scripts/qa/check_doc_paths.py.
   - not closable: no attempt in evolution/attempt_vectors.jsonl records this asset
   - snapshot: `evolution/snapshots/063__skills_qm-reaction-validation__v1`
+- `064` **tools/guess/auto_guess.py** v1→v2 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: The interpolation guesser runs from any step directory. The informational workdir field is expressed relative to the repository root, falling back to the absolute path, so a layout change cannot lose already-built guesses.
+  - snapshot: `evolution/snapshots/064__tools_guess_auto_guess.py__v1`
+- `065` **tools/guess/** v0→v1 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Every generator resolves its dependencies against the repository root. scripts/qa/test_guess_ladder.py imports each generator, checks every repo-relative constant resolves, and refuses the retired layout by name.
+  - snapshot: `evolution/snapshots/065__tools_guess___v0`
+- `066` **tools/geometry/map_reaction_atoms.py** v0→v1 [plumbing]
+  - failure mode: `tool_crash_reported_as_result` (v1)
+  - intended effect: The mapper each asset set carries matches the contract that set's consumers read: the final set writes the full record its guess ladder needs, the initial set keeps the compact record its skills read. A mapping failure can no longer masquerade as a successful guess.
+  - snapshot: `evolution/snapshots/066__tools_geometry_map_reaction_atoms.py__v0`

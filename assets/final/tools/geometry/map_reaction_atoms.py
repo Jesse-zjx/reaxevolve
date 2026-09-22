@@ -40,13 +40,7 @@ def build_parser():
     )
     parser.add_argument(
         "--json-out",
-        help=(
-            "Optional path to write mapping records as JSON. "
-            "By default writes only the top-ranked record; use --all-mapped "
-            "to write all reported mappings. Each record includes "
-            "mapped_reaction_smiles, formed_bonds, broken_bonds, "
-            "bond_order_changes, and hydrogen_count_changes."
-        ),
+        help="Optional path to write the results as JSON",
     )
     parser.add_argument(
         "--all-mapped",
@@ -60,15 +54,6 @@ def build_parser():
         help=(
             "Optionally draw the top-ranked mapped reaction. "
             "If no path is provided, writes ./mapped_reaction.png"
-        ),
-    )
-    parser.add_argument(
-        "--draw-all",
-        nargs="?",
-        const="mapped_reactions",
-        help=(
-            "Optionally draw all reported mapped reactions to a directory. "
-            "If no directory is provided, writes ./mapped_reactions/"
         ),
     )
     return parser
@@ -446,19 +431,6 @@ def reactant_atom_label(atom_idx, reactant_labels=None):
     return reactant_labels[atom_idx]
 
 
-def format_bond_label(atom_a, symbol_a, atom_b, symbol_b):
-    left = (atom_a, symbol_a)
-    right = (atom_b, symbol_b)
-    if right[0] < left[0]:
-        left, right = right, left
-    return f"{left[1]}{left[0]}-{right[1]}{right[0]}"
-
-
-def format_hydrogen_change(atom_label, symbol, delta):
-    sign = "+" if delta > 0 else ""
-    return f"{symbol}{atom_label}:{sign}{delta}H"
-
-
 def bond_changes(mol_r, mol_p, heavy_r, heavy_p, mapping, reactant_labels=None):
     pos_to_orig_r = {pos: orig for pos, orig in enumerate(heavy_r)}
     pos_to_orig_p = {pos: orig for pos, orig in enumerate(heavy_p)}
@@ -476,13 +448,14 @@ def bond_changes(mol_r, mol_p, heavy_r, heavy_p, mapping, reactant_labels=None):
         h_r = atom_r.GetTotalNumHs()
         h_p = atom_p.GetTotalNumHs()
         if h_r != h_p:
-            hydrogen_delta.append(
-                format_hydrogen_change(
-                    reactant_atom_label(pos_to_orig_r[r_i], reactant_labels),
-                    atom_r.GetSymbol(),
-                    h_p - h_r,
-                )
-            )
+            hydrogen_delta.append({
+                "reactant_atom": reactant_atom_label(pos_to_orig_r[r_i], reactant_labels),
+                "product_atom": pos_to_orig_p[p_i] + 1,
+                "symbol": atom_r.GetSymbol(),
+                "reactant_hcount": h_r,
+                "product_hcount": h_p,
+                "delta": h_p - h_r,
+            })
 
     for r_i in range(n):
         p_i = mapping[r_i]
@@ -492,19 +465,44 @@ def bond_changes(mol_r, mol_p, heavy_r, heavy_p, mapping, reactant_labels=None):
             bond_p = mol_p.GetBondBetweenAtoms(pos_to_orig_p[p_i], pos_to_orig_p[p_j])
             order_r = bond_order_value(bond_r)
             order_p = bond_order_value(bond_p)
-            atom_label_i = reactant_atom_label(pos_to_orig_r[r_i], reactant_labels)
-            atom_label_j = reactant_atom_label(pos_to_orig_r[r_j], reactant_labels)
-            symbol_i = mol_r.GetAtomWithIdx(pos_to_orig_r[r_i]).GetSymbol()
-            symbol_j = mol_r.GetAtomWithIdx(pos_to_orig_r[r_j]).GetSymbol()
-            bond_label = format_bond_label(atom_label_i, symbol_i, atom_label_j, symbol_j)
 
             if bond_r is not None and bond_p is None:
-                broken.append(bond_label)
+                broken.append({
+                    "reactant_atoms": [
+                        reactant_atom_label(pos_to_orig_r[r_i], reactant_labels),
+                        reactant_atom_label(pos_to_orig_r[r_j], reactant_labels),
+                    ],
+                    "product_atoms": [pos_to_orig_p[p_i] + 1, pos_to_orig_p[p_j] + 1],
+                    "symbols": [
+                        mol_r.GetAtomWithIdx(pos_to_orig_r[r_i]).GetSymbol(),
+                        mol_r.GetAtomWithIdx(pos_to_orig_r[r_j]).GetSymbol(),
+                    ],
+                    "reactant_order": order_r,
+                })
             elif bond_r is None and bond_p is not None:
-                formed.append(bond_label)
+                formed.append({
+                    "reactant_atoms": [
+                        reactant_atom_label(pos_to_orig_r[r_i], reactant_labels),
+                        reactant_atom_label(pos_to_orig_r[r_j], reactant_labels),
+                    ],
+                    "product_atoms": [pos_to_orig_p[p_i] + 1, pos_to_orig_p[p_j] + 1],
+                    "symbols": [
+                        mol_r.GetAtomWithIdx(pos_to_orig_r[r_i]).GetSymbol(),
+                        mol_r.GetAtomWithIdx(pos_to_orig_r[r_j]).GetSymbol(),
+                    ],
+                    "product_order": order_p,
+                })
             elif bond_r is not None and bond_p is not None and abs(order_r - order_p) > 1e-6:
                 changed.append({
-                    "bond": bond_label,
+                    "reactant_atoms": [
+                        reactant_atom_label(pos_to_orig_r[r_i], reactant_labels),
+                        reactant_atom_label(pos_to_orig_r[r_j], reactant_labels),
+                    ],
+                    "product_atoms": [pos_to_orig_p[p_i] + 1, pos_to_orig_p[p_j] + 1],
+                    "symbols": [
+                        mol_r.GetAtomWithIdx(pos_to_orig_r[r_i]).GetSymbol(),
+                        mol_r.GetAtomWithIdx(pos_to_orig_r[r_j]).GetSymbol(),
+                    ],
                     "reactant_order": order_r,
                     "product_order": order_p,
                 })
@@ -620,34 +618,6 @@ def draw_reaction(mapped_rxn_smiles, output_path):
     image.save(output_path)
 
 
-def draw_all_reactions(records, output_dir):
-    output_dir = Path(output_dir)
-    if output_dir.exists() and not output_dir.is_dir():
-        raise ValueError(f"--draw-all expects a directory path, got file: {output_dir}")
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    output_paths = []
-    for record in records:
-        output_path = output_dir / f"mapping_{record['rank']:03d}.png"
-        draw_reaction(record["mapped_reaction_smiles"], output_path)
-        output_paths.append(output_path)
-    return output_paths
-
-
-def compact_mapping_records(records):
-    fields = [
-        "mapped_reaction_smiles",
-        "formed_bonds",
-        "broken_bonds",
-        "bond_order_changes",
-        "hydrogen_count_changes",
-    ]
-    return [
-        {field: record[field] for field in fields}
-        for record in records
-    ]
-
-
 def main():
     args = build_parser().parse_args()
 
@@ -738,14 +708,9 @@ def main():
         draw_reaction(records[0]["mapped_reaction_smiles"], args.draw)
         print(f"Wrote {args.draw}")
 
-    if args.draw_all:
-        output_paths = draw_all_reactions(records, args.draw_all)
-        print(f"Wrote {len(output_paths)} mapped reaction drawings to {args.draw_all}")
-
     if args.json_out:
-        json_records = records if args.all_mapped else records[:1]
         with open(args.json_out, "w", encoding="utf-8") as handle:
-            json.dump(compact_mapping_records(json_records), handle, indent=2, sort_keys=False)
+            json.dump(result, handle, indent=2, sort_keys=False)
         print(f"Wrote {args.json_out}")
 
 

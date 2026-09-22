@@ -54,6 +54,9 @@ echo "=== 5. rediscovery report matches its data ==="
 echo "=== 5b. preregistration is consistent ==="
 ( cd "$C" && $PY scripts/qa/test_preregistration.py | tail -2 ) | sed 's/^/  /' || rc=1
 
+echo "=== 5c. guess ladder is reachable and the mapper contract holds ==="
+( cd "$C" && $PY scripts/qa/test_guess_ladder.py | tail -2 ) | sed 's/^/  /' || rc=1
+
 echo "=== 6a. failure taxonomy and classifier agree ==="
 ( cd "$C" && $PY scripts/qa/test_failure_taxonomy.py | tail -2 ) | sed 's/^/  /' || rc=1
 

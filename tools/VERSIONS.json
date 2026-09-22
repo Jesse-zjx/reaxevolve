@@ -13,7 +13,7 @@
   "tools": {
     "geometry/builder.py": "v0",
     "geometry/inquire.py": "v0",
-    "geometry/map_reaction_atoms.py": "v0",
+    "geometry/map_reaction_atoms.py": "v1",
     "geometry/parse_orca_output.py": "v0",
     "geometry/smi_to_xyz.py": "v0",
     "geometry/xyz_to_smiles.py": "v0",
@@ -21,7 +21,7 @@
     "expand/templates_expand.py": "v2",
     "screen/diversity.py": "v1",
     "guess/ladder.py": "v1",
-    "guess/auto_guess.py": "v1",
+    "guess/auto_guess.py": "v2",
     "guess/constrained_scan_guess.py": "v1",
     "guess/dry_proton_guess.py": "v1",
     "guess/water_relay_guess.py": "v1",
@@ -32,7 +32,8 @@
     "workflow/run_qm_step.py": "v0",
     "workflow/orca_xtb_workflow.py": "v1",
     "workflow/validate_candidate.py": "v1",
-    "workflow/soft_mode_cleanup.py": "v1"
+    "workflow/soft_mode_cleanup.py": "v1",
+    "guess": "v1"
   },
   "retired": {
     "workflow/prepare_step.py": "depends on the retired path-validator workspace layout",

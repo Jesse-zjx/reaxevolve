@@ -104,6 +104,8 @@ python scripts/smoke_test.py                      # no DFT, no API
 python loop/run_loop.py --dry-run                 # stage wiring only
 python loop/mass_balance.py                       # audit the graph for conservation
 python loop/select_candidates.py --top 8          # what the next round would compute
+python loop/saturation.py                         # has revising the assets stopped paying?
+python scripts/qa/test_guess_ladder.py            # can the guess generators reach their tools?
 ```
 
 One command that clones this repository and checks everything a reader receives — deposits

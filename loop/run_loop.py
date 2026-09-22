@@ -8,7 +8,11 @@ Stop when any of:
   1) every human-set target has a STRICT route from a glucose seed
      (`--stop-on-targets any` to stop at the first one)
   2) cumulative core-hours >= budget
-  3) `--idle-stop` consecutive rounds with no new STRICT edge AND no asset revision
+  3) the preregistered saturation rule fires (`loop/saturation.py`, K and eps from
+     `preregistration/panel.json`), which is the rule the method commits to
+  4) `--idle-stop` consecutive rounds with neither a new STRICT edge nor an asset revision —
+     an operational brake, not the preregistered criterion; it is reported separately so the
+     two are never conflated
 
 Acceptance is `policy/acceptance/STRICT.md` (v5) only, written solely by
 `scripts/validate/verdict_writer.py`. Everything in this file is scheduling.
@@ -93,6 +97,17 @@ def targets_reached(mode: str = "all") -> bool:
     if not reach:
         return False
     return any(reach.values()) if mode == "any" else all(reach.values())
+
+
+def saturation_state() -> dict:
+    """Preregistered stopping rule, evaluated against the recorded metrics."""
+    try:
+        import saturation as SAT  # noqa: WPS433
+
+        return SAT.evaluate()
+    except Exception as exc:  # a broken rule must not silently become "never stop"
+        log("saturation check failed:", str(exc)[:200])
+        return {"saturated": False, "which_fired": None, "error": str(exc)[:200]}
 
 
 def evo_log_len() -> int:
@@ -308,7 +323,19 @@ def main():
     ap.add_argument("--max-rounds-per-step", type=int, default=2)
     ap.add_argument("--nprocs", type=int, default=16)
     ap.add_argument("--wall-s", type=int, default=5400)
-    ap.add_argument("--idle-stop", type=int, default=3)
+    ap.add_argument(
+        "--idle-stop",
+        type=int,
+        default=3,
+        help="operational brake: stop after this many rounds with neither a new STRICT edge nor "
+        "an asset revision. Not the preregistered criterion; reported as a separate reason.",
+    )
+    ap.add_argument(
+        "--no-saturation-stop",
+        action="store_true",
+        help="keep running past the preregistered saturation point (diagnostics only; the "
+        "protocol licenses freezing the assets once it fires)",
+    )
     ap.add_argument("--template-top", type=int, default=24, help="template candidates landed / round")
     ap.add_argument("--llm-top", type=int, default=4, help="LLM hypotheses requested / round")
     ap.add_argument("--no-llm", action="store_true", help="template Explore only (no API spend)")
@@ -425,12 +452,25 @@ def main():
         if load_core_hours() >= a.budget_hours:
             log("STOP: core-hour budget exhausted")
             break
+
+        # The preregistered criterion. Evaluated after the metrics row is written, so it reads
+        # this round too. `which_fired` is logged because stopping on zero growth is a weaker
+        # statement than stopping because growth became small.
+        sat = saturation_state()
+        rec["saturation"] = {k: sat.get(k) for k in ("saturated", "which_fired", "rounds_available")}
+        if sat.get("saturated") and not a.no_saturation_stop:
+            log(f"STOP: preregistered saturation rule fired ({sat.get('which_fired')}) — "
+                f"K={sat.get('K')} eps={sat.get('epsilon')}")
+            log("      freezing the asset set is now licensed; see preregistration/")
+            break
+
         if d_strict == 0 and d_evo == 0:
             idle += 1
         else:
             idle = 0
         if idle >= a.idle_stop:
-            log(f"STOP: {idle} idle rounds (no STRICT, no asset revision)")
+            log(f"STOP: operational brake — {idle} idle rounds (no STRICT, no asset revision). "
+                f"This is not the preregistered saturation criterion.")
             break
 
     manifest("loop_end")

@@ -350,6 +350,7 @@ def main():
         ("check_doc_paths.py", "every documented repo path resolves"),
         ("test_failure_taxonomy.py", "failure taxonomy and classifier agree"),
         ("test_preregistration.py", "panel is disjoint from the C2 task and still resolves"),
+        ("test_guess_ladder.py", "guess ladder reaches its tools and the mapper contract holds"),
     ):
         r = subprocess.run(
             [sys.executable, str(PKG / "scripts" / "qa" / script)],

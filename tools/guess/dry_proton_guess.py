@@ -39,7 +39,10 @@ from constrained_scan_guess import (
     write_xyz,
 )
 
-MAP_TOOL = WS / "resources" / "tools" / "map_reaction_atoms.py"
+# Repository root: tools/<group>/<file>.py -> two levels up.
+REPO = Path(__file__).resolve().parents[2]
+
+MAP_TOOL = REPO / "tools" / "geometry" / "map_reaction_atoms.py"
 
 # A covalent X-H bond is well under this; used to collect the donor's hydrogens.
 XH_BOND_MAX = 1.35

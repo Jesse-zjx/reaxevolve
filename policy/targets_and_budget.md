@@ -56,8 +56,14 @@ connect the stated endpoints.
 | Candidates considered / round | 8 | `--top` |
 | Candidates validated / round | 4 | `--cap` |
 | Max attempts / candidate edge | 3 | `--max-attempts`; >1 is what makes "the same edge passed after the asset changed" observable |
-| Idle stop | 3 rounds | No new STRICT edge **and** no asset revision |
+| Saturation stop | K=3, ε=5% | The **preregistered** criterion (`preregistration/panel.json`), evaluated by `loop/saturation.py`. Reports which of the two conditions fired. |
+| Idle stop | 3 rounds | Operational brake only: no new STRICT edge **and** no asset revision. Not the preregistered criterion, and logged as a distinct reason. |
 | Success stop | all targets | `--stop-on-targets all\|any\|never` |
+
+The distinction between the last two matters. Stopping because relative growth fell below ε is a
+statement about diminishing returns; stopping because nothing happened for three rounds is a
+statement about the run. Only the first licenses freezing the asset set for the fixed-asset
+comparison, and the loop records which one ended it.
 
 ## QM floor is human-set, not evolved
 
@@ -73,4 +79,8 @@ outside the editable surface.
 1. Every target in the table above has a STRICT route from a glucose seed
    (`--stop-on-targets any` to stop at the first).
 2. Cumulative QM core-hours >= the cap.
-3. `--idle-stop` consecutive rounds with neither a new STRICT edge nor an asset revision.
+3. The preregistered saturation rule fires: for each of the last K=3 rounds, relative growth in
+   accepted edges is below ε=5%, or there is no growth at all for all K. The diagnostic panel is
+   re-measured at the same time. Rule and panel: `preregistration/`.
+4. `--idle-stop` consecutive rounds with neither a new STRICT edge nor an asset revision
+   (operational brake).
