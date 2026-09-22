@@ -84,7 +84,20 @@ def endpoint_matches(irc_xyz, expected_smis):
     Returns (ok, got, exp).
     """
     sym, xyz = read_xyz(irc_xyz)
-    got = sorted(frag_canon(s, c) for s, c in atom_fragments(sym, xyz))
+    # Sort with a total order. frag_canon returns None for a fragment RDKit cannot perceive —
+    # dissociated, radical, or otherwise mangled — and comparing None against anything raises,
+    # so a plain sorted() crashed here before the `None not in got` guard below could run. The
+    # crash was not hypothetical: a naive interpolation guess in the bar-resolution probe reached
+    # an IRC endpoint with two unperceivable fragments and took down the validator, which in the
+    # loop means the attempt yields no verdict at all rather than a rejection.
+    #
+    # This cannot change any accept/reject decision. For endpoints whose fragments are all
+    # perceivable the ordering is unchanged, and an unperceivable fragment was already specified
+    # as a rejection by the guard and by the docstring above — it simply became reachable.
+    got = sorted(
+        (frag_canon(s, c) for s, c in atom_fragments(sym, xyz)),
+        key=lambda s: (s is None, s or ""),
+    )
     exp = sorted(canon(s) for s in expected_smis)
     return (None not in got) and (got == exp), got, exp
 

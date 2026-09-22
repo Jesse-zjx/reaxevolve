@@ -1,0 +1,75 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>OCC(O)=C(O)C(O)C(O)CO": {
+    "name": "bar_probe_ff_s2_interp_g1",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "OCC(O)=C(O)C(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -539.33,
+    "status": "rejected",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-09-22 18:57",
+    "driver": "run_qm_step.v0",
+    "method_ladder": "xtb_optts -> r2SCAN-3c_optts_numfreq -> r2SCAN-3c_irc",
+    "xtb_preopt": "ok",
+    "xtb_xyz": "bar_probe_ff_s2_interp_g1_xtb_ts.xyz",
+    "ts_imag_all": [
+      -539.33
+    ],
+    "water_detail": "no bilateral H2O fragments",
+    "policy_pass": false,
+    "detail": "clause fail",
+    "strict_version": "v5",
+    "asset_versions": {
+      "schema": "reaxevolve-asset-versions.v1",
+      "note": "Monotonic version per evolvable asset. Attempts record this whole vector, so a verdict can be traced to the asset set that produced it. Bumped only through scripts/reflect/asset_snapshot.py --bump, which also writes evolution/snapshots/ and appends evolution/EVOLUTION_LOG.jsonl. Files under policy/, scripts/ and loop/ are not assets and do not appear here.",
+      "asset_set": "final",
+      "skills": {
+        "pathway-method": "v2",
+        "strict-edge-criterion": "v2",
+        "ts-validation-strategy": "v2",
+        "strict-chain-assembly": "v2",
+        "qm-reaction-validation": "v2",
+        "memory-and-reflection": "v1"
+      },
+      "tools": {
+        "geometry/builder.py": "v0",
+        "geometry/inquire.py": "v0",
+        "geometry/map_reaction_atoms.py": "v1",
+        "geometry/parse_orca_output.py": "v0",
+        "geometry/smi_to_xyz.py": "v0",
+        "geometry/xyz_to_smiles.py": "v0",
+        "record_update.py": "v0",
+        "expand/templates_expand.py": "v2",
+        "screen/diversity.py": "v1",
+        "guess/ladder.py": "v1",
+        "guess/auto_guess.py": "v2",
+        "guess/constrained_scan_guess.py": "v1",
+        "guess/dry_proton_guess.py": "v1",
+        "guess/water_relay_guess.py": "v1",
+        "guess/neb_guess.py": "v1",
+        "guess/scan2d.py": "v1",
+        "guess/scan2d_guess.py": "v1",
+        "guess/proton_scan.py": "v1",
+        "workflow/run_qm_step.py": "v0",
+        "workflow/orca_xtb_workflow.py": "v1",
+        "workflow/validate_candidate.py": "v1",
+        "workflow/soft_mode_cleanup.py": "v1",
+        "guess": "v1"
+      },
+      "retired": {
+        "workflow/prepare_step.py": "depends on the retired path-validator workspace layout",
+        "workflow/auto_validate_driver.py": "depends on the retired path-validator workspace layout"
+      }
+    },
+    "hypothesis_id": "H_0c307fa7798d",
+    "input_fingerprint": {
+      "bar_probe_ff_s2_interp_g1_xtb_ts.xyz": "16e7ea26aebfe7b9"
+    }
+  }
+}

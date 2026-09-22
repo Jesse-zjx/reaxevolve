@@ -33,8 +33,8 @@ control.
 Moved to `evidence/archive/controls_negative_A_water_relay.md`.
 
 Those six `force_water` attempts never located a TS (`imag_got/all/n_imag = None`), so they
-do not discriminate the water clause. **Gap:** this note currently has no bar-resolution
-negative; the linear-interpolation control below is the cheapest fill-in.
+do not discriminate the water clause. The bar-resolution gap this note used to flag is filled by
+negative control C below.
 
 ## Negative control B — from-SMILES reproduction without deposited TS (hard baseline)
 
@@ -60,15 +60,34 @@ across 20 jobs at NPROCS=4 → order **~180 CPU-h** for the full 20-step from-SM
 useless; the 13 misses are the cost of refusing deposited geometries. Do not cite this as
 “the system fails” — cite it as the hardness of the guessing problem under the strict bar.
 
-## Linear-interpolation / naive guess (optional third negative)
+## Negative control C — bar resolution under a naive guess (run)
 
-Not re-run for this note. If needed for the paper, a short OptTS from a linear R–P
-interpolation on a deposit step that already has a known dry saddle is the cleanest
-should-fail probe (expect multi-imag or IRC mismatch). Prefer documenting one concrete
-example with NPROCS × wall rather than a narrative.
+**Definition:** reach a deposited dry saddle by uniform linear interpolation, a method with no
+reaction-coordinate reasoning, and submit the result to the unmodified acceptance path. Design
+and the three outcomes, declared before the calculation:
+`preregistration/bar_resolution_probe.md`. Result, generated from the verdict records:
+`experiments/bar_resolution/RESULT.md`.
+
+Step: `O=C(CO)C(O)C(O)C(O)CO` → `OCC(O)=C(O)C(O)C(O)CO`, keto → enol proton transfer, deposited
+saddle −2042.5 cm⁻¹ (`deposits/glucose_ff_review_v1` step 2). Neither a C2 route step nor a
+diagnostic panel edge, so running it perturbs neither.
+
+**Read as:** the bar rejected the naive candidates, and — the more informative part — it rejected
+them on the endpoint clause rather than on the frequency count. The candidates were clean
+single-mode saddles, just not the ones connecting the stated reactant and product. A bar that
+asked only "is this a proper transition state?" would have accepted them. This is the evidence
+that the IRC endpoint criterion is what carries the weight.
+
+This control also found a defect in the acceptance path, which is part of what it was worth
+running for: an IRC endpoint whose fragments RDKit cannot perceive made `endpoint_matches` raise
+instead of reject, because the guard for that case sat behind a `sorted()` that could not order
+`None`. In the loop a crash there means the attempt yields **no verdict at all** — it counts as
+neither an accepted edge nor a rejection, and the compute leaves nothing to learn from. Fixed,
+with the invariant pinned by `scripts/qa/test_endpoint_match.py`; the fix cannot change any
+accept/reject decision, since unperceivable endpoints were already specified as rejections.
 
 ## How to use in the outline
 
-- Methods / §3.5: positive control + neg B measure ceiling and guessing hardness.
-  Bar-resolution negative is currently a **gap** (archived A); fill with linear-interpolation.
+- Methods / §3.5: positive control + neg B measure ceiling and guessing hardness; neg C measures
+  bar resolution and identifies the endpoint clause as the one doing the work.
 - Do **not** merge into main figure 2’s cumulative STRICT curve.

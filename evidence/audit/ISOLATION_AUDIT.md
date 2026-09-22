@@ -1,8 +1,8 @@
 # Isolation audit
 
-- time: 2026-09-22T11:03:01Z
+- time: 2026-09-22T14:45:57Z
 - workspace: `/root/inno-agent/workspaces/reaxevolve`
-- files_scanned: 22
+- files_scanned: 71
 - files_skipped_too_large: 0
 - suffixes: .inp .json .jsonl .log .md .out .sh .txt .xyz
 - violations: 0

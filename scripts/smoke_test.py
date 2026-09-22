@@ -351,6 +351,7 @@ def main():
         ("test_failure_taxonomy.py", "failure taxonomy and classifier agree"),
         ("test_preregistration.py", "panel is disjoint from the C2 task and still resolves"),
         ("test_guess_ladder.py", "guess ladder reaches its tools and the mapper contract holds"),
+        ("test_endpoint_match.py", "an unusable IRC endpoint rejects instead of crashing"),
     ):
         r = subprocess.run(
             [sys.executable, str(PKG / "scripts" / "qa" / script)],

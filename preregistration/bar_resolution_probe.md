@@ -1,7 +1,9 @@
 # Bar-resolution negative control (preregistered)
 
-**Status**: design locked, not yet run. Written before the calculation, because a control whose
-expected outcome is decided afterwards is not a control.
+**Status**: run. This document was committed before the calculation (`79442bb`), because a control
+whose expected outcome is decided afterwards is not a control. Result:
+`experiments/bar_resolution/RESULT.md` — all three candidates landed in outcome **A**, and none of
+the prohibitions below were exercised.
 
 Fills the gap `evidence/controls.md` names about itself: the positive control shows the bar
 accepts a known-good transition state, and negative control B measures how hard the guessing
