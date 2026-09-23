@@ -1,0 +1,48 @@
+{
+  "O=C(CO)CC(O)C(O)CO>>OCC(O)=CC(O)C(O)CO": {
+    "name": "r0_g1",
+    "reactant": "O=C(CO)CC(O)C(O)CO",
+    "product": "OCC(O)=CC(O)C(O)CO",
+    "coproduct": null,
+    "charge": 0,
+    "ts_imag_cm-1": -1999.94,
+    "status": "STRICT",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": true,
+      "B_isReactant": true,
+      "B_isProduct": false
+    },
+    "time": "2026-08-14 04:14",
+    "driver": "run_qm_step.v0",
+    "method_ladder": "xtb_optts -> r2SCAN-3c_optts_numfreq -> r2SCAN-3c_irc",
+    "xtb_preopt": "ok",
+    "xtb_xyz": "r0_g1_xtb_ts.xyz",
+    "ts_imag_all": [
+      -1999.94
+    ],
+    "water_detail": "no bilateral H2O fragments",
+    "policy_pass": true,
+    "strict_version": "v5",
+    "asset_versions": {
+      "schema": "chem-genesis-asset-versions.v0",
+      "skills": {
+        "generate-ts-guesses": "v0",
+        "diagnose-ts-failures": "v0",
+        "memory-and-reflection": "v0",
+        "qm-execution": "v0",
+        "chain-assembly": "v0"
+      },
+      "tools": {
+        "geometry/builder.py": "v0",
+        "geometry/inquire.py": "v0",
+        "geometry/map_reaction_atoms.py": "v0",
+        "geometry/parse_orca_output.py": "v0",
+        "geometry/xyz_to_smiles.py": "v0",
+        "geometry/smi_to_xyz.py": "v0",
+        "workflow/run_qm_step.py": "v0",
+        "record_update.py": "v0"
+      }
+    }
+  }
+}

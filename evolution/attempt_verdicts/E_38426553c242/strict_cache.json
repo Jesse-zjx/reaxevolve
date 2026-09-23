@@ -1,0 +1,52 @@
+{
+  "O=C(C=C(O)C(O)CO)CO>>O=CC=C(O)C=C(O)CO": {
+    "name": "r1_g2",
+    "reactant": "O=C(C=C(O)C(O)CO)CO",
+    "product": "O=CC=C(O)C=C(O)CO",
+    "coproduct": "O",
+    "charge": 0,
+    "ts_imag_cm-1": -240.84,
+    "status": "rejected",
+    "endpoint_match": {
+      "F_isReactant": false,
+      "F_isProduct": false,
+      "B_isReactant": false,
+      "B_isProduct": false
+    },
+    "time": "2026-09-07 22:21",
+    "driver": "run_qm_step.v0",
+    "method_ladder": "xtb_optts -> r2SCAN-3c_optts_numfreq -> r2SCAN-3c_irc",
+    "xtb_preopt": "ok",
+    "xtb_xyz": "r1_g2_xtb_ts.xyz",
+    "ts_imag_all": [
+      -240.84
+    ],
+    "water_detail": "no bilateral H2O fragments",
+    "policy_pass": false,
+    "detail": "weak reactive mode (-241) \u2014 confirm it is the intended motion",
+    "strict_version": "v5",
+    "asset_versions": {
+      "schema": "chem-genesis-asset-versions.v0",
+      "skills": {
+        "generate-ts-guesses": "v2",
+        "diagnose-ts-failures": "v3",
+        "memory-and-reflection": "v0",
+        "qm-execution": "v2",
+        "chain-assembly": "v0"
+      },
+      "tools": {
+        "geometry/builder.py": "v0",
+        "geometry/inquire.py": "v0",
+        "geometry/map_reaction_atoms.py": "v0",
+        "geometry/parse_orca_output.py": "v0",
+        "geometry/xyz_to_smiles.py": "v0",
+        "geometry/smi_to_xyz.py": "v0",
+        "workflow/run_qm_step.py": "v0",
+        "record_update.py": "v0"
+      },
+      ".skills/generate-ts-guesses/SKILL.md": 39,
+      ".skills/diagnose-ts-failures/SKILL.md": 3,
+      ".skills/qm-execution/SKILL.md": 1
+    }
+  }
+}

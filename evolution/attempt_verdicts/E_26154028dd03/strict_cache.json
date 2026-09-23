@@ -1,0 +1,35 @@
+{
+  "O=C(CO)C(O)C(O)C(O)CO>>O=C(CO)C(O)C=C(O)CO": {
+    "name": "r1_g2",
+    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+    "product": "O=C(CO)C(O)C=C(O)CO",
+    "coproduct": "O",
+    "driver": "run_qm_step.v0",
+    "guess_path": "/root/inno-agent/workspaces/chem-genesis/runs/validation/E_26154028dd03/r1_g2_guess.xyz",
+    "wall_s": 5400.104652643204,
+    "status": "unresolved",
+    "detail": "WALL_TIME>5400s",
+    "strict_version": "v5",
+    "asset_versions": {
+      "schema": "chem-genesis-asset-versions.v0",
+      "skills": {
+        "generate-ts-guesses": "v1",
+        "diagnose-ts-failures": "v0",
+        "memory-and-reflection": "v0",
+        "qm-execution": "v2",
+        "chain-assembly": "v0"
+      },
+      "tools": {
+        "geometry/builder.py": "v0",
+        "geometry/inquire.py": "v0",
+        "geometry/map_reaction_atoms.py": "v0",
+        "geometry/parse_orca_output.py": "v0",
+        "geometry/xyz_to_smiles.py": "v0",
+        "geometry/smi_to_xyz.py": "v0",
+        "workflow/run_qm_step.py": "v0",
+        "record_update.py": "v0"
+      }
+    },
+    "time": "2026-08-16 23:08"
+  }
+}

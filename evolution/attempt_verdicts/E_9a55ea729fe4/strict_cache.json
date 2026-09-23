@@ -1,0 +1,36 @@
+{
+  "OC=C1C=CC(CO)O1>>O=Cc1ccc(CO)o1": {
+    "name": "r1_g5",
+    "reactant": "OC=C1C=CC(CO)O1",
+    "product": "O=Cc1ccc(CO)o1",
+    "coproduct": null,
+    "driver": "run_qm_step.v0",
+    "rc": 1,
+    "stdout_tail": "",
+    "stderr_tail": "[08:18:01] WARNING: not removing hydrogen atom without neighbors\n[08:18:01] WARNING: not removing hydrogen atom without neighbors\nTraceback (most recent call last):\n  File \"/root/inno-agent/workspaces/chem-genesis/tools/workflow/run_qm_step.py\", line 278, in <module>\n    main()\n  File \"/root/inno-agent/workspaces/chem-genesis/tools/workflow/run_qm_step.py\", line 252, in main\n    cls = _EM.classify_double_ended(\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/inno-agent/workspaces/chem-genesis/scripts/validate/endpoint_match.py\", line 101, in classify_double_ended\n    fF_R, *_ = endpoint_matches(fpath, react_side)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/inno-agent/workspaces/chem-genesis/scripts/validate/endpoint_match.py\", line 87, in endpoint_matches\n    got = sorted(frag_canon(s, c) for s, c in atom_fragments(sym, xyz))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: '<' not supported between instances of 'str' and 'NoneType'\n",
+    "status": "unresolved",
+    "detail": "DRIVER_NO_VERDICT rc=1 :: (fpath, react_side)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/inno-agent/workspaces/chem-genesis/scripts/validate/endpoint_match.py\", line 87, in endpoint_matches\n    got = sorted(frag_canon(s, c) for s, c in atom_fragments(sym, xyz))\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: '<' not supported between instances of 'str' and 'NoneType'",
+    "strict_version": "v5",
+    "asset_versions": {
+      "schema": "chem-genesis-asset-versions.v0",
+      "skills": {
+        "generate-ts-guesses": "v0",
+        "diagnose-ts-failures": "v0",
+        "memory-and-reflection": "v0",
+        "qm-execution": "v0",
+        "chain-assembly": "v0"
+      },
+      "tools": {
+        "geometry/builder.py": "v0",
+        "geometry/inquire.py": "v0",
+        "geometry/map_reaction_atoms.py": "v0",
+        "geometry/parse_orca_output.py": "v0",
+        "geometry/xyz_to_smiles.py": "v0",
+        "geometry/smi_to_xyz.py": "v0",
+        "workflow/run_qm_step.py": "v0",
+        "record_update.py": "v0"
+      }
+    },
+    "time": "2026-08-10 08:18"
+  }
+}

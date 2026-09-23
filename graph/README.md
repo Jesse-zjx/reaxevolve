@@ -18,6 +18,12 @@ Never hard-code a count into a document, and never read one from a stored summar
 | `canonical/accepted_network.json` | STRICT-only projection, for publication views. |
 | `canonical/routes.json` | Enumerated routes per target. |
 | `caches/strict_caches/**/strict_cache.json` | Raw per-attempt driver records, 162 files. The evidence the rebuild merges. |
+
+Everything under `caches/` is merged into the canonical network, so a verdict archived there becomes
+a delivered result. `evolution/attempt_verdicts/` holds 70 per-attempt verdicts from the isolated
+evolution campaign for exactly that reason: they are evidence about asset revisions, not about the
+delivered network, and archiving them here took the accepted-edge count from 30 to 44 by admitting 14
+edges that never went through the audit which demoted 8.
 | `derived/` | Regenerated views. Not tracked; rebuild from the state. |
 
 ## Rebuild order, and why it matters

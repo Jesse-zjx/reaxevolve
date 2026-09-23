@@ -45,8 +45,18 @@ applied to attempts after the fact — and that classification would be ours, wr
 outcomes visible. Keying on failure mode uses what Reflect actually recorded and what the
 revisions actually targeted.
 
-For each targeted failure mode with enough instances on both sides — on the present record,
-`no_dominant_mode` and `no_endpoint_record`:
+For each targeted failure mode with at least two qualifying instances on each side of the activation
+point. Which modes those are is decided by the rule, not chosen: the resolver reports the ones that
+qualify and the reason each rejected mode failed to. On the present record both `no_dominant_mode`
+and `no_endpoint_record` qualify, giving 8 instances and 16 runs.
+
+A mode's instances must be classifiable, which required recovering something. The attempt stream
+records asset versions and ordering but not imaginary modes or endpoint flags, and the canonical
+`graph/canonical/verdicts.jsonl` covers an earlier period that does not overlap the revisions at
+all — so for a while no attempt near a revision could be classified without inventing a reading of
+its `detail` string. The 70 per-attempt verdict caches those attempts referenced had been left in
+scratch and are now archived under `graph/caches/strict_caches/genesis_validation/`, 103 kB, which
+makes all 116 cache references resolve and lets the existing classifier do the work.
 
 1. **Revision under test** — the lowest-`seq` revision in `evolution/EVOLUTION_LOG.jsonl`
    satisfying all of: `class == "qm_feedback"`; `failure_mode` includes the mode; a non-null
@@ -71,9 +81,10 @@ hold to agree.
 If either side of a mode has fewer than two instances, that mode contributes fewer and it is
 reported rather than backfilled from another mode.
 
-A resolver script writes the resolved selection to a committed JSON file **before** any run, so the
-mapping from rule to instances is auditable and cannot drift. Both are created once this protocol is
-confirmed; building them against an unconfirmed rule would be the wrong order.
+`scripts/qa/resolve_c1_selection.py` applies the rule and writes `preregistration/c1_selection.json`,
+committed **before** any run so the mapping from rule to instances is auditable and cannot drift.
+`--check` reasserts that the committed file still follows the rule, and runs in the smoke test and in
+`scripts/qa/verify_clone.sh`: an edit to the selection that the rule does not produce fails there.
 
 ### The snapshots restore SKILL.md and not the whole asset
 
@@ -185,5 +196,12 @@ The related defect is fixed: skills are now resolved by role through `assets/rol
 by name, so the loop runs against either set. It previously named two initial-set skills and could
 not run against the final set at all.
 
-What remains before a run: the resolver that writes the selection file, and confirmation that the
-`before` arm's snapshot materialisation behaves as the limitation above describes.
+The `before` arm's rollback is implemented and checked. `--snapshot-asset` with `--snapshot` rolls one
+asset back and reports which files came from the snapshot and which were left at the arm's content,
+refusing to describe a partial restore as a whole one. `scripts/qa/test_replay_rollback.py` holds
+three invariants: the rollback changes the file, files outside the snapshot are untouched, and no
+ledger revision touches a companion file — the last being the condition under which a partial restore
+is an acceptable comparison at all. The test was itself checked by sabotaging the rollback into a
+no-op and confirming it fails.
+
+Nothing further blocks a run.

@@ -106,6 +106,9 @@ python loop/mass_balance.py                       # audit the graph for conserva
 python loop/select_candidates.py --top 8          # what the next round would compute
 python loop/saturation.py                         # has revising the assets stopped paying?
 python scripts/qa/test_guess_ladder.py            # can the guess generators reach their tools?
+python loop/asset_set.py --set initial            # which skills fill which role in a set
+python scripts/eval/arm_runner.py --set initial --dry-run   # an evaluation arm, without the QM
+python scripts/qa/resolve_c1_selection.py         # what the replay's selection rule picks
 ```
 
 One command that clones this repository and checks everything a reader receives — deposits

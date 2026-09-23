@@ -66,6 +66,10 @@ for ARM in initial final; do
     && echo "  arm $ARM: materialises, declares its set, resolves both roles" ) || { echo "  arm $ARM FAILED"; rc=1; }
 done
 
+echo "=== 5f. replay selection matches its rule, and the before arm rolls back ==="
+( cd "$C" && $PY scripts/qa/resolve_c1_selection.py --check | tail -1 ) | sed 's/^/  /' || rc=1
+( cd "$C" && $PY scripts/qa/test_replay_rollback.py | tail -1 ) | sed 's/^/  /' || rc=1
+
 echo "=== 6a. failure taxonomy and classifier agree ==="
 ( cd "$C" && $PY scripts/qa/test_failure_taxonomy.py | tail -2 ) | sed 's/^/  /' || rc=1
 

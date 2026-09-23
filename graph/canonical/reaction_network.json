@@ -1735,7 +1735,7 @@
       "ts_imag_cm-1": -932.28,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridge2_c6c5/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -1758,7 +1758,7 @@
       "ts_imag_cm-1": -1459.8,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step1/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -1781,7 +1781,7 @@
       "ts_imag_cm-1": -942.1,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ra_glyc_dftscan/optts/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -1804,7 +1804,7 @@
       "ts_imag_cm-1": -766.5,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridge_stepC/iso5b/clean_-7/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -1827,7 +1827,7 @@
       "ts_imag_cm-1": -872.91,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step5/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -1850,7 +1850,7 @@
       "ts_imag_cm-1": -1541.1,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step3/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -1873,7 +1873,7 @@
       "ts_imag_cm-1": -758.07,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ra_fructose/grid3/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -1896,7 +1896,7 @@
       "ts_imag_cm-1": -638.49,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCeCO__OC1CeCO1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_5b388f358827": {
       "id": "E_5b388f358827",
@@ -1911,7 +1911,7 @@
       "ts_imag_cm-1": -248.0,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOCOeCO__OCeCOCOCOeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_b98a235ce39f": {
       "id": "E_b98a235ce39f",
@@ -1926,7 +1926,7 @@
       "ts_imag_cm-1": -927.95,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOC1OCeCC1O__OeCCOc1ccco1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_8150619dca4a": {
       "id": "E_8150619dca4a",
@@ -1941,7 +1941,7 @@
       "ts_imag_cm-1": -295.88,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OCeCOCOCOCOCO__OCeCOCeCOCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_9ab910dbc3ac": {
       "id": "E_9ab910dbc3ac",
@@ -1956,7 +1956,7 @@
       "ts_imag_cm-1": -1835.2,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/CeC1OCOeCCOC1O__CeC1CeCOCeCOO1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_f9793050405d": {
       "id": "E_f9793050405d",
@@ -1971,7 +1971,7 @@
       "ts_imag_cm-1": -946.98,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOeCCOCOCO__OeCCOeCCOeCCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_546d258a92d6": {
       "id": "E_546d258a92d6",
@@ -1986,7 +1986,7 @@
       "ts_imag_cm-1": -1007.6,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOCOCOeCO__CeCOCeOCOCOeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_cc01e2f34ad6": {
       "id": "E_cc01e2f34ad6",
@@ -2001,7 +2001,7 @@
       "ts_imag_cm-1": -664.14,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOeCCOCO__OCC1CeCOCOO1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_933f000131ba": {
       "id": "E_933f000131ba",
@@ -2016,7 +2016,7 @@
       "ts_imag_cm-1": -1580.32,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCC1OCeCCO1__OeCCeOCeCCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -2053,7 +2053,7 @@
       "ts_imag_cm-1": -359.12,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ra_glyc/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_b336e9b9bf19": {
       "id": "E_b336e9b9bf19",
@@ -2082,7 +2082,7 @@
       "ts_imag_cm-1": -890.33,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCeOCeCCOCO__CeCOCeCCeOCeO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_16736f8c3cc8": {
       "id": "E_16736f8c3cc8",
@@ -2097,7 +2097,7 @@
       "ts_imag_cm-1": -945.73,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeC1CC1O__OC1eCC1O/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_8e5489ee5fce": {
       "id": "E_8e5489ee5fce",
@@ -2112,7 +2112,7 @@
       "ts_imag_cm-1": -1585.46,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/CeC1OCOeCCOC1O__CeC1OCOeCCeC1O/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_2a7cc54fd25d": {
       "id": "E_2a7cc54fd25d",
@@ -2127,7 +2127,7 @@
       "ts_imag_cm-1": -1618.63,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/CeC1CeCOCOCOO1__Cec1ccOceCOo1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_1ab00eacce20": {
       "id": "E_1ab00eacce20",
@@ -2142,7 +2142,7 @@
       "ts_imag_cm-1": -207.22,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCO__CeCOCeO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_8950b0c38357": {
       "id": "E_8950b0c38357",
@@ -2157,7 +2157,7 @@
       "ts_imag_cm-1": -1608.81,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCeOCCOCO__OeCCOeCCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_d4210f2af379": {
       "id": "E_d4210f2af379",
@@ -2172,7 +2172,7 @@
       "ts_imag_cm-1": -987.98,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOCOCeCO__OeCCOCOeCCeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_fc750a063aaf": {
       "id": "E_fc750a063aaf",
@@ -2201,7 +2201,7 @@
       "ts_imag_cm-1": -105.09,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCeOCCOCO__OeCC1OCCOCO1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_2fba0504892c": {
       "id": "E_2fba0504892c",
@@ -2216,7 +2216,7 @@
       "ts_imag_cm-1": -134.05,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/CeC1OCeOCeCC1O__CeC1OC2OCeCC1O2/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_62b0f67590d8": {
       "id": "E_62b0f67590d8",
@@ -2231,7 +2231,7 @@
       "ts_imag_cm-1": -221.77,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOeCCOCOCO__OeCCOeCCeCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_c4635f9e1a1e": {
       "id": "E_c4635f9e1a1e",
@@ -2246,7 +2246,7 @@
       "ts_imag_cm-1": -2063.79,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCO__OCeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_79d1753b0b07": {
       "id": "E_79d1753b0b07",
@@ -2261,7 +2261,7 @@
       "ts_imag_cm-1": -239.59,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCC1eCCCOCOO1__OeCCOeCCCeOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_f43a14e9efb4": {
       "id": "E_f43a14e9efb4",
@@ -2276,7 +2276,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOCeCOCO__OCeCOCOCeCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_cf91b5240937": {
       "id": "E_cf91b5240937",
@@ -2291,7 +2291,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOCeCOCO__OCeCOCOCeCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_e8f6b3288ed2": {
       "id": "E_e8f6b3288ed2",
@@ -2306,7 +2306,7 @@
       "ts_imag_cm-1": -1364.14,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOeCCOCO__OeCCOCOeCCeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_933ecb048b65": {
       "id": "E_933ecb048b65",
@@ -2321,7 +2321,7 @@
       "ts_imag_cm-1": -352.25,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOeCCeOCOCO__CeCOCeOCeCOCeO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_33af7d73f676": {
       "id": "E_33af7d73f676",
@@ -2336,7 +2336,7 @@
       "ts_imag_cm-1": -105.09,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCeOCCOCO__OeCC1OCCCOO1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_68b0d9a354ac": {
       "id": "E_68b0d9a354ac",
@@ -2351,7 +2351,7 @@
       "ts_imag_cm-1": -605.95,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOeCCOCO__CeCOCeCOCeOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_c3e9585121c5": {
       "id": "E_c3e9585121c5",
@@ -2366,7 +2366,7 @@
       "ts_imag_cm-1": -855.85,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeC1CC1O__Oec1cc1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_5d09391ec8bc": {
       "id": "E_5d09391ec8bc",
@@ -2381,7 +2381,7 @@
       "ts_imag_cm-1": -286.82,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOeCCOCO__OCC1CeCOCOCOO1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_a09e1ef33811": {
       "id": "E_a09e1ef33811",
@@ -2396,7 +2396,7 @@
       "ts_imag_cm-1": -2071.46,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOeCCeOCOCO__OeCCOeCCeOCeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_0bbc77562c43": {
       "id": "E_0bbc77562c43",
@@ -2411,7 +2411,7 @@
       "ts_imag_cm-1": -256.23,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OCC1eCOCOCCOO1__OCc1ccOcCOo1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_f52aa8ae87b4": {
       "id": "E_f52aa8ae87b4",
@@ -2426,7 +2426,7 @@
       "ts_imag_cm-1": -105.09,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCeOCCOCO__OeC1CCCOOC1O/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_c875682b90fe": {
       "id": "E_c875682b90fe",
@@ -2455,7 +2455,7 @@
       "ts_imag_cm-1": -316.75,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOeCCOCOCO__CeCOCOCeCOCeO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_8bc2a9065ece": {
       "id": "E_8bc2a9065ece",
@@ -2470,7 +2470,7 @@
       "ts_imag_cm-1": -62.53,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OCC1eCOCOCCOO1__CeC1OCCOeCOC1O/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_10610549364a": {
       "id": "E_10610549364a",
@@ -2485,7 +2485,7 @@
       "ts_imag_cm-1": -154.07,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OCeC1CeCCOCOO1__OCec1ccceCOo1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_d1dd1c3fbcb4": {
       "id": "E_d1dd1c3fbcb4",
@@ -2500,7 +2500,7 @@
       "ts_imag_cm-1": -1296.23,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCO__OeCCeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -2523,7 +2523,7 @@
       "ts_imag_cm-1": -190.34,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeC1CC1O__CCeO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_012979a8727a": {
       "id": "E_012979a8727a",
@@ -2538,7 +2538,7 @@
       "ts_imag_cm-1": -698.37,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCeOCeCCOCO__OeCCeOCeCCeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_547019bbef54": {
       "id": "E_547019bbef54",
@@ -2553,7 +2553,7 @@
       "ts_imag_cm-1": -226.1,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs/OeCCOCOCOCOeCO__OeCCeCOCOCOeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_cc38708e226a": {
       "id": "E_cc38708e226a",
@@ -2568,7 +2568,7 @@
       "ts_imag_cm-1": -645.17,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridge_c6c5/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -2591,7 +2591,7 @@
       "ts_imag_cm-1": -1629.95,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridge_stepC/dry5k/optts_f50/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2614,7 +2614,7 @@
       "ts_imag_cm-1": -2032.48,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridgeA/a2/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2637,7 +2637,7 @@
       "ts_imag_cm-1": -2042.51,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridgeA/a1/g3vtight/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2660,7 +2660,7 @@
       "ts_imag_cm-1": -959.08,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_5a007685073b": {
       "id": "E_5a007685073b",
@@ -2675,7 +2675,7 @@
       "ts_imag_cm-1": -959.08,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -2700,7 +2700,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_546ff4a855aa": {
       "id": "E_546ff4a855aa",
@@ -2715,7 +2715,7 @@
       "ts_imag_cm-1": -434.65,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2738,7 +2738,7 @@
       "ts_imag_cm-1": -2252.31,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2764,7 +2764,7 @@
       "ts_imag_cm-1": -1532.96,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2787,7 +2787,7 @@
       "ts_imag_cm-1": -1454.63,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2813,7 +2813,7 @@
       "ts_imag_cm-1": -830.39,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/hmfarom_run/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2836,7 +2836,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/satW_run/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_69ace3d0cee3": {
       "id": "E_69ace3d0cee3",
@@ -2851,7 +2851,7 @@
       "ts_imag_cm-1": -401.53,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/g2_K_M/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_a6ee2c33fca4": {
       "id": "E_a6ee2c33fca4",
@@ -2866,7 +2866,7 @@
       "ts_imag_cm-1": -52.41,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/gap2_L_M/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_710d344f31d1": {
       "id": "E_710d344f31d1",
@@ -2881,7 +2881,7 @@
       "ts_imag_cm-1": -1461.13,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/dh_L_HMF/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -2904,7 +2904,7 @@
       "ts_imag_cm-1": -1112.65,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/gap1_I_J/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_15bc1ddf18db": {
       "id": "E_15bc1ddf18db",
@@ -2919,7 +2919,7 @@
       "ts_imag_cm-1": -1578.83,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/anomeric/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -2942,7 +2942,7 @@
       "ts_imag_cm-1": -352.51,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/frontTS/n5_n42/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_8a939eb1b4b0": {
       "id": "E_8a939eb1b4b0",
@@ -2957,7 +2957,7 @@
       "ts_imag_cm-1": -987.09,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/round3/ringclose/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -2982,7 +2982,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/full2/n0_n1/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -3007,7 +3007,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/full2/ringclose_16open/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_534c9bf0ca75": {
       "id": "E_534c9bf0ca75",
@@ -3022,7 +3022,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/formal/ringclose_15_16/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_2e4bfbbf62f1": {
       "id": "E_2e4bfbbf62f1",
@@ -3037,7 +3037,7 @@
       "ts_imag_cm-1": -815.42,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/tsneb/n3_n15/val/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_bbf82a512deb": {
       "id": "E_bbf82a512deb",
@@ -3052,7 +3052,7 @@
       "ts_imag_cm-1": -502.72,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/nebts/aromatize_16_6/val2/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_e03feabc62a9": {
       "id": "E_e03feabc62a9",
@@ -3067,7 +3067,7 @@
       "ts_imag_cm-1": -2018.27,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/full/n2_n3/val/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "demotion",
         "strict_version": "v5",
@@ -3092,7 +3092,7 @@
       "ts_imag_cm-1": -1252.07,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/round4/n1_n2/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_aa50fb6413d4": {
       "id": "E_aa50fb6413d4",
@@ -3107,7 +3107,7 @@
       "ts_imag_cm-1": -1532.87,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/round7/n16_16ald/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3130,7 +3130,7 @@
       "ts_imag_cm-1": -480.12,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/cyc/n0_enol/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_a95d121a5955": {
       "id": "E_a95d121a5955",
@@ -3145,7 +3145,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/cyc/e1_diene_irc/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_11aff40b1176": {
       "id": "E_11aff40b1176",
@@ -3160,7 +3160,7 @@
       "ts_imag_cm-1": -63.9,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/mid3/n15_16ald/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_e7bc2a87607d": {
       "id": "E_e7bc2a87607d",
@@ -3175,7 +3175,7 @@
       "ts_imag_cm-1": -2051.06,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/gapfill/OeCCOCOeCCOCO__OeCCOCeOCCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3201,7 +3201,7 @@
       "ts_imag_cm-1": -827.44,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/gapfill/OeCCOCeOCCOCO__OeCCeOCOCCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3224,7 +3224,7 @@
       "ts_imag_cm-1": -1884.84,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs_keto/OeCCCeO__OeCCeCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3247,7 +3247,7 @@
       "ts_imag_cm-1": -479.77,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/enol_keto_ga/dry/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3273,7 +3273,7 @@
       "ts_imag_cm-1": -920.12,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/enol_keto_ga/wcat/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3298,7 +3298,7 @@
       "ts_imag_cm-1": -2137.83,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step2/sv2/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3321,7 +3321,7 @@
       "ts_imag_cm-1": -1621.5,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step4/sv/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3344,7 +3344,7 @@
       "ts_imag_cm-1": -1810.26,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/r2_hmftaut/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3370,7 +3370,7 @@
       "ts_imag_cm-1": -540.99,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/r2_xlu/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_89722cfe047b": {
       "id": "E_89722cfe047b",
@@ -3385,7 +3385,7 @@
       "ts_imag_cm-1": null,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/dispatch_runs/OeCCOCOCeOCOCO__OeCCOCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_70de9f77df23": {
       "id": "E_70de9f77df23",
@@ -3400,7 +3400,7 @@
       "ts_imag_cm-1": -784.78,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/dispatch_runs/OeCCOCOCeOCOCO__OeCCeOCOCO/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_a206186cac23": {
       "id": "E_a206186cac23",
@@ -3415,7 +3415,7 @@
       "ts_imag_cm-1": -1995.79,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/r2_ffdehyd/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3441,7 +3441,7 @@
       "ts_imag_cm-1": -1873.27,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/r2_hmfdehyd/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3467,7 +3467,7 @@
       "ts_imag_cm-1": -540.8,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/r2_xlu_cleanp/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3490,7 +3490,7 @@
       "ts_imag_cm-1": -386.37,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/haaR2c/g25/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_cdd9b0e6c178": {
       "id": "E_cdd9b0e6c178",
@@ -3505,7 +3505,7 @@
       "ts_imag_cm-1": -869.33,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/r2_3keto/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_c10fbea5e90f": {
       "id": "E_c10fbea5e90f",
@@ -3520,7 +3520,7 @@
       "ts_imag_cm-1": -27.07,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/phase2_runs/E1_glucose_retroaldol_HAA/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z"
+      "updated_at": "2026-09-23T14:36:02Z"
     },
     "E_2c6837886071": {
       "id": "E_2c6837886071",
@@ -3535,7 +3535,7 @@
       "ts_imag_cm-1": -1449.78,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -3558,7 +3558,7 @@
       "ts_imag_cm-1": -1410.08,
       "source": "strict_cache",
       "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-      "updated_at": "2026-09-21T18:24:09Z",
+      "updated_at": "2026-09-23T14:36:02Z",
       "readjudication": {
         "ledger": "readjudication",
         "strict_version": "v5",
@@ -6497,7 +6497,7 @@
       "O=CCO",
       "O=Cc1ccco1"
     ],
-    "built_at": "2026-09-21T18:24:09Z",
+    "built_at": "2026-09-23T14:36:02Z",
     "n_nodes": 243,
     "n_edges": 325,
     "n_strict": 30,

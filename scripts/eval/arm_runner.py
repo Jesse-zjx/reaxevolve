@@ -116,6 +116,54 @@ def materialise(set_name: str, dest: str) -> dict:
     }
 
 
+def overlay_snapshot(dest: str, asset_id: str, snapshot: str) -> dict:
+    """Replace one asset in a materialised arm with its content at a past version.
+
+    This is the replay's `before` arm. What it can and cannot do is a property of the snapshots, not
+    of this function: 55 of 59 hold only SKILL.md, so the asset is not restored whole. Companion
+    files stay at the arm's own content, which is what keeps the comparison honest — no revision in
+    the ledger touched a companion file, so holding them fixed leaves the arms differing only in the
+    text each revision actually changed.
+
+    The report says which files came from the snapshot and which were left alone, so a reader does
+    not have to take that on trust.
+    """
+    src = os.path.join(PKG, snapshot)
+    if not os.path.isdir(src):
+        raise SystemExit(f"snapshot not found: {snapshot}")
+    target = os.path.join(dest, asset_id)
+    replaced, kept = [], []
+    if os.path.isfile(target) or asset_id.endswith(".py"):
+        # A single-file asset: the snapshot holds the whole thing.
+        files = [f for f in os.listdir(src) if os.path.isfile(os.path.join(src, f))]
+        if len(files) != 1:
+            raise SystemExit(f"{snapshot} holds {len(files)} files for single-file asset {asset_id}")
+        shutil.copy2(os.path.join(src, files[0]), target)
+        replaced.append(asset_id)
+    else:
+        if not os.path.isdir(target):
+            raise SystemExit(f"{asset_id} is not present in this arm: wrong asset set?")
+        snap_names = {
+            os.path.relpath(os.path.join(r, f), src)
+            for r, _, fs in os.walk(src) for f in fs
+        }
+        for rel in sorted(snap_names):
+            shutil.copy2(os.path.join(src, rel), os.path.join(target, rel))
+            replaced.append(os.path.join(asset_id, rel))
+        for r, _, fs in os.walk(target):
+            for f in fs:
+                rel = os.path.relpath(os.path.join(r, f), target)
+                if rel not in snap_names:
+                    kept.append(os.path.join(asset_id, rel))
+    return {
+        "asset_id": asset_id,
+        "snapshot": snapshot,
+        "restored_from_snapshot": replaced,
+        "left_at_arm_content": sorted(kept),
+        "whole_asset_restored": not kept,
+    }
+
+
 def verify_arm(info: dict, set_name: str) -> list[str]:
     """The materialised tree really is the arm it claims to be."""
     problems = []
@@ -185,6 +233,10 @@ def main() -> int:
     ap.add_argument("--nprocs", type=int, default=16)
     ap.add_argument("--wall-s", type=int, default=5400)
     ap.add_argument("--workdir", default=None, help="where to materialise (default: runs/arms/<set>)")
+    ap.add_argument("--snapshot-asset", metavar="ASSET_ID",
+                    help="replay's `before` arm: roll this asset back to --snapshot")
+    ap.add_argument("--snapshot", metavar="PATH",
+                    help="evolution/snapshots/<entry> to roll --snapshot-asset back to")
     ap.add_argument("--dry-run", action="store_true",
                     help="materialise and verify the arm, then stop before any QM")
     ap.add_argument("--keep", action="store_true", help="keep the materialised tree afterwards")
@@ -198,6 +250,21 @@ def main() -> int:
     print(f"  root:   {os.path.relpath(dest, PKG)}")
     print(f"  assets: {info['n_skills']} skills, {info['n_tools']} tools "
           f"(tree declares {info['declared_set_in_tree']!r})")
+
+    rollback = None
+    if a.snapshot_asset or a.snapshot:
+        if not (a.snapshot_asset and a.snapshot):
+            print("--snapshot-asset and --snapshot must be given together")
+            return 2
+        rollback = overlay_snapshot(dest, a.snapshot_asset, a.snapshot)
+        print(f"== rolled {a.snapshot_asset} back to {a.snapshot} ==")
+        for f in rollback["restored_from_snapshot"]:
+            print(f"  from snapshot:  {f}")
+        for f in rollback["left_at_arm_content"]:
+            print(f"  left as-is:     {f}")
+        if not rollback["whole_asset_restored"]:
+            print("  the asset is NOT restored whole. The snapshot does not contain every file the")
+            print("  asset carries; the rest stay at this arm's content, identical in both arms.")
 
     print("== verifying the arm is what it claims ==")
     problems = verify_arm(info, a.name)

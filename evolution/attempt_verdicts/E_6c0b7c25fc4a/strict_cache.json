@@ -1,0 +1,38 @@
+{
+  "OCC1OC(O)C(O)C(O)C1O>>OCC1OC(O)C(O)=C(O)C1O": {
+    "name": "r1_g2",
+    "reactant": "OCC1OC(O)C(O)C(O)C1O",
+    "product": "OCC1OC(O)C(O)=C(O)C1O",
+    "coproduct": null,
+    "driver": "run_qm_step.v0",
+    "guess_path": "/root/inno-agent/workspaces/chem-genesis/runs/validation/E_6c0b7c25fc4a/r1_g2_guess.xyz",
+    "wall_s": 5400.1036467552185,
+    "status": "unresolved",
+    "detail": "WALL_TIME>5400s",
+    "strict_version": "v5",
+    "asset_versions": {
+      "schema": "chem-genesis-asset-versions.v0",
+      "skills": {
+        "generate-ts-guesses": "v2",
+        "diagnose-ts-failures": "v3",
+        "memory-and-reflection": "v0",
+        "qm-execution": "v2",
+        "chain-assembly": "v0"
+      },
+      "tools": {
+        "geometry/builder.py": "v0",
+        "geometry/inquire.py": "v0",
+        "geometry/map_reaction_atoms.py": "v0",
+        "geometry/parse_orca_output.py": "v0",
+        "geometry/xyz_to_smiles.py": "v0",
+        "geometry/smi_to_xyz.py": "v0",
+        "workflow/run_qm_step.py": "v0",
+        "record_update.py": "v0"
+      },
+      ".skills/generate-ts-guesses/SKILL.md": 4,
+      ".skills/diagnose-ts-failures/SKILL.md": 2,
+      ".skills/qm-execution/SKILL.md": 1
+    },
+    "time": "2026-08-22 20:41"
+  }
+}

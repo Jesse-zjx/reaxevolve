@@ -353,9 +353,13 @@ def main():
         ("test_guess_ladder.py", "guess ladder reaches its tools and the mapper contract holds"),
         ("test_endpoint_match.py", "an unusable IRC endpoint rejects instead of crashing"),
         ("test_asset_roles.py", "both asset sets are runnable and agree with the rename record"),
+        ("resolve_c1_selection.py --check", "committed replay selection still matches its rule"),
+        ("test_replay_rollback.py", "the replay's before arm rolls back and says how far"),
     ):
+        # Entries may carry arguments, so split rather than treating the whole string as a filename.
+        name, *args = script.split()
         r = subprocess.run(
-            [sys.executable, str(PKG / "scripts" / "qa" / script)],
+            [sys.executable, str(PKG / "scripts" / "qa" / name), *args],
             cwd=str(PKG), text=True, capture_output=True,
         )
         if r.returncode == 0:

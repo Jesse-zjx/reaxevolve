@@ -1,0 +1,150 @@
+{
+  "note": "Resolved from preregistration/c1_protocol.md by scripts/qa/resolve_c1_selection.py. Do not edit by hand; rerun the resolver. Failure modes come from the classifier in scripts/reflect/failure_digest.py applied to archived verdict records, not from a fresh reading of detail strings.",
+  "rule": {
+    "instances_per_side": 2,
+    "revision_choice": "lowest seq among eligible, so the choice cannot follow the result",
+    "repair": "the last N qualifying attempts before the activation index",
+    "transfer": "the first N qualifying attempts from the activation index onward",
+    "excluded": "attempts with no verdict (validator crash) are not selectable and do not count as failures of any mode"
+  },
+  "stream": {
+    "attempts": 123,
+    "with_verdict_record": 116,
+    "void": 3
+  },
+  "eligible_revisions": 43,
+  "modes_considered": [
+    "no_dominant_mode",
+    "no_endpoint_record"
+  ],
+  "modes_selected": [
+    "no_dominant_mode",
+    "no_endpoint_record"
+  ],
+  "modes_rejected": {},
+  "selection": {
+    "no_dominant_mode": {
+      "revision": {
+        "seq": 7,
+        "asset_id": ".skills/diagnose-ts-failures",
+        "asset_version_before": 2,
+        "asset_version_after": 3,
+        "snapshot": "evolution/snapshots/007__skills_diagnose-ts-failures__v2",
+        "activation_point": ".skills/diagnose-ts-failures",
+        "activation_edge": "O=CC(O)C(O)C(O)C(O)CO>>OC=CC(O)C(O)C(O)CO",
+        "activation_index": 31,
+        "targets": [
+          "no_dominant_mode",
+          "no_endpoint_record"
+        ]
+      },
+      "repair": [
+        {
+          "name": "r1_g2",
+          "edge": "O=C(C=CC(O)CO)CO>>OCC1(O)C=CC(O)(CO)O1",
+          "reactant": "O=C(C=CC(O)CO)CO",
+          "product": "OCC1(O)C=CC(O)(CO)O1",
+          "coproduct": null,
+          "time": "2026-08-18 06:09",
+          "status": "rejected",
+          "mode": "no_dominant_mode"
+        },
+        {
+          "name": "r1_g2",
+          "edge": "OCC1(O)C=CC(O)(CO)O1>>OC=C1C=CC(CO)O1",
+          "reactant": "OCC1(O)C=CC(O)(CO)O1",
+          "product": "OC=C1C=CC(CO)O1",
+          "coproduct": "O",
+          "time": "2026-08-18 10:58",
+          "status": "rejected",
+          "mode": "no_dominant_mode"
+        }
+      ],
+      "transfer": [
+        {
+          "name": "r1_g2",
+          "edge": "O=C(C=CC(O)CO)CO>>OC=C(O)C=CC(O)CO",
+          "reactant": "O=C(C=CC(O)CO)CO",
+          "product": "OC=C(O)C=CC(O)CO",
+          "coproduct": null,
+          "time": "2026-08-18 20:10",
+          "status": "rejected",
+          "mode": "no_dominant_mode"
+        },
+        {
+          "name": "r1_g2",
+          "edge": "OCC(O)=CC(O)C(O)CO>>OCC(O)=CC=CC(O)CO",
+          "reactant": "OCC(O)=CC(O)C(O)CO",
+          "product": "OCC(O)=CC=CC(O)CO",
+          "coproduct": "O",
+          "time": "2026-08-19 07:10",
+          "status": "rejected",
+          "mode": "no_dominant_mode"
+        }
+      ]
+    },
+    "no_endpoint_record": {
+      "revision": {
+        "seq": 1,
+        "asset_id": ".skills/qm-execution",
+        "asset_version_before": 0,
+        "asset_version_after": 1,
+        "snapshot": "evolution/snapshots/001__skills_qm-execution__v0",
+        "activation_point": ".skills/qm-execution",
+        "activation_edge": "O=CC(O)C(O)C(O)C(O)CO>>O=CC=C(O)C(O)C(O)CO",
+        "activation_index": 20,
+        "targets": [
+          "no_endpoint_record"
+        ]
+      },
+      "repair": [
+        {
+          "name": "r0_g1",
+          "edge": "OCC1OC(O)(CO)C(O)C1O>>OCC1=C(O)C(O)C(CO)O1",
+          "reactant": "OCC1OC(O)(CO)C(O)C1O",
+          "product": "OCC1=C(O)C(O)C(CO)O1",
+          "coproduct": "O",
+          "time": "2026-08-12 06:21",
+          "status": "unresolved",
+          "mode": "no_endpoint_record"
+        },
+        {
+          "name": "r1_g2",
+          "edge": "O=CC=C(O)C(O)C(O)CO>>O=C(C=C(O)C(O)CO)CO",
+          "reactant": "O=CC=C(O)C(O)C(O)CO",
+          "product": "O=C(C=C(O)C(O)CO)CO",
+          "coproduct": null,
+          "time": "2026-08-15 09:02",
+          "status": "rejected",
+          "mode": "no_endpoint_record"
+        }
+      ],
+      "transfer": [
+        {
+          "name": "r1_g2",
+          "edge": "O=C(CO)C(O)C(O)C(O)CO>>O=C(CO)C(O)C=C(O)CO",
+          "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+          "product": "O=C(CO)C(O)C=C(O)CO",
+          "coproduct": "O",
+          "time": "2026-08-16 23:08",
+          "status": "unresolved",
+          "mode": "no_endpoint_record"
+        },
+        {
+          "name": "r1_g2",
+          "edge": "OC=C(O)C(O)C(O)C(O)CO>>O=CC=C(O)C(O)C(O)CO",
+          "reactant": "OC=C(O)C(O)C(O)C(O)CO",
+          "product": "O=CC=C(O)C(O)C(O)CO",
+          "coproduct": null,
+          "time": "2026-08-17 11:12",
+          "status": "unresolved",
+          "mode": "no_endpoint_record"
+        }
+      ]
+    }
+  },
+  "totals": {
+    "instances": 8,
+    "runs": 16
+  }
+}
