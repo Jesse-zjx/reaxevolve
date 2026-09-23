@@ -352,6 +352,7 @@ def main():
         ("test_preregistration.py", "panel is disjoint from the C2 task and still resolves"),
         ("test_guess_ladder.py", "guess ladder reaches its tools and the mapper contract holds"),
         ("test_endpoint_match.py", "an unusable IRC endpoint rejects instead of crashing"),
+        ("test_asset_roles.py", "both asset sets are runnable and agree with the rename record"),
     ):
         r = subprocess.run(
             [sys.executable, str(PKG / "scripts" / "qa" / script)],

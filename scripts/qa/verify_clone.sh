@@ -60,6 +60,12 @@ echo "=== 5c. guess ladder is reachable and the mapper contract holds ==="
 echo "=== 5d. an unusable IRC endpoint rejects instead of crashing ==="
 ( cd "$C" && $PY scripts/qa/test_endpoint_match.py | tail -2 ) | sed 's/^/  /' || rc=1
 
+echo "=== 5e. both evaluation arms materialise and resolve their own roles ==="
+for ARM in initial final; do
+  ( cd "$C" && $PY scripts/eval/arm_runner.py --set $ARM --dry-run >/dev/null 2>&1 \
+    && echo "  arm $ARM: materialises, declares its set, resolves both roles" ) || { echo "  arm $ARM FAILED"; rc=1; }
+done
+
 echo "=== 6a. failure taxonomy and classifier agree ==="
 ( cd "$C" && $PY scripts/qa/test_failure_taxonomy.py | tail -2 ) | sed 's/^/  /' || rc=1
 

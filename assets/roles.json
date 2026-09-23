@@ -1,0 +1,21 @@
+{
+  "note": "Which skills fill each role the loop needs, per asset set. The loop calls skills by role, not by name, because the two sets do not share names: skills were renamed, merged and split as they took on campaign-specific content. Hardcoding a name made the runner work for exactly one set — loop/skill_runner.py named two initial-set skills and so could not run against the final set at all. Every entry here must be consistent with evolution/ASSET_RENAMES.json, which scripts/qa/test_asset_roles.py enforces.",
+  "schema": "reaxevolve-asset-roles.v1",
+  "roles": {
+    "guess_generation": "Produce transition-state guesses for one elementary step, given reactant, product and the reaction kind.",
+    "failure_diagnosis": "Read a failed attempt and decide what to try next, or that the step should be abandoned."
+  },
+  "sets": {
+    "initial": {
+      "guess_generation": [".skills/generate-ts-guesses"],
+      "failure_diagnosis": [".skills/diagnose-ts-failures"]
+    },
+    "final": {
+      "guess_generation": [".skills/ts-validation-strategy"],
+      "failure_diagnosis": [".skills/ts-validation-strategy", ".skills/strict-edge-criterion"]
+    }
+  },
+  "exclusions": {
+    ".skills/generate-ts-guesses -> .skills/pathway-method": "ASSET_RENAMES records generate-ts-guesses as merging into both ts-validation-strategy and pathway-method. Only the first fills the guess_generation role: pathway-method is the route-level operating recipe and is authoritative about the bar and packaging, so loading it into a single-step guess call would supply route-level instruction where a step-level decision is being made. The exclusion is declared here rather than left implicit, because silently dropping half of a recorded merge is how an asset set stops matching its own history."
+  }
+}

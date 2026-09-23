@@ -29,6 +29,9 @@ sys.path.insert(0, str(PKG / "scripts" / "validate"))
 import chem_paths as CP  # noqa: E402
 import verdict_writer as _VW  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import asset_set as _AS  # noqa: E402
+
 CP.bootstrap()
 
 # ORCA scratch that is worthless once a step has been adjudicated or abandoned.
@@ -163,9 +166,20 @@ def map_atoms(
     return data
 
 
-def pi_skill(skill_dir: Path, prompt: str, tools: str = "read,bash,write,edit") -> str:
+def pi_skill(skill_dirs, prompt: str, tools: str = "read,bash,write,edit") -> str:
+    """Run one pi call with the given skills loaded.
+
+    Takes a list because a role can be filled by more than one skill: the two initial-set skills
+    both merged into the final set's ts-validation-strategy, and failure diagnosis there is split
+    across it and strict-edge-criterion. A single-skill signature would have forced the caller to
+    pick one half of a recorded merge.
+    """
+    if isinstance(skill_dirs, (str, Path)):
+        skill_dirs = [skill_dirs]
+    if not skill_dirs:
+        raise RuntimeError("pi_skill called with no skills: the prompt would name an unloaded skill")
     env = os.environ.copy()
-    env["SKILL_FLAGS"] = f"--skill {skill_dir}"
+    env["SKILL_FLAGS"] = " ".join(f"--skill {d}" for d in skill_dirs)
     env["TOOL_FLAGS"] = f"--tools {tools}"
     r = run([str(PKG / "loop" / "pi_call.sh"), prompt], env=env, timeout=3600)
     out = (r.stdout or "") + ("\n" + r.stderr if r.stderr else "")
@@ -397,8 +411,13 @@ def run_step(
     mapping = map_atoms(reactant, product, mapping_path, coproduct=coproduct)
     record_path = workdir / "record.json"
 
-    gen_skill = PKG / ".skills" / "generate-ts-guesses"
-    diag_skill = PKG / ".skills" / "diagnose-ts-failures"
+    # Resolve skills by role, not by name. These were two hardcoded initial-set names, which meant
+    # this runner could not execute against the final asset set — the set the live tree carries —
+    # because those skills do not exist under those names there. CHEM_ASSET_SET lets a caller pin
+    # the set; by default it is whichever set this tree declares.
+    asset_set = os.environ.get("CHEM_ASSET_SET") or _AS.live_set_name()
+    gen_skills = [Path(d) for d in _AS.skill_dirs(asset_set, "guess_generation")]
+    diag_skills = [Path(d) for d in _AS.skill_dirs(asset_set, "failure_diagnosis")]
 
     history = []
     best = None
@@ -437,7 +456,7 @@ Requirements:
 - Final guess files only (no `*_tmp*.xyz` intermediates) — at most {max_guesses_per_round}.
 - Do not edit policy/ or leave the reaxevolve workspace.
 """
-        pi_skill(gen_skill, gen_prompt)
+        pi_skill(gen_skills, gen_prompt)
 
         # Prefer the curated record list; fall back to non-tmp xyz on disk.
         guesses = guesses_from_record(record_path, workdir, round_dir)
@@ -519,7 +538,7 @@ Requirements:
 - Do not leave reaxevolve workspace.
 """
         try:
-            pi_skill(diag_skill, diag_prompt)
+            pi_skill(diag_skills, diag_prompt)
         except Exception as e:
             history.append({"round": rnd, "results": round_results, "diag_error": str(e)})
             break

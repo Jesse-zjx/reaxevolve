@@ -1,8 +1,14 @@
 # C1 — repair and transfer replay protocol (preregistered)
 
-**Status**: DRAFT, awaiting confirmation. Nothing may be run under this protocol until it is
-confirmed and committed; the point of writing it first is that the reported numbers are not the
-ones that happened to look best.
+**Status**: confirmed, not yet run. Locked before any compute; the point of writing it first is that
+the reported numbers are not the ones that happened to look best. The selection rule below may not
+change after an arm has run.
+
+**Reporting requirement**: the paper body must state that selection was keyed on failure mode and
+why — the record's triggers are aggregate digests and attempts carry no reaction kind, so a
+mechanism-class selection would have required a classifier written with the outcomes visible. A
+reader who expects the mechanism-class framing the narrative uses elsewhere is entitled to see that
+this deviation was forced by the record and decided before the runs, not chosen afterwards.
 
 **Claim under test**: structured QM feedback produces traceable revisions to Skills/Tools that
 change subsequent behaviour — not merely on the instance that triggered them, but on other
@@ -166,10 +172,18 @@ Reported per class and in aggregate:
   outcome and must not be selected as repair or transfer instances, nor counted as failures of any
   mode.
 
-## Known prerequisites
+## Prerequisites — met
 
-Neither this protocol nor C2 can run today: there is no runner that can execute the loop against a
-chosen asset set with Reflect closed. `loop/skill_runner.py` hardcodes two skill names that exist
-only in the initial asset set, so it cannot currently run against the final set at all. One runner
-satisfies both protocols and fixes that defect; it must exist, and be verified on a dry run, before
-either protocol starts.
+Neither this protocol nor C2 could run until an arm runner existed. `scripts/eval/arm_runner.py`
+now materialises a chosen asset set into an isolated tree, verifies that the tree declares that set
+and resolves its own roles, refuses an arm that can reach the other set's assets or the deposited
+answers, records the revision ledger's digest before and after so a revision landing mid-arm voids
+the arm, and accounts core-hours against the cap. Both arms pass its dry run, and that dry run is
+part of `scripts/qa/verify_clone.sh`.
+
+The related defect is fixed: skills are now resolved by role through `assets/roles.json` rather than
+by name, so the loop runs against either set. It previously named two initial-set skills and could
+not run against the final set at all.
+
+What remains before a run: the resolver that writes the selection file, and confirmation that the
+`before` arm's snapshot materialisation behaves as the limitation above describes.
