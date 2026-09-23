@@ -19,8 +19,9 @@ in the deposits (or the one deposited water shuttle), then judge with the **curr
 
 Expected: **no new STRICT edge** (bar must refuse provenance-free catalytic water).
 
-Source: `experiments/repro_v1/jobs_water.json` + `results/*` with `force_water: true`
-(launcher: `start_water_control.sh`).
+Source: a `jobs_water.json` job list plus its per-job results, with `force_water: true`. This
+control is archived and its scratch was not migrated, so the inputs are named here for the record
+rather than shipped; the six attempts it covers never located a TS, which is why it was archived.
 
 | id | step | wall_s | NPROCS × wall | status under current pipeline |
 |---|---|---|---|---|

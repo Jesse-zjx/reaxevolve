@@ -78,11 +78,27 @@ def tracked_paths() -> set[str]:
 
 
 def default_scope() -> list[str]:
-    files = []
-    for rel in tracked_markdown():
-        if rel.startswith((".skills/", "assets/")) or "/" not in rel or rel.startswith("docs/"):
-            files.append(rel)
-    return files
+    """Every tracked markdown file except the historical snapshots.
+
+    This used to cover only `.skills/`, `assets/`, `docs/` and the repository root, which left
+    `preregistration/`, `policy/`, `evidence/` and `experiments/` unchecked — the documents where a
+    dangling reference matters most, since they are what the claims rest on. Widening the scope
+    surfaced eleven unresolved references that had been invisible.
+
+    `evolution/snapshots/` is exempt: those files record what an asset said at a past version, and
+    rewriting them to fix a reference would falsify the record the ledger exists to preserve.
+    """
+    return [rel for rel in tracked_markdown() if not rel.startswith("evolution/snapshots/")]
+
+
+def immediate_subdirs(parent: str, tracked: set[str]) -> set[str]:
+    depth = len(parent.split("/")) if parent else 0
+    out = set()
+    for t in tracked:
+        parts = t.split("/")
+        if len(parts) > depth and (not parent or t.startswith(parent + "/")):
+            out.add(parts[depth])
+    return out
 
 
 def interesting(token: str) -> bool:
@@ -122,6 +138,15 @@ def main() -> int:
                 # A skill may reference a file it bundles, relative to its own directory.
                 sibling = os.path.normpath(os.path.join(os.path.dirname(rel), tok))
                 if sibling in tracked:
+                    continue
+                # An index describing a layout its siblings share — `deposits/README.md` naming
+                # `05_docs/FINAL_STRICT_CHAIN.md`, which every deposit carries — is describing a
+                # shape, not pointing at one file. Resolve it if any immediate subdirectory has it.
+                parent = os.path.dirname(rel)
+                if any(
+                    os.path.normpath(os.path.join(parent, sub, tok)) in tracked
+                    for sub in immediate_subdirs(parent, tracked)
+                ):
                     continue
                 on_disk = os.path.exists(os.path.join(PKG, tok))
                 missing.append((rel, i, tok + ("  [present but untracked]" if on_disk else "")))

@@ -33,8 +33,8 @@ Barriers are all 30–36 kcal/mol (electronic).
   reactant→TS→product path `step_n_IRC_Full_trj.xyz`), plus `chain_shared_nodes/`.
   Full-path frame counts: step1 100, step2 124, step3 88, step4 112.
 - `04_orca_inp_out_hess/` — ORCA `.out` + `.hess` for every TS (frequency evidence) and IRC `.out`.
-- `05_docs/` — `VERIFICATION.json`, `cross_step_consistency.json`, `energetics_manifest.json`,
-  `build_scripts/gen_report.py`.
+- `05_docs/` — `VERIFICATION.json`, `cross_step_consistency.json`, `energetics_manifest.json`.
+  The report generator that once sat alongside them was a scratch script and was not migrated.
 - `06_final_chain/` — assembled route (canonical nodes + co-products + clean TSs + `MANIFEST.json`).
 
 ## Independent verification (see `05_docs/VERIFICATION.json`)

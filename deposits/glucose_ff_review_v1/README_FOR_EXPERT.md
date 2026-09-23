@@ -57,7 +57,11 @@ same rate-limiting motif and barrier as the glucose→HMF chain (68.2).
   `energetics_manifest.json`, and `build_scripts/` (assembly + `self_check.py`).
 - `06_final_chain/` — the assembled chain (canonical nodes + clean TSs + `MANIFEST.json`).
 
-## Independent verification (`05_docs/build_scripts/self_check.py`, reads ONLY the deposited files)
+## Independent verification (reads ONLY the deposited files)
+
+The self-check script this section described was not migrated and is not in this repository; the
+checks below are stated so they can be run directly against the deposited files. The repository's
+own re-verification of every deposit is `scripts/qa/verify_clone.sh` step 1.
 ```
 SINGLE-IMAGINARY: 11/11    STRICT-IRC: 11/11
 deposited: 12 nodes, 11 transition states

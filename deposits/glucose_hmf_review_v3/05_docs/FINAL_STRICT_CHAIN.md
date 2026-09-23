@@ -66,4 +66,5 @@ A separate pass re-audited the finalized chain:
   connectivity but differ by a single hydroxyl rotamer (ΔE 5.7 / 1.8 kcal, barrierless
   interconversion, no bond change); the canonical node geometry adopts the lower-energy
   conformer.
-- Artifacts: `final_chain/VERIFICATION.json`, `consistency/result.json`, `s4_disp/`.
+- Artifacts: `VERIFICATION.json` and `cross_step_consistency.json`, both alongside this file, plus
+  `s4_disp/`.
