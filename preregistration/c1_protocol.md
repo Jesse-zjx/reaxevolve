@@ -83,6 +83,16 @@ reported rather than backfilled from another mode.
 
 `scripts/qa/resolve_c1_selection.py` applies the rule and writes `preregistration/c1_selection.json`,
 committed **before** any run so the mapping from rule to instances is auditable and cannot drift.
+
+**Recorded before any run, and not a reason to change the selection.** The three stored snapshots of
+`.skills/qm-execution` (versions 0, 1 and 2) are one file: 2480 bytes, the same sha256. Seq 1, the
+revision selected for `no_endpoint_record`, therefore has identical before and after text. Its replay
+cannot attribute an outcome difference to the skill. The selection rule is lowest seq, not "the
+stored text changed", so the instances stay; the result for that mode has to be reported as a
+comparison of identical text. Seq 7, selected for `no_dominant_mode`, does store two different texts
+(version 2 and version 3). The packaged `assets/initial` skill files are not these historical
+snapshots either, which is why a replay overlays the snapshots rather than running that set as it
+stands.
 `--check` reasserts that the committed file still follows the rule, and runs in the smoke test and in
 `scripts/qa/verify_clone.sh`: an edit to the selection that the rule does not produce fails there.
 
@@ -196,13 +206,23 @@ The related defect is fixed: skills are now resolved by role through `assets/rol
 by name, so the loop runs against either set. It previously named two initial-set skills and could
 not run against the final set at all.
 
-The `before` arm's rollback is implemented and checked. `--snapshot-asset` with `--snapshot` rolls one
-asset back and reports which files came from the snapshot and which were left at the arm's content,
-refusing to describe a partial restore as a whole one. `scripts/qa/test_replay_rollback.py` holds
-three invariants: the rollback changes the file, files outside the snapshot are untouched, and no
-ledger revision touches a companion file — the last being the condition under which a partial restore
-is an acceptable comparison at all. The test was itself checked by sabotaging the rollback into a
-no-op and confirming it fails.
+Both arms are built from the ledger, not by running `--set initial` as it stands. That set is version 0
+of every skill, and the revisions under test moved their skills past version 0, so an unpinned after
+arm would be comparing the starting text with itself. `pin_replay` reads `asset_versions_at_revision`,
+which is the state after the revision and names only the assets the ledger recorded. Both arms receive
+each named asset at that version; the before arm then puts the asset under test back to the revision's
+own snapshot. The content at a version is the next revision's snapshot of that asset — a snapshot is a
+before-image, so there is no separate after-image. Assets the vector does not name stay at the initial
+set in both arms, and the runner lists them. `--revision` and `--arm before|after` are how a C1 task
+is launched; a C1 task without `--arm` is refused.
+
+The single-asset rollback underneath that pin reports which files came from the snapshot and which
+were left at the arm's content, and refuses to describe a partial restore as a whole one.
+`scripts/qa/test_replay_rollback.py` checks the rollback, the pin (the two arms differ only in the
+revised skill, and the other named skills are not left at version 0), and that no ledger revision
+touches a companion file — the last being the condition under which a partial restore is an acceptable
+comparison at all. The rollback check was itself checked by sabotaging it into a no-op and confirming
+it fails.
 
 Tasks are derived from this protocol rather than written by hand: `scripts/eval/make_task.py`
 emits one per failure mode and arm from `c1_selection.json`, and the runner refuses any step not

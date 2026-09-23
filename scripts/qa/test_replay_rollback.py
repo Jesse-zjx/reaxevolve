@@ -159,6 +159,62 @@ def main() -> int:
         else:
             ok(f"{n} archived edge(s), none inside the rebuild's scan path")
 
+    print("\n== 4. the two arms differ only in the asset the revision changed ==")
+    # `--set initial` alone is version 0 of every skill. The after arm has to be asset_version_after,
+    # and every other asset the revision's vector names has to be that version in both arms.
+    # Leaving the after arm at the initial set would compare v0 with v0.
+    for mode, blob in sel["selection"].items():
+        seq = blob["revision"]["seq"]
+        under = blob["revision"]["asset_id"]
+        trees, pins = {}, {}
+        try:
+            for arm_name in ("before", "after"):
+                dest = os.path.join(PKG, "runs", "arms", f"_pin_{mode}_{arm_name}")
+                shutil.rmtree(dest, ignore_errors=True)
+                AR.materialise("initial", dest)
+                pins[arm_name] = AR.pin_replay(dest, seq, arm_name)
+                trees[arm_name] = dest
+            same = True
+            for arm_name in ("before", "after"):
+                item = next(x for x in pins[arm_name]["applied"] if x["asset_id"] == under)
+                arm_md = os.path.join(trees[arm_name], under, "SKILL.md")
+                snap_md = os.path.join(PKG, item["snapshot"], "SKILL.md")
+                if not filecmp.cmp(arm_md, snap_md, shallow=False):
+                    fail(f"{mode} {arm_name}: {under} is not {item['snapshot']}")
+                    same = False
+                else:
+                    ok(f"{mode} {arm_name}: {under} at version {item['version']}")
+            before_md = os.path.join(trees["before"], under, "SKILL.md")
+            after_md = os.path.join(trees["after"], under, "SKILL.md")
+            before_snap = os.path.join(
+                PKG, next(x for x in pins["before"]["applied"] if x["asset_id"] == under)["snapshot"],
+                "SKILL.md")
+            after_snap = os.path.join(
+                PKG, next(x for x in pins["after"]["applied"] if x["asset_id"] == under)["snapshot"],
+                "SKILL.md")
+            if same and filecmp.cmp(before_snap, after_snap, shallow=False):
+                # The pin did what the ledger says. The ledger's two images are one file, so the
+                # arms cannot differ in this text; that is a property of the record, checked here
+                # so a run does not discover it after the compute.
+                ok(f"{mode}: the ledger stores the same SKILL.md at both versions")
+            elif same and filecmp.cmp(before_md, after_md, shallow=False):
+                fail(f"{mode}: before and after carry the same {under}")
+            elif same:
+                ok(f"{mode}: before and after differ")
+            for asset_id in (x["asset_id"] for x in pins["before"]["applied"] if x["asset_id"] != under):
+                a = os.path.join(trees["before"], asset_id, "SKILL.md")
+                b = os.path.join(trees["after"], asset_id, "SKILL.md")
+                initial = os.path.join(PKG, "assets", "initial", asset_id, "SKILL.md")
+                if not filecmp.cmp(a, b, shallow=False):
+                    fail(f"{mode}: {asset_id} differs between arms")
+                elif filecmp.cmp(a, initial, shallow=False):
+                    fail(f"{mode}: {asset_id} was left at the initial set, not the pinned version")
+                else:
+                    ok(f"{mode}: {asset_id} pinned, and identical across arms")
+        finally:
+            for dest in trees.values():
+                shutil.rmtree(dest, ignore_errors=True)
+
     print("\n==== SUMMARY ====")
     if FAILS:
         print(f"{len(FAILS)} failure(s):")

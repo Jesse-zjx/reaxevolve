@@ -192,6 +192,89 @@ def overlay_snapshot(dest: str, asset_id: str, snapshot: str) -> dict:
     }
 
 
+def _version_number(value) -> int:
+    text = str(value)
+    if text.startswith("v"):
+        text = text[1:]
+    return int(text)
+
+
+def _evolution_log() -> list[dict]:
+    path = os.path.join(PKG, "evolution", "EVOLUTION_LOG.jsonl")
+    return [json.loads(line) for line in open(path) if line.strip()]
+
+
+def snapshot_holding(records: list[dict], asset_id: str, version: int) -> str:
+    """The snapshot that stores `asset_id` as it stood at `version`.
+
+    A snapshot is the before-image of the revision that moved the asset off that version, so the
+    content at version N is the snapshot whose `asset_version_before` is N. There is no separate
+    after-image: the next revision's snapshot is this revision's result.
+    """
+    hits = [
+        r for r in records
+        if r.get("asset_id") == asset_id and _version_number(r.get("asset_version_before")) == version
+    ]
+    if len(hits) != 1:
+        raise SystemExit(
+            f"expected one snapshot of {asset_id} at version {version}, found {len(hits)}"
+        )
+    return hits[0]["snapshot"]
+
+
+def pin_replay(dest: str, seq: int, arm: str) -> dict:
+    """Make the two replay arms differ only in the asset the revision changed.
+
+    `asset_versions_at_revision` is the state after the revision, and it names only the assets the
+    ledger recorded — for these revisions, a handful of skills, not the whole tree. Both arms get
+    every named asset at that version. The `before` arm then puts the asset under test back to the
+    revision's own snapshot, which is `asset_version_before`. Assets the vector does not name stay
+    at the initial set in both arms, and are listed so that limit is visible.
+    """
+    if arm not in ("before", "after"):
+        raise SystemExit("--arm must be before or after")
+    records = _evolution_log()
+    rev = next((r for r in records if r.get("seq") == seq), None)
+    if rev is None:
+        raise SystemExit(f"no revision seq {seq}")
+    vector = rev.get("asset_versions_at_revision") or {}
+    under = rev["asset_id"]
+    if under not in vector:
+        raise SystemExit(f"seq {seq} does not record {under} in asset_versions_at_revision")
+    if _version_number(vector[under]) != _version_number(rev["asset_version_after"]):
+        raise SystemExit(
+            f"seq {seq}: the vector records {under} at {vector[under]}, "
+            f"not asset_version_after {rev['asset_version_after']}"
+        )
+    applied = []
+    for asset_id, ver in vector.items():
+        version = _version_number(ver)
+        if arm == "before" and asset_id == under:
+            snap = rev["snapshot"]
+            version = _version_number(rev["asset_version_before"])
+            # The revision's own snapshot has to be the before-image the rest of the ledger agrees
+            # on. A hand-edited path here would make the two arms differ in something else.
+            if snap != snapshot_holding(records, asset_id, version):
+                raise SystemExit(f"seq {seq}: snapshot {snap} is not {asset_id} at version {version}")
+        else:
+            snap = snapshot_holding(records, asset_id, version)
+        report = overlay_snapshot(dest, asset_id, snap)
+        report["version"] = version
+        applied.append(report)
+    present = set()
+    skills = os.path.join(dest, ".skills")
+    if os.path.isdir(skills):
+        present = {f".skills/{name}" for name in os.listdir(skills)}
+    unpinned = sorted(present - set(vector))
+    return {
+        "seq": seq,
+        "arm": arm,
+        "asset_under_test": under,
+        "applied": applied,
+        "left_at_initial_set": unpinned,
+    }
+
+
 def verify_arm(info: dict, set_name: str) -> list[str]:
     """The materialised tree really is the arm it claims to be."""
     problems = []
@@ -263,8 +346,12 @@ def main() -> int:
     ap.add_argument("--max-rounds", type=int, default=3,
                     help="guess rounds per step, identical across arms by construction")
     ap.add_argument("--workdir", default=None, help="where to materialise (default: runs/arms/<set>)")
+    ap.add_argument("--revision", type=int, metavar="SEQ",
+                    help="replay this ledger revision; requires --arm")
+    ap.add_argument("--arm", choices=("before", "after"),
+                    help="which side of --revision to materialise")
     ap.add_argument("--snapshot-asset", metavar="ASSET_ID",
-                    help="replay's `before` arm: roll this asset back to --snapshot")
+                    help="roll one asset back to --snapshot, without pinning the rest of the vector")
     ap.add_argument("--snapshot", metavar="PATH",
                     help="evolution/snapshots/<entry> to roll --snapshot-asset back to")
     ap.add_argument("--dry-run", action="store_true",
@@ -272,7 +359,29 @@ def main() -> int:
     ap.add_argument("--keep", action="store_true", help="keep the materialised tree afterwards")
     a = ap.parse_args()
 
-    dest = a.workdir or os.path.join(PKG, "runs", "arms", a.name)
+    task_blob = json.load(open(a.task)) if a.task else None
+    seq, arm = a.revision, a.arm
+    if task_blob and str(task_blob.get("task") or "").startswith("c1_"):
+        if a.name != "initial":
+            print("C1 replays initial-lineage skills; --set must be initial")
+            return 2
+        if arm not in ("before", "after"):
+            print("a C1 task has two arms; pass --arm before or --arm after")
+            return 2
+        rev_seq = (task_blob.get("revision") or {}).get("seq")
+        if seq is not None and seq != rev_seq:
+            print(f"--revision {seq} does not match the task's revision {rev_seq}")
+            return 2
+        seq = rev_seq
+    if (seq is None) != (arm is None):
+        print("--revision and --arm must be given together")
+        return 2
+    if seq is not None and (a.snapshot or a.snapshot_asset):
+        print("a replay pin already places every named asset; do not also pass --snapshot")
+        return 2
+
+    label = a.name if seq is None else f"{a.name}_{arm}_seq{seq}"
+    dest = a.workdir or os.path.join(PKG, "runs", "arms", label)
     shutil.rmtree(dest, ignore_errors=True)
 
     print(f"== materialising arm {a.name!r} ==")
@@ -282,7 +391,18 @@ def main() -> int:
           f"(tree declares {info['declared_set_in_tree']!r})")
 
     rollback = None
-    if a.snapshot_asset or a.snapshot:
+    pin = None
+    if seq is not None:
+        pin = pin_replay(dest, seq, arm)
+        print(f"== replay seq {seq} arm {arm}: {pin['asset_under_test']} ==")
+        for item in pin["applied"]:
+            print(f"  {item['asset_id']} at version {item['version']}  "
+                  f"({os.path.basename(item['snapshot'])})")
+        if pin["left_at_initial_set"]:
+            print("  not named by the revision's vector, left at the initial set:")
+            for asset_id in pin["left_at_initial_set"]:
+                print(f"    {asset_id}")
+    elif a.snapshot_asset or a.snapshot:
         if not (a.snapshot_asset and a.snapshot):
             print("--snapshot-asset and --snapshot must be given together")
             return 2
@@ -326,7 +446,6 @@ def main() -> int:
         print("\n--task is required for a real run")
         return 2
 
-    task_blob = json.load(open(a.task))
     steps = task_blob.get("steps") or []
     if not steps:
         print(f"{a.task} contains no steps")
