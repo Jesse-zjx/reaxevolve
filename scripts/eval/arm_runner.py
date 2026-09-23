@@ -59,6 +59,30 @@ def ledger_digest() -> tuple[int, str]:
     return n, hashlib.sha256(data).hexdigest()[:16]
 
 
+def asset_digest(dest: str) -> tuple[int, str]:
+    """Digest of every asset file in the arm, to prove none changed while the arm ran.
+
+    The ledger digest is not enough. Skills run with `write` and `edit` tools, so an arm can modify
+    its own SKILL.md directly, without going through the bump path and without touching the ledger —
+    and that is precisely the protocol's prohibition on editing assets during evaluation. Hashing the
+    arm's own assets is what actually detects it.
+    """
+    h = hashlib.sha256()
+    n = 0
+    for sub in (".skills", "tools"):
+        base = os.path.join(dest, sub)
+        for root, dirs, files in os.walk(base):
+            dirs[:] = sorted(d for d in dirs if d != "__pycache__")
+            for f in sorted(files):
+                if f.endswith(".pyc"):
+                    continue
+                p = os.path.join(root, f)
+                h.update(os.path.relpath(p, dest).encode())
+                h.update(open(p, "rb").read())
+                n += 1
+    return n, h.hexdigest()[:16]
+
+
 def materialise(set_name: str, dest: str) -> dict:
     """Build an isolated tree running `set_name`'s assets on the shared framework."""
     if os.path.exists(dest):
@@ -232,6 +256,8 @@ def main() -> int:
     ap.add_argument("--cap-core-h", type=float, default=180.0)
     ap.add_argument("--nprocs", type=int, default=16)
     ap.add_argument("--wall-s", type=int, default=5400)
+    ap.add_argument("--max-rounds", type=int, default=3,
+                    help="guess rounds per step, identical across arms by construction")
     ap.add_argument("--workdir", default=None, help="where to materialise (default: runs/arms/<set>)")
     ap.add_argument("--snapshot-asset", metavar="ASSET_ID",
                     help="replay's `before` arm: roll this asset back to --snapshot")
@@ -279,7 +305,9 @@ def main() -> int:
     print("  isolation: assets/, deposits/, experiments/ not reachable from the arm")
 
     n_before, d_before = ledger_digest()
+    na_before, da_before = asset_digest(dest)
     print(f"  ledger before: {n_before} revisions, digest {d_before}")
+    print(f"  assets before: {na_before} files, digest {da_before}")
 
     if a.dry_run:
         print("\n== dry run: stopping before QM ==")
@@ -294,11 +322,39 @@ def main() -> int:
         print("\n--task is required for a real run")
         return 2
 
-    steps = json.load(open(a.task)).get("steps") or []
+    task_blob = json.load(open(a.task))
+    steps = task_blob.get("steps") or []
+    if not steps:
+        print(f"{a.task} contains no steps")
+        return 2
+
+    # Every step must be one the preregistration locks. Deriving the task from the protocol is only
+    # worth something if a hand-edited task cannot be run: this is the check that makes it so.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import make_task as MT  # noqa: E402
+
+    allowed = MT.preregistered_steps()
+    stray = [
+        (s.get("reactant"), s.get("product")) for s in steps
+        if (s.get("reactant"), s.get("product")) not in allowed
+    ]
+    if stray:
+        print(f"\nrefusing to run: {len(stray)} step(s) in {os.path.relpath(a.task, PKG)} are not "
+              "in the preregistration")
+        for r, p in stray[:5]:
+            print(f"  {str(r)[:38]} -> {str(p)[:38]}")
+        print("Derive the task with scripts/eval/make_task.py rather than editing it.")
+        return 2
+    print(f"  task: {task_blob.get('task')} from {task_blob.get('source')}")
+    print(f"  all {len(steps)} step(s) are preregistered")
+
     print(f"\n== running {len(steps)} step(s), cap {a.cap_core_h} core-hours ==")
     env = os.environ.copy()
     env["CHEM_ASSET_SET"] = a.name          # pin the set inside the arm
-    env["CHEM_REFLECT_CLOSED"] = "1"        # no revision may land
+    # Read by scripts/reflect/asset_snapshot.py, which refuses to bump while it is set. Prevention
+    # as well as the detection above: this was previously set and read by nothing, which made
+    # "Reflect is closed" a claim resting only on the arm never calling Reflect.
+    env["CHEM_REFLECT_CLOSED"] = "1"
     results = []
     t0 = time.time()
     for i, step in enumerate(steps, 1):
@@ -310,9 +366,12 @@ def main() -> int:
         print(f"  step {i}/{len(steps)}  {r[:30]} -> {p[:30]}   (spent {spent})")
         cmd = [
             sys.executable, os.path.join(dest, "loop", "skill_runner.py"),
-            "--reactant", r, "--product", p,
+            "--reactant-smiles", r, "--product-smiles", p,
             "--workdir", os.path.join(dest, "runs", f"step_{i}"),
             "--nprocs", str(a.nprocs), "--wall-s", str(a.wall_s),
+            # Pinned rather than defaulted: the guess budget has to be identical across arms, and a
+            # default that changed between runs would make the arms differ in more than the assets.
+            "--max-rounds", str(a.max_rounds),
             "--budget-core-h", str(a.cap_core_h - spent),
         ]
         if step.get("coproduct"):
@@ -325,17 +384,29 @@ def main() -> int:
         })
 
     n_after, d_after = ledger_digest()
-    reflect_closed = (n_after, d_after) == (n_before, d_before)
+    na_after, da_after = asset_digest(dest)
+    ledger_unchanged = (n_after, d_after) == (n_before, d_before)
+    assets_unchanged = (na_after, da_after) == (na_before, da_before)
+    # Both must hold. The ledger catches a revision landing through the bump path; the asset digest
+    # catches an arm editing its own skill directly, which the skills' write/edit tools allow and
+    # which the ledger would not show.
+    reflect_closed = ledger_unchanged and assets_unchanged
     report = {
         "asset_set": a.name,
         "cap_core_h": a.cap_core_h,
+        "max_rounds": a.max_rounds,
         "spent_core_h": spent_core_h(dest),
         "wall_s": round(time.time() - t0),
         "steps_attempted": len(results),
         "steps_total": len(steps),
         "reflect_closed": reflect_closed,
+        "ledger_unchanged": ledger_unchanged,
+        "assets_unchanged": assets_unchanged,
         "ledger_before": {"n": n_before, "digest": d_before},
         "ledger_after": {"n": n_after, "digest": d_after},
+        "assets_before": {"n": na_before, "digest": da_before},
+        "assets_after": {"n": na_after, "digest": da_after},
+        "task": os.path.relpath(a.task, PKG) if a.task else None,
         "results": results,
     }
     out_path = os.path.join(dest, "ARM_REPORT.json")
@@ -343,8 +414,11 @@ def main() -> int:
     print(f"\n== arm {a.name} ==")
     print(f"  spent {report['spent_core_h']} of {a.cap_core_h} core-hours")
     print(f"  reflect closed: {reflect_closed}")
-    if not reflect_closed:
-        print("  ARM VOID: a revision landed during evaluation")
+    if not ledger_unchanged:
+        print(f"  ARM VOID: a revision landed during evaluation "
+              f"({n_before} -> {n_after} entries)")
+    if not assets_unchanged:
+        print("  ARM VOID: an asset changed while the arm ran, without going through the ledger")
     print(f"  report: {os.path.relpath(out_path, PKG)}")
     return 0 if reflect_closed else 1
 

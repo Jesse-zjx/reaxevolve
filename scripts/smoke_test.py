@@ -355,6 +355,7 @@ def main():
         ("test_asset_roles.py", "both asset sets are runnable and agree with the rename record"),
         ("resolve_c1_selection.py --check", "committed replay selection still matches its rule"),
         ("test_replay_rollback.py", "the replay's before arm rolls back and says how far"),
+        ("test_arm_contract.py", "the seams an arm only reaches on a real run"),
     ):
         # Entries may carry arguments, so split rather than treating the whole string as a filename.
         name, *args = script.split()

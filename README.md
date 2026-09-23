@@ -109,6 +109,7 @@ python scripts/qa/test_guess_ladder.py            # can the guess generators rea
 python loop/asset_set.py --set initial            # which skills fill which role in a set
 python scripts/eval/arm_runner.py --set initial --dry-run   # an evaluation arm, without the QM
 python scripts/qa/resolve_c1_selection.py         # what the replay's selection rule picks
+python scripts/eval/make_task.py --list           # the tasks derivable from the preregistration
 ```
 
 One command that clones this repository and checks everything a reader receives — deposits

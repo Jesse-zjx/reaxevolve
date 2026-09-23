@@ -204,4 +204,12 @@ ledger revision touches a companion file — the last being the condition under 
 is an acceptable comparison at all. The test was itself checked by sabotaging the rollback into a
 no-op and confirming it fails.
 
-Nothing further blocks a run.
+Tasks are derived from this protocol rather than written by hand: `scripts/eval/make_task.py`
+emits one per failure mode and arm from `c1_selection.json`, and the runner refuses any step not
+present in the preregistration. Reflect being closed is now enforced as well as detected —
+`asset_snapshot.py` refuses to bump while an arm is running, and the runner hashes the arm's own
+assets before and after, which is what catches an arm editing its own skill directly. The skills
+run with write and edit tools, so the ledger digest alone would not have seen that.
+
+Nothing further blocks a run. `scripts/qa/test_arm_contract.py` covers the seams a dry run cannot
+reach, which is where both of the runner's earlier defects sat.

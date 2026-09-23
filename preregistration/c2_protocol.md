@@ -73,6 +73,23 @@ could not, not that it ran out of money.
   time and budget spent.
 - Report the rediscovery caveat above in the same place as the result, not in a footnote.
 
+## Running an arm
+
+The step list is locked in `preregistration/panel.json` under `c2_task_route`, and the task file the
+runner consumes is derived from it by `scripts/eval/make_task.py --c2` rather than written by hand.
+The runner refuses a task containing any step the preregistration does not hold, so the prohibition
+below is enforced rather than merely stated.
+
+```bash
+python scripts/eval/make_task.py --c2
+python scripts/eval/arm_runner.py --set initial --task runs/tasks/c2_route.json --cap-core-h 180
+python scripts/eval/arm_runner.py --set final   --task runs/tasks/c2_route.json --cap-core-h 180
+```
+
+Reflect is closed in both arms by prevention and by detection: `asset_snapshot.py` refuses to bump
+while an arm runs, and the runner hashes each arm's own assets before and after, so an arm that
+edited a skill directly — which the skills' write and edit tools allow — voids itself.
+
 ## Prohibitions
 
 - No post-hoc substitution of the task or the step list.

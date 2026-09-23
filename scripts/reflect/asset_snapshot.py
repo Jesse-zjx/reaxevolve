@@ -185,6 +185,16 @@ def main():
     )
     a = ap.parse_args()
 
+    # Reflect is closed during a fixed-asset comparison or a replay: a revision landing mid-arm
+    # would mean the arm was no longer a comparison between two asset versions. scripts/eval/
+    # arm_runner.py sets this for the duration, and detects a violation afterwards through the
+    # ledger and asset digests; refusing here is the prevention half.
+    if a.bump and os.environ.get("CHEM_REFLECT_CLOSED") == "1":
+        raise SystemExit(
+            "refusing to bump: CHEM_REFLECT_CLOSED is set, so an evaluation arm is running and no "
+            "revision may land. Unset it only outside an arm."
+        )
+
     os.makedirs(SNAP, exist_ok=True)
     asset_id = normalize_asset_id(a.asset_id)
     vers = load_versions()
