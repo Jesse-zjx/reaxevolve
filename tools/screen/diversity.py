@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
-"""Diversity layer for reaction-network exploration.
+"""Diversity helpers for candidate scoring and route enumeration.
 
-Implements three literature-grounded mechanisms so the (QM-bottlenecked) search
-spends effort on genuinely DISTINCT, novel routes instead of re-deepening one:
-  (1) novelty scoring (novelty search) + diverse batch selection (DPP/farthest-point);
-  (2) route behavioral descriptors + a Quality-Diversity (MAP-Elites) archive;
-  (3) a route-divergence acceptance gate (Reasoning-Path-Divergence analog).
+What the live path calls:
+  - `tools/expand/templates_expand.py` uses `novelty`: one minus the maximum Morgan Tanimoto
+    of a product against species already in the network.
+  - `scripts/graph/enumerate_routes.py` uses `route_descriptor`, `niche_key`, `is_divergent`
+    and `route_diversity_report`. A candidate route is dropped only when it shares at least 60%
+    of its edges with an already-kept route AND sits in a niche that route already occupies.
+    Either condition on its own is not enough to drop it.
 
-Pure library; import from templates_expand / enumerate_routes / auto_loop.
+`select_diverse` is a greedy batch picker: normalised quality plus a weight times the minimum
+fingerprint distance to what has already been picked. Nothing in this repository calls it, and
+it is not a determinantal point process and not a MAP-Elites archive. Those names are not used
+here because the code does not implement them.
 """
 import math
 from rdkit import Chem
@@ -43,9 +48,8 @@ def novelty(smi, known):
     return 1.0 - best
 
 def select_diverse(cands, n, key_smi, quality_key="score", lam=1.0):
-    """Greedy quality-diversity batch pick (MAP-Elites/DPP-greedy flavour):
-    iteratively take argmax( quality + lam * min_dist_to_already_picked ). Avoids
-    spending the QM budget on near-duplicate candidates. `key_smi(c)`->product SMILES."""
+    """Greedy batch pick: argmax of normalised quality plus lam times min fingerprint distance
+    to candidates already picked. Not called by the loop. `key_smi(c)` returns a product SMILES."""
     if len(cands) <= n: return list(cands)
     pool = list(cands); picked = []
     # normalise quality to [0,1] so it trades off against distance (also in [0,1])
@@ -77,7 +81,8 @@ def route_descriptor(nodes, edges):
             "via_ketose": ketose, "kind_multiset": kinds}
 
 def niche_key(desc):
-    """Coarse niche = the qualitative "shape" of the route (MAP-Elites cell)."""
+    """Coarse route shape: carbon trajectory, whether it fragments, whether it passes a ketose,
+    and the set of reaction kinds. Used by enumerate_routes as a niche label, not as an archive."""
     return (desc["carbon_traj"], desc["fragmenting"], desc["via_ketose"],
             tuple(sorted(set(desc["kind_multiset"]))))
 

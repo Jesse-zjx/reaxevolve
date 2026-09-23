@@ -18,13 +18,13 @@ Never hard-code a count into a document, and never read one from a stored summar
 | `canonical/accepted_network.json` | STRICT-only projection, for publication views. |
 | `canonical/routes.json` | Enumerated routes per target. |
 | `caches/strict_caches/**/strict_cache.json` | Raw per-attempt driver records, 162 files. The evidence the rebuild merges. |
+| `derived/` | Regenerated views. Not tracked; rebuild from the state. |
 
 Everything under `caches/` is merged into the canonical network, so a verdict archived there becomes
 a delivered result. `evolution/attempt_verdicts/` holds 70 per-attempt verdicts from the isolated
 evolution campaign for exactly that reason: they are evidence about asset revisions, not about the
 delivered network, and archiving them here took the accepted-edge count from 30 to 44 by admitting 14
 edges that never went through the audit which demoted 8.
-| `derived/` | Regenerated views. Not tracked; rebuild from the state. |
 
 ## Rebuild order, and why it matters
 
@@ -78,6 +78,11 @@ only place the mapping lives.
 **Raw statuses** are driver-level tokens (`no_strict`, `NOT_CLEAN_TS`, `MISMATCH`, …),
 kept because Reflect diagnoses on the distinction between them. They are not acceptance
 categories and must not be presented as such.
+
+The archive is not a normalised vocabulary. `canonical/verdicts.jsonl` holds 180 records under
+63 distinct `status` strings; four of those are bare tokens and the rest are a token with the
+driver's free text appended. That wording is kept on purpose. Counts in `NETWORK_STATE.md` use
+the four buckets, after `split_status` separates the token from the detail.
 
 Some older cache entries appended free text to the status, e.g.
 `NOT_CLEAN_TS (imag modes=[-248.0])`, which split one status into as many values as there

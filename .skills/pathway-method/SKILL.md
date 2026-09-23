@@ -113,7 +113,9 @@ reports 11/11 with a uniform DEFGRID3.
 - `.../validation/ff_finalize/{assemble_review_v1,gen_report,cross_consistency}.py` — build the deposit.
 - Deposit self-test: `<deposit>/05_docs/build_scripts/self_check.py` (reads only deposited files;
   prints `SINGLE-IMAGINARY n/n · STRICT-IRC n/n · VERDICT PASS`).
-- Network/batch: `reaction_network/{build_reaction_network,templates_expand,validate_candidate,auto_loop}.py`.
+- Network/batch: `scripts/graph/build_reaction_network.py`, `tools/expand/templates_expand.py`,
+  `loop/run_loop.py`. The old `reaction_network/` layout, including `auto_loop.py`, is not in this
+  repository.
 
 ## Deposit packaging (mirror the accepted layout)
 `00_report/` (HTML) · `01_chain_nodes_xyz/` (DEFGRID3 minima) · `02_transition_states_xyz/` ·
@@ -123,23 +125,26 @@ reports 11/11 with a uniform DEFGRID3.
 `README_FOR_EXPERT.md`. Always end by running `self_check.py` → must print `VERDICT PASS`.
 
 ## Diversity layer (find multiple distinct routes, not one)
-`tools/screen/diversity.py` prevents the search collapsing to one route per target
-(novelty search + Quality-Diversity/MAP-Elites + a Reasoning-Path-Divergence gate):
-- **novelty scoring**: `templates_expand` scores `motif + NOVELTY_WEIGHT*novelty` (novelty =
-  1 − max Tanimoto of the product vs already-explored species) → pushes QM into new space.
-- **diverse batch selection**: `auto_loop` picks each round via `diversity.select_diverse`
-  (greedy quality + λ·min-distance, DPP/farthest-point) instead of top-N by score, so the
-  QM budget is not spent on near-duplicate candidates.
-- **route QD archive + divergence gate**: `enumerate_routes` keeps only routes that are
-  <60% edge-overlap *and* occupy a new behavioral niche (`route_descriptor`: carbon trajectory,
-  fragmenting?, via-ketose?, reaction-kind set). Reports `n_distinct_niches` / mean overlap.
-Use these knobs to widen coverage and to quantify route diversity (a paper metric).
+`tools/screen/diversity.py` is a library. Two callers use it, and neither is a MAP-Elites archive
+or a determinantal point process:
+- **novelty scoring**: `templates_expand` adds `NOVELTY_WEIGHT * novelty` to the motif score.
+  Novelty is 1 minus the maximum Morgan Tanimoto of the product against species already in the
+  network, which pushes enumeration toward structures the network does not already contain.
+- **route filter**: `enumerate_routes` drops a candidate only when it shares at least 60% of its
+  edges with a route already kept AND sits in a niche that route already occupies. The niche is
+  the route shape from `route_descriptor` (carbon trajectory, whether the route fragments, whether
+  it passes a ketose, the set of reaction kinds). A near-duplicate in a new niche is kept, and so
+  is a distant route in a known niche. The report records `n_distinct_niches` and mean edge overlap.
+
+`select_diverse` (greedy quality plus fingerprint distance) is in the same file and is not called.
+Do not describe the search as MAP-Elites, and do not cite `auto_loop` for batch selection: that
+driver is not part of this repository, and the loop selects by score.
 
 ## Batch exploration (network growth)
-Loop `auto_loop.py`: build graph → `templates_expand.py` (enumerate new candidate edges from the
-**confirmed** frontier only — single-fragment species that are STRICT/validated endpoints) →
-validate top-N in parallel shards → merge → rebuild. Favor small / retro-aldol / proven-motif
-candidates; cap per-guess DFT wall-clock.
+The loop that runs is `loop/run_loop.py`: template enumeration, then score-first selection
+(`loop/select_candidates.py`), then validation. `auto_loop.py` is not in this repository. The
+measurement below is from that retired driver and is a record of what it did, not a description of
+the current loop. Favor small / retro-aldol / proven-motif candidates; cap per-guess DFT wall-clock.
 
 **Measured yield of the automated layer: 2 STRICT out of 115 attempts dispatched at DFT.** (Not to be
 confused with the xTB-era figure of 118 edges screened in `ts-validation-strategy` — that one is about
