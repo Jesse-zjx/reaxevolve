@@ -40,10 +40,18 @@ the comparison is between asset versions and not between a learning period and a
 | Arm | Asset set | Version vector | Contents |
 |---|---|---|---|
 | initial | `assets/initial` | `sha256:94458f7c2a70ad9c` | 5 declarative skills, geometry toolkit, QM driver. No candidate enumerator, no scoring, no guess ladder. |
-| final | `assets/final` | `sha256:7d9a93b062b2f80a` | 6 skills, enumerator + `motif_score`, novelty screen, per-kind guess ladder, full workflow. |
+| final | `assets/final` | `sha256:e8c0cafc4de82836` | 6 skills, enumerator + `motif_score`, novelty screen, per-kind guess ladder, full workflow. |
 
 Vector hash = sha256 of the `skills` and `tools` tables of that set's `tools/VERSIONS.json`,
-sorted keys, first 16 hex characters. Repository state at locking: `2f85913`.
+sorted keys, first 16 hex characters. First lock: `2f85913`, final vector `sha256:7d9a93b062b2f80a`.
+
+**Re-locked before either arm ran.** The first final snapshot still resolved the guess ladder's atom
+mapper under `tools/resources/tools/`, a layout this repository does not have. The mapper call is
+caught and the generator continues on an element-grouped nearest-neighbour map, so that arm would
+have been comparing a degraded guesser with a working one. The snapshot was refreshed from the
+repaired tools, the new vector is the one in the table, and the initial arm's vector is unchanged.
+`scripts/eval/arm_runner.py` copies `assets/<set>` into the arm even when the live tree declares the
+same set, so the run uses this snapshot and not a later working-tree edit.
 
 The initial arm has no guess ladder, so its guesses come from the generic interpolation route in
 `generate-ts-guesses`. That is the asset set as it was; substituting a better generator would

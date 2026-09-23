@@ -119,6 +119,11 @@
   },
   "c2_arms": {
     "initial": {"path": "assets/initial", "vector_sha256_16": "94458f7c2a70ad9c"},
-    "final": {"path": "assets/final", "vector_sha256_16": "7d9a93b062b2f80a"}
+    "final": {
+      "path": "assets/final",
+      "vector_sha256_16": "e8c0cafc4de82836",
+      "previous_vector_sha256_16": "7d9a93b062b2f80a",
+      "relock_reason": "Before either arm ran, the locked snapshot still pointed the guess ladder at the retired resources/ layout, so its guesses fell back to an element-grouped nearest-neighbour map. Refreshed from the repaired tools. The initial arm is unchanged."
+    }
   }
 }

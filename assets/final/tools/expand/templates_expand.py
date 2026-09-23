@@ -286,36 +286,20 @@ import chem_paths as _CP
 _CP.bootstrap()
 
 if __name__ == '__main__':
-    # frontier = confirmed species so far (read from the network if present)
-    import os
-    _reflect = _os.path.join(_CP.PACKAGE, 'scripts', 'reflect')
-    if _reflect not in _sys.path:
-        _sys.path.insert(0, _reflect)
-    import graph_views as _GV  # noqa: E402
-
-    NET = _os.path.join(_CP.GRAPH, 'reaction_network.json')
-    known = set()
-    frontier_default = ['O=CC(O)C(O)C(O)C(O)CO', 'O=C(CO)C(O)C(O)C(O)CO',
-                        'O=CC(=O)CC(O)C(O)CO', 'O=CC(=O)C=CC(O)CO', 'O=CC(O)CO',
-                        'OC=C(O)C(O)C(O)C(O)CO']
-    # real-frontier: expand from CONFIRMED = STRICT ∪ evidence_ok (see graph_views).
-    SEEDS = [canon('OCC1OC(O)C(O)C(O)C1O'), canon('O=CC(O)C(O)C(O)C(O)CO'),   # glucose (cyclic/open)
-             canon('O=CC(O)C(O)C(O)CO'), canon('OCC1OC(O)C(O)C1O')]            # xylose (open/cyclic)
-    if os.path.exists(NET):
-        net = json.load(open(NET))
-        known = {(e['reactant'], e['product']) for e in net['edges']}
-        real_nodes, _ = _GV.confirmed_nodes(net, view='working', seeds=SEEDS)
-        # only expand from SINGLE-fragment species (multi-fragment retro-aldol product
-        # nodes are not real standalone reactants for intramolecular templates)
-        frontier = sorted(s for s in real_nodes if s and '.' not in s)
-    else:
-        frontier = frontier_default
-    cands = expand(frontier, known)
-    out = _os.path.join(_CP.GRAPH, 'candidate_queue.json')
-    json.dump(cands, open(out, 'w'), indent=2)
-    print('frontier species:', len(frontier), 'NEW candidate edges:', len(cands))
-    print('by kind:', dict(collections.Counter(c['reaction_kind'] for c in cands)))
-    print('--- top 20 by score ---')
-    for c in cands[:20]:
-        print(f"  [{c['score']:+.0f}] {c['reaction_kind']:14s} {c['reactant']}  ->  {c['product']}"
-              + (' + H2O' if c['coproduct'] else ''))
+    # This module is a library: `expand(frontier, known_edges)`.
+    #
+    # It used to double as a script that computed its own frontier and wrote its own
+    # candidate_queue.json. That was a second write path into Graph Memory, in a different
+    # format, bypassing the atom-conservation gate — so a direct run could leave the queue
+    # in a shape the loop does not read. Frontier selection and landing now belong to
+    # loop/explore_templates.py, which goes through scripts/graph/add_hypothesis.py.
+    print(__doc__.strip())
+    print()
+    print('This is a library, not an entry point. To enumerate and land candidates:')
+    print('    python loop/explore_templates.py --top 24 [--dry-run]')
+    print()
+    print('To inspect the enumeration without writing anything:')
+    print('    python -c "import sys; sys.path[:0]=[\'tools/expand\',\'tools/screen\'];'
+          ' import templates_expand as T;'
+          ' print(len(T.expand([T.canon(\'O=CC(O)C(O)C(O)C(O)CO\')], set())))"')
+    raise SystemExit(2)

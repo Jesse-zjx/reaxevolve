@@ -24,6 +24,8 @@ from pathlib import Path
 import numpy as np
 
 WS = Path(__file__).resolve().parents[1]
+# Repository root: tools/<group>/<file>.py -> two levels up.
+REPO = Path(__file__).resolve().parents[2]
 import sys as _sys, os as _os
 _here = _os.path.dirname(_os.path.abspath(__file__))
 _pkg = _here
@@ -47,16 +49,32 @@ ORCA_CMD = os.environ.get(
     (_CP.ORCA_DIR + '/orca'),
 )
 
-sys.path.insert(0, str(WS / "resources"))
-sys.path.insert(0, str(WS / "resources" / "tools"))
+sys.path.insert(0, str(REPO / "tools" / "guess"))
+sys.path.insert(0, str(REPO / "tools" / "geometry"))
 
 from auto_guess import (
+
     read_xyz,
     write_xyz,
     smiles_to_xyz_xtb,
     _element_nearest_neighbor_map,
     reorder_product,
 )
+
+
+def _repo_rel(p) -> str:
+    """Path relative to the repository root, or the path itself if it lies outside.
+
+    Reporting a path must not be able to fail: this was `relative_to(WS)`, which assumed QM
+    scratch sat under tools/ and raised once it moved to runs/ — discarding guesses that had
+    already been built.
+    """
+    from pathlib import Path as _P
+    try:
+        return str(_P(p).resolve().relative_to(_P(__file__).resolve().parents[2]))
+    except ValueError:
+        return str(p)
+
 
 
 def render_neb_ts_input(
@@ -267,7 +285,7 @@ def process_step(
     }]
 
     manifest = {
-        "workdir": str(step_dir.relative_to(WS)),
+        "workdir": _repo_rel(step_dir),
         "round": round_idx,
         "reactant_smiles": r_smi,
         "product_smiles": p_balanced_smi,

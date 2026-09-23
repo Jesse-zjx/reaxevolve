@@ -1,7 +1,7 @@
 """Guess ladder ordering used by validate_candidate (tools/workflow/validate_candidate.py).
 
-Maps reaction_kind sets to primary guess generators. Import generators from this package when
-present; validate_candidate still loads via qm-workspace/resources shims during migration.
+Maps reaction_kind sets to primary guess generators, all of which live in this package
+(`tools/guess/`). The geometry tools they call are in `tools/geometry/`.
 """
 from __future__ import annotations
 

@@ -28,7 +28,11 @@ import numpy as np
 from constrained_scan_guess import PYTHON, WS, XTB_BIN, read_xyz, write_xyz
 from dry_proton_guess import run_constrained_opt_pairs
 
-MAP_TOOL = WS / "resources" / "tools" / "map_reaction_atoms.py"
+from pathlib import Path
+# Repository root: tools/<group>/<file>.py -> two levels up.
+REPO = Path(__file__).resolve().parents[2]
+
+MAP_TOOL = REPO / "tools" / "geometry" / "map_reaction_atoms.py"
 XH_BOND_MAX = 1.35
 
 

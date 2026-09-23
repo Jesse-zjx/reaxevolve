@@ -61,6 +61,8 @@ from pathlib import Path
 import numpy as np
 
 WS = Path(__file__).resolve().parents[1]
+# Repository root: tools/<group>/<file>.py -> two levels up.
+REPO = Path(__file__).resolve().parents[2]
 import sys as _sys, os as _os
 _here = _os.path.dirname(_os.path.abspath(__file__))
 _pkg = _here
@@ -80,8 +82,8 @@ _CP.bootstrap()
 PYTHON = sys.executable or _CP.PYBIN
 XTB_BIN = shutil.which("xtb") or _CP.XTB_BIN
 
-sys.path.insert(0, str(WS / "resources"))
-sys.path.insert(0, str(WS / "resources" / "tools"))
+sys.path.insert(0, str(REPO / "tools" / "guess"))
+sys.path.insert(0, str(REPO / "tools" / "geometry"))
 
 from auto_guess import (  # noqa: E402
     read_xyz, write_xyz, smiles_to_xyz_xtb,
@@ -90,6 +92,21 @@ from auto_guess import (  # noqa: E402
 from neb_guess import run_neb_ts  # noqa: E402
 
 
+
+
+def _repo_rel(p) -> str:
+    """Path relative to the repository root, or the path itself if it lies outside.
+
+    Reporting a path must not be able to fail: this was `relative_to(WS)`, which assumed QM
+    scratch sat under tools/ and raised once it moved to runs/ — discarding guesses that had
+    already been built.
+    """
+    from pathlib import Path as _P
+    try:
+        return str(_P(p).resolve().relative_to(_P(__file__).resolve().parents[2]))
+    except ValueError:
+        return str(p)
+
 # ---------------------------------------------------------------------------
 # Donor / acceptor detection
 # ---------------------------------------------------------------------------
@@ -97,7 +114,7 @@ from neb_guess import run_neb_ts  # noqa: E402
 def _map_h_changes(reactant_smiles, product_balanced_smiles, reactant_xyz):
     """Return (donor_heavy_1based, acceptor_heavy_1based) from atom mapping, or
     (None, None) if it could not be determined."""
-    script = WS / "resources" / "tools" / "map_reaction_atoms.py"
+    script = REPO / "tools" / "geometry" / "map_reaction_atoms.py"
     with tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode="w") as f:
         jout = f.name
     try:
@@ -336,7 +353,7 @@ def process_step(step_dir: Path, round_idx=0, n_waters=1, nprocs=DEFAULT_NPROCS,
     shutil.copy2(ts_xyz, gxyz)
 
     manifest = {
-        "workdir": str(step_dir.relative_to(WS)),
+        "workdir": _repo_rel(step_dir),
         "round": round_idx,
         "reactant_smiles": r_smi,
         # organic product only -> endpoint matching strips catalytic water
@@ -353,7 +370,7 @@ def process_step(step_dir: Path, round_idx=0, n_waters=1, nprocs=DEFAULT_NPROCS,
     }
     mp = step_dir / f"auto_guess_manifest.round_{round_idx}.json"
     mp.write_text(json.dumps(manifest, indent=2, ensure_ascii=False))
-    print(f"  wrote water-relay manifest: {mp.relative_to(WS)}")
+    print(f"  wrote water-relay manifest: {_repo_rel(mp)}")
     return manifest
 
 

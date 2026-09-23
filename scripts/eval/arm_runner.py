@@ -88,8 +88,11 @@ def materialise(set_name: str, dest: str) -> dict:
     if os.path.exists(dest):
         raise SystemExit(f"refusing to overwrite {dest}")
     os.makedirs(dest)
-    src_assets = AS.set_root(set_name)
-    live = AS.live_set_name()
+    # assets/<name>, never the live tree. set_root() returns the live tree when it declares this
+    # set, which would overlay the arm with itself and ship whatever has drifted since the lock.
+    src_assets = os.path.join(PKG, "assets", set_name)
+    if not os.path.isdir(os.path.join(src_assets, "tools")):
+        raise SystemExit(f"no snapshot at {src_assets}")
 
     for d in FRAMEWORK:
         s = os.path.join(PKG, d)
@@ -106,16 +109,17 @@ def materialise(set_name: str, dest: str) -> dict:
         # copy per arm would make the disk cost of a comparison dominate its compute cost.
         os.symlink(nm, os.path.join(dest, "node_modules"))
 
-    # Overlay the arm's assets. For the set the live tree already carries this is a no-op, which is
-    # why it is expressed as an overlay rather than a conditional: the two cases stay identical.
-    if set_name != live:
-        for d in (".skills", "tools"):
-            s = os.path.join(src_assets, d)
-            if os.path.isdir(s):
-                t = os.path.join(dest, d)
-                shutil.rmtree(t, ignore_errors=True)
-                shutil.copytree(s, t, symlinks=True,
-                                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    # Always overlay assets/<set>, including when the live tree declares that same set. The live
+    # tree is where repairs land between a lock and a run; the comparison has to run the snapshot
+    # the protocol hashed, not whatever the working tree happens to contain.
+    for d in (".skills", "tools"):
+        s = os.path.join(src_assets, d)
+        if not os.path.isdir(s):
+            raise SystemExit(f"asset set {set_name!r} has no {d}/ under {src_assets}")
+        t = os.path.join(dest, d)
+        shutil.rmtree(t, ignore_errors=True)
+        shutil.copytree(s, t, symlinks=True,
+                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
 
     # The role map, and only the role map, out of assets/. The arm must resolve roles by itself —
     # a dry run that resolved them in the parent process would verify nothing about the arm — but
@@ -128,7 +132,7 @@ def materialise(set_name: str, dest: str) -> dict:
     for d in ("runs", "evidence/state/loop", "evidence/audit"):
         os.makedirs(os.path.join(dest, d), exist_ok=True)
 
-    vv = AS.version_vector(set_name, dest if set_name == live else None)
+    vv = AS.version_vector(set_name, dest)
     return {
         "asset_set": set_name,
         "root": dest,

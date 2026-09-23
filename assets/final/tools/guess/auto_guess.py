@@ -40,6 +40,8 @@ from pathlib import Path
 import numpy as np
 
 WS = Path(__file__).resolve().parents[1]
+# Repository root: tools/guess/auto_guess.py -> two levels up.
+REPO = Path(__file__).resolve().parents[2]
 import sys as _sys, os as _os
 _here = _os.path.dirname(_os.path.abspath(__file__))
 _pkg = _here
@@ -54,13 +56,28 @@ while _pkg != '/':
         break
     _pkg = _os.path.dirname(_pkg)
 import chem_paths as _CP
+
+
+def _repo_rel(p) -> str:
+    """Path relative to the repository root, or the path itself if it lies outside.
+
+    Reporting a path must not be able to fail: this was `relative_to(WS)`, which assumed QM
+    scratch sat under tools/ and raised once it moved to runs/ — discarding guesses that had
+    already been built.
+    """
+    from pathlib import Path as _P
+    try:
+        return str(_P(p).resolve().relative_to(_P(__file__).resolve().parents[2]))
+    except ValueError:
+        return str(p)
+
 _CP.bootstrap()
 
 PYTHON = sys.executable or _CP.PYBIN
 XTB_BIN = shutil.which("xtb") or _CP.XTB_BIN
 
-sys.path.insert(0, str(WS / "resources"))
-sys.path.insert(0, str(WS / "resources" / "tools"))
+sys.path.insert(0, str(REPO / "tools" / "guess"))
+sys.path.insert(0, str(REPO / "tools" / "geometry"))
 
 
 # ---------------------------------------------------------------------------
@@ -140,7 +157,7 @@ def smiles_to_xyz_xtb(smiles: str, out_xyz: Path) -> None:
 
 def heavy_atom_map(reactant_smiles: str, product_smiles: str, reactant_xyz: Path) -> dict:
     """Call map_reaction_atoms.py and return the JSON result."""
-    script = WS / "resources" / "tools" / "map_reaction_atoms.py"
+    script = REPO / "tools" / "geometry" / "map_reaction_atoms.py"
     with tempfile.NamedTemporaryFile(suffix=".json", delete=False, mode="w") as f:
         json_out = f.name
     try:
@@ -388,9 +405,16 @@ def process_step(step_dir: Path, round_idx: int = 0, n_guesses: int = 9,
             "generator_notes": comment,
         })
 
-    # Build manifest
+    # Build manifest. `workdir` is informational, so express it relative to the repository root
+    # when possible and fall back to the path itself. It used to be taken relative to this
+    # file's parent directory, which only resolved while scratch lived under tools/ — under the
+    # current layout (runs/) that raised and lost a set of guesses that had already been built.
+    try:
+        workdir = str(step_dir.relative_to(REPO))
+    except ValueError:
+        workdir = str(step_dir)
     manifest = {
-        "workdir": str(step_dir.relative_to(WS)),
+        "workdir": workdir,
         "round": round_idx,
         "reactant_smiles": r_smi,
         "product_smiles": p_balanced_smi,
@@ -401,7 +425,7 @@ def process_step(step_dir: Path, round_idx: int = 0, n_guesses: int = 9,
 
     manifest_path = step_dir / f"auto_guess_manifest.round_{round_idx}.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False))
-    print(f"  wrote manifest: {manifest_path.relative_to(WS)}")
+    print(f"  wrote manifest: {_repo_rel(manifest_path)}")
     return manifest
 
 

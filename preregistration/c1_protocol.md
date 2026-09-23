@@ -211,5 +211,8 @@ present in the preregistration. Reflect being closed is now enforced as well as 
 assets before and after, which is what catches an arm editing its own skill directly. The skills
 run with write and edit tools, so the ledger digest alone would not have seen that.
 
-Nothing further blocks a run. `scripts/qa/test_arm_contract.py` covers the seams a dry run cannot
-reach, which is where both of the runner's earlier defects sat.
+The code side of a run is in place. `scripts/qa/test_arm_contract.py` covers the seams a dry run
+cannot reach, which is where both of the runner's earlier defects sat. Compute waits on `.env`
+(`BASE_URL`, `API_KEY`, `MODEL_NAME`) at the repository root; C1 runs before C2, and neither starts
+without it. The final asset snapshot those arms will use was re-locked first — see
+`preregistration/c2_protocol.md`.
