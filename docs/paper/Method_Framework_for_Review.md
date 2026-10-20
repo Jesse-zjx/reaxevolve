@@ -5,6 +5,7 @@
 > **不是评价对象**：当前仓库某一时刻的代码完备度、未完成实验数字、本机账本条数。实现可后续补齐。  
 > **刻意不包含**：网络条数、回路轮次、复用计数、phase 状态、账本条数、修订史、`auto_loop` 作为方法主角。  
 > **口径来源**：`docs/paper/dialogue_change_ledger.md` §1；结构对齐 `Nature_Communications_Chinese_Outline_v4.md`。  
+> **2026-10-21**：本文件仍是预注册的方法合同。C1/C2 的**实测**在 `docs/paper/draft_sources/observed_c1_c2.md`，不支持「终点资产更强」。写初稿时以大纲文首 D-30 为准。  
 > **作者已确认口径**：  
 > 1. 验收**只有**人类敲定的单一交付级标准。STRICT 只判反应边/路径；无 Skill/Tool patch「系统接纳」。  
 > 2. 不讨论执行期内冻结/零演化的工程强制。  

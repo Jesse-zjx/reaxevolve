@@ -121,7 +121,7 @@ def ensure_reactant_xyz(smiles: str, path: Path) -> Path:
     r = run(
         [
             CP.PYBIN,
-            str(PKG / "tools" / "smi_to_xyz.py"),
+            str(PKG / "tools" / "geometry" / "smi_to_xyz.py"),
             smiles,
             str(path),
         ]
@@ -140,7 +140,7 @@ def map_atoms(
     r = run(
         [
             CP.PYBIN,
-            str(PKG / "tools" / "map_reaction_atoms.py"),
+            str(PKG / "tools" / "geometry" / "map_reaction_atoms.py"),
             reactant,
             product_side,
             "--json-out",
@@ -431,7 +431,8 @@ def run_step(
         round_dir.mkdir(exist_ok=True)
         init_record(record_path, reaction_id, mapping, rnd)
 
-        gen_prompt = f"""Use skill generate-ts-guesses for exactly one round.
+        gen_names = ", ".join(p.name for p in gen_skills)
+        gen_prompt = f"""Use these loaded skills for exactly one round: {gen_names}.
 
 Round: {rnd}
 Reaction ID: {reaction_id}
@@ -524,7 +525,8 @@ Requirements:
             history.append({"round": rnd, "results": round_results, "stop": "STRICT"})
             break
 
-        diag_prompt = f"""Use skill diagnose-ts-failures for exactly one round.
+        diag_names = ", ".join(p.name for p in diag_skills)
+        diag_prompt = f"""Use these loaded skills for exactly one round: {diag_names}.
 
 Round: {rnd}
 Record JSON: {record_path}

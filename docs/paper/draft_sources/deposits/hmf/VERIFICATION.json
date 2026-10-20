@@ -1,0 +1,76 @@
+{
+  "imaginary_modes": {
+    "step1": [
+      -1410.1
+    ],
+    "step2": [
+      -1449.8
+    ],
+    "step3": [
+      -1533.0
+    ],
+    "step4": [
+      -1574.5
+    ],
+    "step5": [
+      -830.4
+    ],
+    "all_single": true,
+    "note": "step4 cleaned by soft-mode displacement reopt"
+  },
+  "irc_double_end_exact": true,
+  "cross_step_SMILES_consistent": true,
+  "cross_step_geometry": {
+    "node1": {
+      "expected": "O=CC(O)=CC(O)C(O)CO",
+      "producer": "step1_dh1g.IRC_B",
+      "producer_smiles": "O=CC(O)=CC(O)C(O)CO",
+      "consumer": "step2_taut3.IRC_F",
+      "consumer_smiles": "O=CC(O)=CC(O)C(O)CO",
+      "dE_prod_minus_reac_kcal": -5.72,
+      "consistent": false
+    },
+    "node2": {
+      "expected": "O=CC(=O)CC(O)C(O)CO",
+      "producer": "step2_taut3.IRC_B",
+      "producer_smiles": "O=CC(=O)CC(O)C(O)CO",
+      "consumer": "step3_dh2.IRC_B",
+      "consumer_smiles": "O=CC(=O)CC(O)C(O)CO",
+      "dE_prod_minus_reac_kcal": -0.024,
+      "consistent": true
+    },
+    "node3": {
+      "expected": "O=CC(=O)C=CC(O)CO",
+      "producer": "step3_dh2.IRC_F",
+      "producer_smiles": "O=CC(=O)C=CC(O)CO",
+      "consumer": "step4clean.IRC_B",
+      "consumer_smiles": "O=CC(=O)C=CC(O)CO",
+      "dE_prod_minus_reac_kcal": -1.818,
+      "consistent": false
+    },
+    "node4": {
+      "expected": "O=CC1(O)C=CC(CO)O1",
+      "producer": "step4clean.IRC_F",
+      "producer_smiles": "O=CC1(O)C=CC(CO)O1",
+      "consumer": "step5_hmfarom.IRC_B",
+      "consumer_smiles": "O=CC1(O)C=CC(CO)O1",
+      "dE_prod_minus_reac_kcal": -0.321,
+      "consistent": true
+    }
+  },
+  "termini": {
+    "node0_glucose": {
+      "expected": "O=CC(O)C(O)C(O)C(O)CO",
+      "smiles": "O=CC(O)C(O)C(O)C(O)CO",
+      "E_Eh": -687.10277583462,
+      "ok": true
+    },
+    "node5_HMF": {
+      "expected": "O=Cc1ccc(CO)o1",
+      "smiles": "O=Cc1ccc(CO)o1",
+      "E_Eh": -457.8240875836,
+      "ok": true
+    }
+  },
+  "conformer_note": "nodes 1 and 3: producer/consumer endpoints share identical connectivity & canonical SMILES but differ by a hydroxyl rotamer (dE 5.7 / 1.8 kcal); barrierless interconversion, no bond change. Canonical node geometry = lower-energy conformer."
+}

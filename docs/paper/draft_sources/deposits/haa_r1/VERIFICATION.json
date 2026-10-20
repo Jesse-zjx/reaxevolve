@@ -1,0 +1,27 @@
+{
+  "level": "r2SCAN-3c/CPCM(water)",
+  "imaginary_modes": {
+    "step1": [
+      -474.1
+    ],
+    "step2": [
+      -758.1
+    ],
+    "step3": [
+      -942.1
+    ],
+    "step4": [
+      -920.1
+    ],
+    "all_single": true,
+    "note": "step2 cleaned at DEFGRID3 (removed -13.5 cm-1 grid-noise soft mode)"
+  },
+  "irc_double_end_exact": true,
+  "cross_step_SMILES_consistent": true,
+  "shared_node_conformer_spread_kcal": {
+    "fructose (step1_prod vs step2_reac)": 0.733,
+    "glyceraldehyde (step2_prod vs step3_reac)": 1.617,
+    "glycolaldehyde_enol (step3_prod vs step4_reac)": 0.006
+  },
+  "note": "Shared main-line species identical by SMILES from both adjacent steps; glycolaldehyde-enol is the same minimum (0.006 kcal), fructose/glyceraldehyde differ only by hydroxyl rotamer (<=1.62 kcal). Canonical node uses lower-E conformer."
+}

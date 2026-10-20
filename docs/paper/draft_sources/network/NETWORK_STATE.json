@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-09-19 01:33:41",
+  "n_nodes": 243,
+  "n_edges": 325,
+  "n_strict": 30,
+  "edges_by_status": {
+    "STRICT": 30,
+    "PARTIAL_MATCH": 11,
+    "NOT_CLEAN_TS": 31,
+    "MISMATCH": 17,
+    "unresolved": 6,
+    "failed": 68,
+    "rejected": 2,
+    "validated": 49,
+    "no_strict": 101,
+    "pruned_endothermic": 1,
+    "qm_real": 9
+  },
+  "edges_by_bucket": {
+    "accepted": 30,
+    "rejected": 30,
+    "unresolved": 207,
+    "evidence_ok": 58
+  },
+  "targets_reachable_strict": {
+    "HMF": true,
+    "HAA": true,
+    "FF": true
+  },
+  "strict_distance_to_targets": {
+    "HMF": 5,
+    "HAA": 4,
+    "FF": 11
+  },
+  "readjudication_applied": {
+    "status_changes": 8,
+    "unmatched": 0,
+    "ledgers": [
+      "evidence/audit/readjudication.jsonl",
+      "evidence/audit/demoted_from_pin_v5.jsonl"
+    ]
+  },
+  "n_strict_dated": 30,
+  "n_strict_undated": 0,
+  "delta_vs_previous_pin": {
+    "added": [],
+    "removed": [],
+    "d_strict": 0
+  },
+  "pin_path": "graph/canonical/audited_strict_edges.json",
+  "note": "Single source for prose counts. Prefer this file over HANDOVER/README literals. Refresh via scripts/reflect/repin_state.py."
+}

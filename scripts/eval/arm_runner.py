@@ -381,7 +381,9 @@ def main() -> int:
         return 2
 
     label = a.name if seq is None else f"{a.name}_{arm}_seq{seq}"
-    dest = a.workdir or os.path.join(PKG, "runs", "arms", label)
+    # Absolute. The step is launched with cwd=dest, and a relative script path is then resolved
+    # against that cwd, so `runs/c1/.../loop/skill_runner.py` became `runs/c1/.../runs/c1/...`.
+    dest = os.path.abspath(a.workdir or os.path.join(PKG, "runs", "arms", label))
     shutil.rmtree(dest, ignore_errors=True)
 
     print(f"== materialising arm {a.name!r} ==")
@@ -543,6 +545,9 @@ def main() -> int:
     if not assets_unchanged:
         print("  ARM VOID: an asset changed while the arm ran, without going through the ledger")
     print(f"  report: {os.path.relpath(out_path, PKG)}")
+    if results and all(r["rc"] != 0 for r in results) and report["spent_core_h"] == 0:
+        print("  ARM VOID: every step exited before an attempt was recorded")
+        return 1
     return 0 if reflect_closed else 1
 
 
