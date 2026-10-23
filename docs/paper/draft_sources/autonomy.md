@@ -1,6 +1,6 @@
 # 自主性（按去重后的干预账本）
 
-来源：`chem-discovery/evidence/INTERVENTIONS.md`。旧的 3246 / 518 条 user 消息作废：会话续跑会把历史重放进新 transcript，计数被放大约 3.8 倍。
+数字来自 chem-discovery 干预账本的去重结果（该文件不在本仓库）。旧的 3246 / 518 条 user 消息作废：会话续跑会把历史重放进新 transcript，计数被放大约 3.8 倍。
 
 ## 数字
 

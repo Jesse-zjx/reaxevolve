@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""run_qm_step.py v0 — stripped QM driver for reaxevolve.
+"""run_qm_step.py v1 — stripped QM driver for reaxevolve.
 
 Pipeline (floor method):
   TS guess xyz
@@ -180,7 +180,7 @@ def main():
         "status": None,
         "endpoint_match": None,
         "time": time.strftime("%Y-%m-%d %H:%M"),
-        "driver": "run_qm_step.v0",
+        "driver": "run_qm_step.v1",
         "method_ladder": "xtb_optts -> r2SCAN-3c_optts_numfreq -> r2SCAN-3c_irc",
     }
 
@@ -263,6 +263,7 @@ def main():
         spectators=(a.spectators.split(",") if a.spectators else None),
     )
     res["endpoint_match"] = cls["endpoint_match"]
+    res["endpoint_double_ended"] = cls["double_ended"]
 
     adj = _VW.adjudicate_with_policy(
         f"{a.name}_ts.out",
@@ -275,6 +276,8 @@ def main():
     )
     res["water_detail"] = adj.get("water_detail")
     res["policy_pass"] = adj.get("pass")
+    res["irc_fwd"] = adj.get("fwd")
+    res["irc_bwd"] = adj.get("bwd")
     clean()
     _save(res, adj["status"], adj.get("detail"))
     print(json.dumps(res, indent=2))

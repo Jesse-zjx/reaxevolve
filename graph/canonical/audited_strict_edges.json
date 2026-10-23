@@ -2,7 +2,7 @@
   "schema": "audited_strict_edges/v1",
   "description": "Audited STRICT edge set mirrored from graph/reaction_network.json. Refresh with scripts/reflect/repin_state.py after expansion.",
   "n_strict": 30,
-  "pinned_at": "2026-09-19",
+  "pinned_at": "2026-10-22",
   "edges": [
     {
       "reactant": "O=C(C(O)CO)C(O)C(O)CO",

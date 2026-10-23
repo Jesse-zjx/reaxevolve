@@ -24,8 +24,7 @@ description: >-
 
 - **Bar**: every step's raw IRC ends must equal the neutral reactant and the neutral product, and the
   next step's reactant is the previous step's product.
-- **Tool**: `tools/workflow/validate_candidate.py` (OptTS + NumFreq + IRC, RDKit-constitution endpoint check;
-  `--active-atoms` focuses the TS mode).
+- **Tool**: `tools/workflow/run_qm_step.py` (OptTS + NumFreq + IRC, then `policy/acceptance/check_strict_bar.py`).
 
 > SUPERSEDED for new work (post-furfural review): the bar is **exactly one imaginary mode** — a small
 > residual floppy mode is a failure; clean it by soft-mode displacement plus a VeryTight re-optimization.
@@ -205,8 +204,10 @@ saddle connects two genuine neutral species, just not the pair that was proposed
   record in `graph/caches/strict_caches/reaction_network/r2_xlu_cleanp/strict_cache.json` (it is not one of the three
   deposits, so verify it there rather than under a deposit).
 
-`validate_candidate.harvest_endpoints()` does this automatically, writing the perceived
-pair into `discovered_cache.json` so the network grows even from a mismatch.
+`scripts/validate/endpoint_match.py` perceives the IRC ends. `loop/skill_runner.py`
+writes a mismatch pair into `graph/caches/discovered_cache.json`. That file is a
+harvest, not a verdict: promote a pair with `scripts/graph/add_hypothesis.py`
+before Validate will spend QM on it.
 
 > Feedback used to be routed back into YARP's `search_graph.json`. That loop is retired —
 > route search no longer goes through YARP enumeration (see `trash/README.md`); harvested
@@ -216,7 +217,7 @@ pair into `discovered_cache.json` so the network grows even from a mismatch.
 
 | File | Purpose |
 |------|---------|
-| `tools/workflow/validate_candidate.py` | The acceptance gate: OptTS + NumFreq + IRC + strict endpoint match |
+| `tools/workflow/run_qm_step.py` | The live QM driver: OptTS + NumFreq + IRC, then the STRICT checker |
 | `tools/guess/constrained_scan_guess.py` | Dual constrained-scan TS guesses (dehydration / aromatization) |
 | `tools/guess/dry_proton_guess.py` | Dry proton-transfer TS guesses (tautomerization / enolization) |
 | `tools/guess/auto_guess.py` | Reaction-agnostic interpolation guesses; fallback only |

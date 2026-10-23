@@ -66,7 +66,7 @@ E=float(re.findall(r"FINAL SINGLE POINT ENERGY\s+(-?\d+\.\d+)",t)[-1])
 Parse the soft (closest-to-zero negative) normal mode from `ts.hess` (`$vibrational_frequencies`,
 `$normal_modes`), displace `c ± 0.7*vec`, re-OptTS. If two guesses both give one imaginary, keep
 either; prefer the one whose |imag| matches the reactive mode. See
-`glucose_ff_review_v1/05_docs/build_scripts/` and `validate_candidate.py::soft_mode_cleanup`.
+`glucose_ff_review_v1/05_docs/build_scripts/` and `tools/workflow/soft_mode_cleanup.py`.
 
 ## PARTIAL_MATCH rescue: read the actual IRC endpoints (do not trust the product guess)
 A `PARTIAL_MATCH` with a **strong** imaginary is usually a real, clean edge whose product you

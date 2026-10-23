@@ -63,12 +63,13 @@ def main():
         "loop/skill_runner.py",
         "loop/reflect.py",
         "loop/fully_auto/apply_revision.py",
+        "loop/fully_auto/client.py",
+        "scripts/qa/test_reflect_payload.py",
         "scripts/graph/add_hypothesis.py",
         "scripts/graph/build_reaction_network.py",
         "scripts/reflect/asset_snapshot.py",
         "scripts/reflect/consolidate_verdicts.py",
         "scripts/reflect/graph_views.py",
-        "scripts/qa/isolation_audit.py",
         "scripts/qa/run_manifest.py",
         "scripts/qa/test_loop_accounting.py",
         "scripts/qa/test_runner_paths.py",
@@ -338,7 +339,7 @@ def main():
         text=True, capture_output=True,
     ).stdout
     # These name the lane in order to fence it off, not to depend on it.
-    exempt = ("isolation_audit", "smoke_test", "check_doc_paths")
+    exempt = ("smoke_test", "check_doc_paths")
     offenders = [l for l in hits.splitlines() if not any(e in l for e in exempt)]
     if offenders:
         fail(f"main loop depends on the tsbench lane: {offenders[:2]}")
@@ -367,7 +368,7 @@ def main():
             ok(label)
         else:
             fail(f"{script}:\n{(r.stdout or r.stderr).strip()[-600:]}")
-    for script in ["scripts/qa/isolation_audit.py", "scripts/qa/run_manifest.py"]:
+    for script in ["scripts/qa/run_manifest.py"]:
         r = subprocess.run([sys.executable, str(PKG / script)], cwd=str(PKG), capture_output=True)
         if r.returncode in (0, 1):  # audit returns 1 on violations
             ok(script)

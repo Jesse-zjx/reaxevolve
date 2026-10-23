@@ -7,7 +7,7 @@ Revisions are ordered by `seq` and versioned per asset. There are no wall-clock
 timestamps: what has to be checkable is the order of revisions, the evidence that
 triggered each one, and the pre-change snapshot it can be diffed against.
 
-**66 revision records** — qm_feedback 50, plumbing 15, reorganization 1 · applied 66
+**76 revision records** — qm_feedback 50, plumbing 24, reorganization 2 · applied 76
 
 ## What the ledger supports
 
@@ -26,8 +26,8 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
 | Failure mode | Revisions |
 |---|---|
 | `no_dominant_mode` | 44 |
-| `no_endpoint_record` | 16 |
-| `stale_path_reference` | 7 |
+| `no_endpoint_record` | 17 |
+| `stale_path_reference` | 16 |
 | `no_match` | 2 |
 | `path_alias` | 1 |
 | `multiple_imaginary` | 1 |
@@ -42,19 +42,23 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
 | `.skills/` | 1 | — |
 | `.skills/diagnose-ts-failures` | 6 | v6 |
 | `.skills/generate-ts-guesses` | 42 | v42 |
-| `.skills/pathway-method` | 1 | v2 |
+| `.skills/pathway-method` | 2 | v3 |
 | `.skills/qm-execution` | 3 | v3 |
-| `.skills/qm-reaction-validation` | 1 | v2 |
-| `.skills/strict-chain-assembly` | 1 | v2 |
-| `.skills/strict-edge-criterion` | 1 | v2 |
-| `.skills/ts-validation-strategy` | 1 | v2 |
+| `.skills/qm-reaction-validation` | 2 | v3 |
+| `.skills/strict-chain-assembly` | 2 | v3 |
+| `.skills/strict-edge-criterion` | 2 | v3 |
+| `.skills/ts-validation-strategy` | 2 | v3 |
 | `tools/expand/templates_expand.py` | 2 | v2 |
 | `tools/geometry/map_reaction_atoms.py` | 1 | v1 |
 | `tools/guess/` | 2 | v1 |
 | `tools/guess/auto_guess.py` | 1 | v2 |
-| `tools/guess/scan2d_guess.py` | 1 | v1 |
+| `tools/guess/ladder.py` | 1 | v2 |
+| `tools/guess/scan2d_guess.py` | 2 | v2 |
+| `tools/guess/water_relay_guess.py` | 1 | v2 |
 | `tools/screen/diversity.py` | 1 | v1 |
+| `tools/workflow/run_qm_step.py` | 1 | v1 |
 | `tools/workflow/soft_mode_cleanup.py` | 1 | v1 |
+| `tools/workflow/validate_candidate.py` (retired; snapshot `evolution/snapshots/075__tools_workflow_validate_candidate.py__v0`) | 1 | v1 |
 
 ## Entries
 
@@ -427,3 +431,43 @@ Ids from `policy/failure_modes.md`, the human-set taxonomy.
   - failure mode: `tool_crash_reported_as_result` (v1)
   - intended effect: The mapper each asset set carries matches the contract that set's consumers read: the final set writes the full record its guess ladder needs, the initial set keeps the compact record its skills read. A mapping failure can no longer masquerade as a successful guess.
   - snapshot: `evolution/snapshots/066__tools_geometry_map_reaction_atoms.py__v0`
+- `067` **.skills/pathway-method** v2→v3 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/067__skills_pathway-method__v2`
+- `068` **.skills/strict-edge-criterion** v2→v3 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/068__skills_strict-edge-criterion__v2`
+- `069` **.skills/ts-validation-strategy** v2→v3 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/069__skills_ts-validation-strategy__v2`
+- `070` **.skills/strict-chain-assembly** v2→v3 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/070__skills_strict-chain-assembly__v2`
+- `071` **.skills/qm-reaction-validation** v2→v3 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/071__skills_qm-reaction-validation__v2`
+- `072` **tools/guess/ladder.py** v1→v2 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/072__tools_guess_ladder.py__v1`
+- `073` **tools/guess/water_relay_guess.py** v1→v2 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/073__tools_guess_water_relay_guess.py__v1`
+- `074` **tools/guess/scan2d_guess.py** v1→v2 [plumbing]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live version vector matches the cleaned files. No capability claim. C2 hashes unchanged.
+  - snapshot: `evolution/snapshots/074__tools_guess_scan2d_guess.py__v1`
+- `075` **tools/workflow/validate_candidate.py** v1→v1 [reorganization]
+  - failure mode: `stale_path_reference` (v1)
+  - intended effect: Live tree no longer advertises a dispatcher that cannot run. No capability claim.
+  - snapshot: `evolution/snapshots/075__tools_workflow_validate_candidate.py__v0`
+- `076` **tools/workflow/run_qm_step.py** v0→v1 [plumbing]
+  - failure mode: `no_endpoint_record` (v1)
+  - intended effect: Perceived IRC termini are on the attempt record. No capability claim.
+  - snapshot: `evolution/snapshots/076__tools_workflow_run_qm_step.py__v0`

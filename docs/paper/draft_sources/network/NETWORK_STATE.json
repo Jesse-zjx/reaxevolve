@@ -1,25 +1,26 @@
 {
-  "generated_at": "2026-09-19 01:33:41",
+  "generated_at": "2026-10-22 03:31:12",
   "n_nodes": 243,
   "n_edges": 325,
   "n_strict": 30,
   "edges_by_status": {
     "STRICT": 30,
-    "PARTIAL_MATCH": 11,
-    "NOT_CLEAN_TS": 31,
-    "MISMATCH": 17,
+    "PARTIAL_MATCH": 14,
+    "NOT_CLEAN_TS": 27,
+    "MISMATCH": 18,
     "unresolved": 6,
-    "failed": 68,
+    "TS_FAILED": 5,
     "rejected": 2,
     "validated": 49,
+    "failed": 63,
     "no_strict": 101,
     "pruned_endothermic": 1,
     "qm_real": 9
   },
   "edges_by_bucket": {
     "accepted": 30,
-    "rejected": 30,
-    "unresolved": 207,
+    "rejected": 34,
+    "unresolved": 203,
     "evidence_ok": 58
   },
   "targets_reachable_strict": {

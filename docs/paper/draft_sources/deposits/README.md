@@ -37,10 +37,11 @@ fact to disclose, not a failure to hide.
 
 ## Known gap
 
-`glucose_haa_review_v2` has no rendered report under `00_report/` — it is the only one of
-the four without one. Its report content is `README_FOR_EXPERT.md` plus
-`05_docs/FINAL_STRICT_CHAIN.md`, and the primary evidence under `04_orca_inp_out_hess/` is
-complete, so the package verifies; what is missing is the convenience rendering.
+`glucose_haa_review_v2` is not in this draft pack (HAA_R2 is as-built only; this
+draft writes three expert-confirmed routes). Its own materials stay in the
+repository at `deposits/glucose_haa_review_v2/` (`README_FOR_EXPERT.md` and
+`deposits/glucose_haa_review_v2/05_docs/FINAL_STRICT_CHAIN.md`). Do not use the
+furfural chain notes as a substitute.
 
 ## Layout (identical in every deposit)
 

@@ -19,7 +19,7 @@ description: >-
 Prereq: each elementary edge validated to the STRICT bar (single imaginary mode +
 raw IRC endpoints = exact neutral reactant/product). See skills `qm-reaction-validation`,
 `strict-edge-criterion`, `ts-validation-strategy`. Bar enforced by
-`tools/workflow/validate_candidate.py`.
+`tools/workflow/run_qm_step.py`.
 
 > Acceptance clauses: `policy/acceptance/STRICT.md` (v5). This skill does not redefine them.
 
@@ -38,8 +38,9 @@ validation of top-scored candidates (that yields ~0 STRICT). It came from:
    species; record that as a `qm_real` edge — the perceived products become new seeds — even when the
    endpoints do not match the proposed pair. This accumulates an edge pool over time — the chain was
    assembled from such an accumulated pool, not one clean pass.
-Engine: `reaction_network/{templates_expand,validate_candidate,build_reaction_network}.py`;
-`discovered_cache.json` = harvested qm_real edges; tiers: STRICT (exact to target) vs qm_real.
+Engine: live expand is `tools/expand/templates_expand.py`; live Validate is
+`tools/workflow/run_qm_step.py`. `discovered_cache.json` = harvested qm_real
+edges; tiers: STRICT (exact to target) vs qm_real.
 
 ## A. Harvest edges & find the route
 Strict results accumulate in many `**/strict_cache.json` files. Build a directed
@@ -84,10 +85,11 @@ General fallback and efficiency measures (in `reaction_network/`):
 - **Active-learning TS sampler** (`active_learning_ts.py`): golden-section interpolation
   between matched reactant/product geometries + quadratic peak fit, constraining the
   changing (active) bonds. Kind-agnostic; add its guesses to the per-kind ones.
-- **Energy-filter pruning** (GFN2, in `validate_candidate.py`): skip candidates whose
-  reaction ΔE is hopelessly endothermic (product side = separately-optimized fragments
-  summed, so fragmentations aren't clash-penalized); then rank all guesses by GFN2
-  energy and DFT-validate only the top few. Cuts wasted DFT.
+- **Energy-filter pruning** (GFN2, was in the archived `validate_candidate.py`): skip
+  candidates whose reaction ΔE is hopelessly endothermic (product side =
+  separately-optimized fragments summed, so fragmentations aren't clash-penalized);
+  then rank guesses by GFN2 energy and DFT-validate only the top few. The live
+  driver does not run this pre-filter; keep it as a search heuristic, not a gate.
 
 ## C. Enforce the exact bar
 Set `EXACT_SMILES_ONLY=1` (default in `orca_xtb_workflow.classify_endpoint_match`):

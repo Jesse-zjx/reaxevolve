@@ -330,9 +330,17 @@ def spent_core_h(dest: str) -> float:
             except Exception:
                 continue
             for v in blob.values():
-                w, n = v.get("wall_s"), v.get("nprocs") or 16
-                if w:
-                    total += (w / 3600.0) * n
+                if not isinstance(v, dict):
+                    continue
+                rows = v.get("attempts")
+                if not (isinstance(rows, list) and rows):
+                    rows = [v]
+                for a in rows:
+                    if not isinstance(a, dict):
+                        continue
+                    w, n = a.get("wall_s"), a.get("nprocs") or 16
+                    if w:
+                        total += (w / 3600.0) * n
     return round(total, 2)
 
 

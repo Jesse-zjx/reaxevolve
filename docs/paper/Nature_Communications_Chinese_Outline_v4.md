@@ -36,7 +36,7 @@
 |---|---|
 | 节点 / 边 | 243 / 325 |
 | 验收边（STRICT） | **30** |
-| 按桶分布 | accepted 30 · evidence_ok 58 · rejected 30 · unresolved 207 |
+| 按桶分布 | accepted 30 · evidence_ok 58 · rejected 34 · unresolved 203 |
 | 判决档案条数 | 180 |
 | 逐次判决记录文件 | 162 |
 | 目标可达（STRICT，自葡萄糖） | HMF · HAA · 糠醛，三者全部可达 |
@@ -54,7 +54,7 @@
 
 ## 两条可证伪的方法主张（写作时须可对上实验）
 
-| 主张 | 预注册对照 | 实测（`draft_sources/observed_c1_c2.md`） | 正文地位 |
+| 主张 | 预注册对照 | 实测（`docs/paper/draft_sources/observed_c1_c2.md`） | 正文地位 |
 |---|---|---|---|
 | **C1** 修订改变后续行为 | 修复 + 迁移重放 | 无一步 STRICT；seq 1 前后技能文本相同 | Results 末：协议有、裁决不了 |
 | **C2** 终点资产改善发现 | 冻结 initial vs final，重建葡萄糖→HMF | 两臂皆 1/5、同一步；不是留出；核时帽未执行（实际 447 / 555） | 同上；**不是主图** |
@@ -263,7 +263,7 @@
 
 ## 4. 交付网络与路线（学习开启的战役）
 
-> **§4 主结果是网络和三条已核路线，不是 C2。** 预注册冻结对照见 `draft_sources/observed_c1_c2.md`，写在本节末一段。不要把 C2 画成主图。
+> **§4 主结果是网络和三条已核路线，不是 C2。** 预注册冻结对照见 `docs/paper/draft_sources/observed_c1_c2.md`，写在本节末一段。不要把 C2 画成主图。
 
 ### 4.0 预注册冻结对照（写短、写在发现之后）
 

@@ -11,8 +11,8 @@ generator is therefore not barred by acceptance policy.
 It is still usually the wrong first choice: dry intramolecular shifts need not
 collapse to a zwitterion. Atom-mapped asynchronous scans give clean dry 1,2-/1,3-H
 migrations (HMF s2 -1449.8, FF s2 -2042.5, FF s3 -2032.5, FF s5 -1630.0,
-FF s8 -2137.8). `validate_candidate.py` / the guess ladder tries dry generators
-first and falls back here only if they yield no guess.
+FF s8 -2137.8). The guess ladder tries dry generators first and falls back
+here only if they yield no guess.
 
 Retained also because `glucose_haa_review_v1` step 4 is a genuine water-mediated
 tautomerization (-920.1, H4↔H9 shuttle) accepted under v5.

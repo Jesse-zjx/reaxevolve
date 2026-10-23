@@ -67,8 +67,9 @@ mkdir -p $STEP_DIR
 # Generate reactant.xyz: python tools/geometry/smi_to_xyz.py "SMILES" $STEP_DIR/reactant.xyz
 ```
 
-`yarp_route.json` is the filename the guess generators and `validate_candidate.py` still read; it is a
-naming leftover, not a dependency on YARP enumeration.
+`yarp_route.json` is the filename some guess generators still read; it is a
+naming leftover, not a dependency on YARP enumeration. Live Validate is
+`tools/workflow/run_qm_step.py`, not the archived `validate_candidate.py`.
 
 ### 4. Generate TS guesses and run ORCA
 
@@ -112,14 +113,16 @@ run — they dominate the disk footprint.
   dehydration. Re-pick the β-H (or the leaving OH) rather than pushing the scan further.
 - **Linear interpolation fails for dehydrations** — atom count mismatch.
 - **C₆H₈O₄ → C₆H₆O₃ (3rd dehydration)**: xTB systematically struggles with this step. Try multiple C₆H₈O₄ isomers.
-- **IRC actual products** from failed validations are valuable — `harvest_endpoints()` writes them
-  into `discovered_cache.json` and they become candidate edges in their own right. (They used to be
+- **IRC actual products** from failed validations are valuable — `loop/skill_runner.py`
+  writes a mismatch pair into `graph/caches/discovered_cache.json`. Promote it with
+  `scripts/graph/add_hypothesis.py` before it is a candidate. (They used to be
   fed back as YARP seeds; that loop is retired.)
 
 ## Automated Loop
 
-Batch validation is driven by `loop/run_loop.py`, which dispatches each
-candidate edge through `validate_candidate.py` and judges it against the strict bar:
+Batch validation is driven by `loop/run_loop.py` → `loop/skill_runner.py`, which
+dispatches each candidate edge through `tools/workflow/run_qm_step.py` and
+judges it against the strict bar:
 
 ```bash
 /root/miniforge3/envs/harness/bin/python3 loop/run_loop.py

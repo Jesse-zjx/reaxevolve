@@ -21,7 +21,7 @@ imaginary frequency agreeing to 7.1 cm⁻¹ on average. Full table:
 | `results/*.json` | Raw per-step outcome as the dispatcher recorded it (20 files). |
 | `render_report.py` | Renders `REPRODUCTION_REPORT.md` from `comparison.json`. |
 | `REPRODUCTION_REPORT.md` | Generated. Do not hand-edit. |
-| `run_shard.py` | The runner that produced `results/` (needs ORCA, xTB and the deposits). |
+| `run_shard.py` | Historical runner that produced `results/`. It called the retired `validate_candidate.py` dispatcher, not the live `run_qm_step.py` loop. Kept as the definition of what was run. |
 
 ```bash
 python experiments/rediscovery/render_report.py           # regenerate the report

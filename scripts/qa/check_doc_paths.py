@@ -135,6 +135,14 @@ def main() -> int:
                 checked += 1
                 if tok in tracked:
                     continue
+                # Frozen asset sets are complete trees. A skill under assets/final/
+                # that names tools/workflow/foo.py means assets/final/tools/workflow/foo.py,
+                # not the live-tree path (which may have been retired).
+                parts = rel.split("/")
+                if len(parts) >= 2 and parts[0] == "assets":
+                    under_set = os.path.normpath(os.path.join(parts[0], parts[1], tok))
+                    if under_set in tracked:
+                        continue
                 # A skill may reference a file it bundles, relative to its own directory.
                 sibling = os.path.normpath(os.path.join(os.path.dirname(rel), tok))
                 if sibling in tracked:

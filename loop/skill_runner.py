@@ -34,6 +34,39 @@ import asset_set as _AS  # noqa: E402
 
 CP.bootstrap()
 
+
+def _run_qm_step_label(root: Path | None = None) -> str:
+    """Driver tag from the tree that is actually running, not a hardcoded live version.
+
+    A C2 arm materialises assets/initial or assets/final (run_qm_step v0) and
+    launches this file from that tree. Writing run_qm_step.v1 there contradicts
+    the arm's VERSIONS.json.
+    """
+    roots: list[Path] = []
+    if root is not None:
+        roots.append(Path(root))
+    cwd = Path.cwd()
+    if cwd not in roots:
+        roots.append(cwd)
+    if PKG not in roots:
+        roots.append(PKG)
+    for r in roots:
+        vf = r / "tools" / "VERSIONS.json"
+        if not vf.is_file():
+            continue
+        try:
+            v = (json.load(open(vf)).get("tools") or {}).get("workflow/run_qm_step.py")
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not v:
+            continue
+        s = str(v)
+        if not s.startswith("v"):
+            s = "v" + s
+        return f"run_qm_step.{s}"
+    return "run_qm_step.v0"
+
+
 # ORCA scratch that is worthless once a step has been adjudicated or abandoned.
 SCRATCH_GLOBS = (
     "*.gbw",
@@ -255,6 +288,82 @@ def guesses_from_record(record_path: Path, workdir: Path, round_dir: Path) -> li
     return uniq
 
 
+def _stamp_cost(cache_path: str, edge_key: str, wall_s: float, nprocs: int) -> None:
+    """Write wall_s/nprocs onto the cache record the arm budget later sums.
+
+    write_strict_cache persists whatever is in the record at write time. The
+    success path is written by run_qm_step, which does not know the outer
+    elapsed wall. Setting wall_s only on the in-memory return left completed
+    jobs at 0 core-hours when arm_runner.spent_core_h read the cache.
+    """
+    try:
+        data = json.load(open(cache_path))
+    except (OSError, json.JSONDecodeError):
+        return
+    rec = data.get(edge_key)
+    if not isinstance(rec, dict):
+        return
+    rec["wall_s"] = float(wall_s)
+    rec["nprocs"] = int(nprocs)
+    atts = rec.get("attempts")
+    if isinstance(atts, list) and atts and isinstance(atts[-1], dict):
+        atts[-1]["wall_s"] = float(wall_s)
+        atts[-1]["nprocs"] = int(nprocs)
+    json.dump(data, open(cache_path, "w"), indent=2)
+    open(cache_path, "a").write("\n")
+
+
+def _harvest_perceived(res: dict, dest: Path | None = None) -> None:
+    """Record IRC termini that are not the proposed pair.
+
+    They are candidates, not verdicts. Explore still has to submit them through
+    add_hypothesis before Validate will spend QM on them.
+    """
+    if res.get("status") == "STRICT" or res.get("policy_pass"):
+        return
+    if res.get("endpoint_double_ended"):
+        return
+    em = res.get("endpoint_match") if isinstance(res.get("endpoint_match"), dict) else {}
+    if (em.get("F_isReactant") and em.get("B_isProduct")) or (
+        em.get("F_isProduct") and em.get("B_isReactant")
+    ):
+        return
+    fwd = res.get("irc_fwd") or res.get("fwd")
+    bwd = res.get("irc_bwd") or res.get("bwd")
+    if not fwd or not bwd or fwd == bwd:
+        return
+    proposed = {res.get("reactant"), res.get("product"), res.get("coproduct")} - {None, ""}
+    perceived = set()
+    for side in (fwd, bwd):
+        perceived.update(x for x in str(side).split(".") if x)
+    if perceived and perceived <= proposed:
+        return
+    dest = dest or (PKG / "graph" / "caches" / "discovered_cache.json")
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    rows = []
+    if dest.is_file():
+        try:
+            blob = json.loads(dest.read_text())
+            rows = blob if isinstance(blob, list) else blob.get("edges") or []
+        except json.JSONDecodeError:
+            rows = []
+    key = f"{fwd}>>{bwd}"
+    if any(r.get("edge") == key for r in rows if isinstance(r, dict)):
+        return
+    rows.append(
+        {
+            "edge": key,
+            "reactant": fwd,
+            "product": bwd,
+            "source": "irc_harvest",
+            "parent": f"{res.get('reactant')}>>{res.get('product')}",
+            "status": res.get("status"),
+            "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        }
+    )
+    dest.write_text(json.dumps(rows, indent=2) + "\n")
+
+
 def validate_guess(
     name: str,
     guess: Path,
@@ -299,9 +408,10 @@ def validate_guess(
             "reactant": reactant,
             "product": product,
             "coproduct": coproduct,
-            "driver": "run_qm_step.v0",
+            "driver": _run_qm_step_label(),
             "guess_path": str(guess),
             "wall_s": elapsed,
+            "nprocs": nprocs,
         }
         written = _VW.write_strict_cache(
             str(workdir / "strict_cache.json"),
@@ -313,6 +423,7 @@ def validate_guess(
         _cleanup_scratch(workdir, name)
         written["wall_s"] = elapsed
         written["guess_path"] = str(guess)
+        written["nprocs"] = nprocs
         return written
 
     try:
@@ -338,8 +449,10 @@ def validate_guess(
                 "reactant": reactant,
                 "product": product,
                 "coproduct": coproduct,
-                "driver": "run_qm_step.v0",
+                "driver": _run_qm_step_label(),
                 "rc": rc,
+                "wall_s": elapsed,
+                "nprocs": nprocs,
                 "stdout_tail": (out or "")[-1500:],
                 "stderr_tail": (err or "")[-1500:],
             },
@@ -349,7 +462,10 @@ def validate_guess(
         _cleanup_scratch(workdir, name)
 
     res["wall_s"] = elapsed
+    res["nprocs"] = nprocs
     res["guess_path"] = str(guess)
+    _stamp_cost(str(workdir / "strict_cache.json"), f"{reactant}>>{product}", elapsed, nprocs)
+    _harvest_perceived(res)
     return res
 
 

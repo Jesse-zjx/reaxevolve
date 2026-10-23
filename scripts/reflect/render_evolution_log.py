@@ -18,6 +18,20 @@ from collections import Counter
 PKG = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LOG = os.path.join(PKG, "evolution", "EVOLUTION_LOG.jsonl")
 OUT = os.path.join(PKG, "evolution", "EVOLUTION_LOG.md")
+VERSIONS = os.path.join(PKG, "tools", "VERSIONS.json")
+
+
+def _retired_asset_ids() -> set[str]:
+    try:
+        vers = json.load(open(VERSIONS))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    out = set()
+    for key in vers.get("retired") or {}:
+        out.add(key)
+        out.add("tools/" + key)
+        out.add("tools/" + key.replace("workflow/", "workflow/"))
+    return out
 
 
 def render(rows: list[dict]) -> str:
@@ -72,10 +86,25 @@ def render(rows: list[dict]) -> str:
     ]
     L += [f"| `{k}` | {v} |" for k, v in modes.most_common()]
 
+    retired = _retired_asset_ids()
+    last_snap = {}
+    for r in rows:
+        if r.get("snapshot"):
+            last_snap[r["asset_id"]] = r["snapshot"]
+
     L += ["", "## Revisions per asset", "", "| Asset | Revisions | Final version |", "|---|---|---|"]
     for a, n in sorted(Counter(r["asset_id"] for r in rows).items()):
         fv = final_v.get(a)
-        L.append(f"| `{a}` | {n} | {'v%d' % fv if fv is not None else '—'} |")
+        ver = f"v{fv}" if fv is not None else "—"
+        if a in retired:
+            snap = last_snap.get(a)
+            label = f"`{a}` (retired"
+            if snap:
+                label += f"; snapshot `{snap}`"
+            label += ")"
+            L.append(f"| {label} | {n} | {ver} |")
+        else:
+            L.append(f"| `{a}` | {n} | {ver} |")
 
     L += ["", "## Entries", ""]
     for r in rows:

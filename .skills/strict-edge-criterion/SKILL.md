@@ -100,5 +100,5 @@ created concertedly *during* an aromatization (motif 4). Any other route to the 
 ## How to use
 When given a candidate edge reactant>>product (+coproduct): identify the anomeric carbon(s), classify
 the bond change, map it to the lists above, and report STRICT-ABLE or not, citing the matching rule id. Only
-spend QM (tools/workflow/validate_candidate.py) on STRICT-ABLE edges. For route search, keep only STRICT-ABLE
+spend QM (`tools/workflow/run_qm_step.py`) on STRICT-ABLE edges. For route search, keep only STRICT-ABLE
 edges in the graph and look for a glucose→HMF path; report the path or the blocking edge-class.

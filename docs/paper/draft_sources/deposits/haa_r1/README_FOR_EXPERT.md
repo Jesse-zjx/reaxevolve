@@ -37,7 +37,7 @@ Barriers are all 30–36 kcal/mol (electronic).
   The report generator that once sat alongside them was a scratch script and was not migrated.
 - `06_final_chain/` — assembled route (canonical nodes + co-products + clean TSs + `MANIFEST.json`).
 
-## Independent verification (see `05_docs/VERIFICATION.json`)
+## Independent verification (see `deposits/glucose_haa_review_v1/05_docs/VERIFICATION.json`)
 - Exactly one imaginary mode per TS: **4/4**. Step 2 (C6 retro-aldol) initially carried a −13.5 cm⁻¹
   grid-noise soft torsion on the default grid → re-optimised at **DEFGRID3** (the fine grid used for the
   HMF chain) → single imaginary mode **−758.1 cm⁻¹**, IRC still connecting exactly fructose ↔
@@ -51,7 +51,7 @@ Barriers are all 30–36 kcal/mol (electronic).
   rotamer (barrierless; smaller than the HMF chain's 5.7 / 1.8 kcal). Canonical node uses the lower-E rotamer.
 
 ## Pre-flight checklist (verified programmatically from the deposited files)
-1. **Every step has a barrier.** ΔE‡ = 35.9 / 35.1 / 31.5 / 30.4 kcal/mol (`06_final_chain/MANIFEST.json`).
+1. **Every step has a barrier.** ΔE‡ = 35.9 / 35.1 / 31.5 / 30.4 kcal/mol (`deposits/glucose_haa_review_v1/06_final_chain/MANIFEST.json`).
 2. **Every step has a TS with exactly one imaginary mode** (final NumFreq block of
    `04_orca_inp_out_hess/transition_states/step_n_TS.out`): −474.1 / **−758.1** / −942.1 / −920.1 cm⁻¹.
 3. **Each node xyz matches the report.** HTML images and SMILES are rendered directly from

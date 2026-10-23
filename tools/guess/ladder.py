@@ -1,7 +1,8 @@
-"""Guess ladder ordering used by validate_candidate (tools/workflow/validate_candidate.py).
+"""Guess ladder: reaction_kind → ordered guess generators.
 
-Maps reaction_kind sets to primary guess generators, all of which live in this package
-(`tools/guess/`). The geometry tools they call are in `tools/geometry/`.
+The archived dispatcher used to consume this table. The live Validate stage
+(`loop/skill_runner.py` → `tools/workflow/run_qm_step.py`) still uses the same
+generators when a skill names them. Geometry helpers live in `tools/geometry/`.
 """
 from __future__ import annotations
 

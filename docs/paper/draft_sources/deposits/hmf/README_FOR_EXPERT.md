@@ -34,7 +34,7 @@ Intermediates 2 and 3 are the literature-known HMF intermediates **3-deoxyglucos
   `cross_step_consistency.json` (per-node front/back comparison), `energetics_manifest.json`.
 - `06_final_chain/` — the assembled chain (canonical nodes + clean TSs + `MANIFEST.json`).
 
-## Independent verification (see `05_docs/VERIFICATION.json`)
+## Independent verification (see `deposits/glucose_hmf_review_v3/05_docs/VERIFICATION.json`)
 - Exactly one imaginary mode per TS: **5/5** (step 4 originally carried a spurious −34.9 cm⁻¹
   hydroxyl-torsion soft mode → removed by soft-mode displacement + reopt; now −1574.5 cm⁻¹ only,
   IRC still connects exact I and M).
@@ -47,7 +47,7 @@ Intermediates 2 and 3 are the literature-known HMF intermediates **3-deoxyglucos
 
 ## Pre-flight checklist (all verified programmatically from the deposited files)
 1. **Every step has a barrier.** ΔE‡ = 50.2 / 68.2 / 46.6 / 32.9 / 51.1 kcal/mol (see
-   `06_final_chain/MANIFEST.json`).
+   `deposits/glucose_hmf_review_v3/06_final_chain/MANIFEST.json`).
 2. **Every step has a transition state with exactly one imaginary mode** (final NumFreq block of
    `04_orca_inp_out_hess/transition_states/step_n_TS.out`): −1410.1 / −1449.8 / −1533.0 /
    **−1574.5** / −830.4 cm⁻¹. (Step 4's earlier spurious −34.9 cm⁻¹ soft torsion was removed.)

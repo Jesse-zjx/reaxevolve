@@ -26,7 +26,7 @@ for d in "$C"/deposits/*/; do
   [ -d "$d" ] || continue
   printf '  %-26s ' "$(basename "$d")"
   ( cd "$C" && $PY policy/acceptance/check_strict_bar.py --deposit "deposits/$(basename "$d")" 2>&1 ) \
-    | grep 'clauses 2-4 met' || rc=1
+    | grep 'clauses 1-4 met' || rc=1
 done
 
 echo "=== 2. accepted count re-derives from the shipped evidence ==="
@@ -93,6 +93,7 @@ PY
 echo "=== 7. structural + accounting checks ==="
 ( cd "$C" && $PY scripts/smoke_test.py 2>&1 | tail -2 ) | sed 's/^/  /' || rc=1
 ( cd "$C" && $PY scripts/qa/test_loop_accounting.py 2>&1 | tail -1 ) | sed 's/^/  /' || rc=1
+( cd "$C" && $PY scripts/qa/test_reflect_payload.py 2>&1 | tail -1 ) | sed 's/^/  /' || rc=1
 
 echo "=== 8. loop wiring (no DFT, no API) ==="
 ( cd "$C" && $PY loop/run_loop.py --dry-run --no-llm 2>&1 | tail -2 ) | sed 's/^/  /' || rc=1

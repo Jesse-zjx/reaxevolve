@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Reproduce deposited steps from SMILES only (no stored geometries)."""
+"""Historical rediscovery runner (negative control B).
+
+Calls the discovery-era dispatcher at RN/validate_candidate.py. That file is
+no longer on the live tool path; the scored results in comparison.json /
+results/ are the record. Do not treat this script as a current-method replay.
+To regenerate the report from those results:
+
+    python experiments/rediscovery/render_report.py
+"""
 import os, sys, json, time, subprocess, argparse
 
 HERE = os.path.dirname(os.path.abspath(__file__))

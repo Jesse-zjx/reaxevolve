@@ -184,6 +184,12 @@ def discrete_water_ok(irc_f, irc_b):
     return True, "; ".join(details) if details else "bilateral water cleared"
 
 
+def level_ok_from_keywords(kw: str) -> bool:
+    """Clause 1: r2SCAN-3c with CPCM(water). Bare CPCM or CPCM(hexane) is not enough."""
+    u = (kw or "").upper()
+    return ("R2SCAN-3C" in u) and bool(re.search(r"CPCM\s*\(\s*WATER\s*\)", u))
+
+
 # ---------- clause checks ----------
 def check_step(
     name,
@@ -207,7 +213,7 @@ def check_step(
 
     imag, kw, grid = parse_ts_out(ts_out)
     r["grid"] = grid
-    r["level_ok"] = ("R2SCAN-3C" in kw.upper()) and ("CPCM" in kw.upper())
+    r["level_ok"] = level_ok_from_keywords(kw)
     r["imag"] = imag
     r["single_imag"] = len(imag) == 1
     if len(imag) == 1 and imag[0] > -300:
@@ -301,11 +307,14 @@ def check_step(
     else:
         r["notes"].append("IRC endpoints not supplied — clauses 3-4 not checked")
 
-    hard = [r["single_imag"]]
-    for k in ("endpoints_ok", "water_ok"):
-        if r[k] is not None:
-            hard.append(r[k])
-    r["pass"] = all(hard)
+    # Missing evidence is not a pass. Clause 1 (level) is a hard gate: an xTB-only
+    # saddle with one imaginary mode must not count as STRICT.
+    incomplete = r["endpoints_ok"] is None or r["water_ok"] is None
+    r["incomplete"] = incomplete
+    if incomplete:
+        r["pass"] = False
+        return r
+    r["pass"] = all((r["level_ok"], r["single_imag"], r["endpoints_ok"], r["water_ok"]))
     return r
 
 
@@ -418,7 +427,7 @@ def main():
     n_ok = sum(1 for r in results if r["pass"])
     grids = {r["grid"] for r in results}
     print("-" * 90)
-    print(f"STRICT {STRICT_VERSION} clauses 2-4 met: {n_ok}/{len(results)}")
+    print(f"STRICT {STRICT_VERSION} clauses 1-4 met: {n_ok}/{len(results)}")
     print(
         f"grid as-built: {', '.join(sorted(grids))}"
         + (

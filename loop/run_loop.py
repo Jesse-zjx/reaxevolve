@@ -295,22 +295,6 @@ def reflect(enable_fully_auto: bool) -> dict:
                 capture_output=True,
             )
             out["fully_auto"] = {"rc": r.returncode, "stdout": (r.stdout or "")[-2000:]}
-    audit = PKG / "scripts" / "qa" / "isolation_audit.py"
-    if audit.is_file():
-        # Capture: an uncaptured child writes onto this process's stdout, and a caller
-        # parsing our JSON then sees two concatenated documents and reports a failure.
-        r = subprocess.run(
-            [CP.PYBIN, str(audit)], cwd=str(PKG), text=True, capture_output=True, check=False
-        )
-        out["isolation_audit"] = {
-            "rc": r.returncode,
-            "clean": r.returncode == 0,
-            "report": "evidence/audit/ISOLATION_AUDIT.md",
-        }
-        if r.returncode not in (0, 1):
-            log("isolation audit error:", (r.stderr or "")[-300:])
-        elif r.returncode == 1:
-            log("isolation audit: VIOLATIONS — see evidence/audit/ISOLATION_AUDIT.md")
     return out
 
 

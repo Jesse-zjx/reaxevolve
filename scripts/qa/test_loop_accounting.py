@@ -15,6 +15,7 @@ Each check guards a bug that silently corrupted a campaign rather than crashing 
 from __future__ import annotations
 
 import json
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -141,6 +142,93 @@ def main() -> int:
     data = json.load(open(q))
     by = {(c["reactant"], c["product"]): c for c in data["candidates"]}
     check(by[("B", "C")]["status"] == "unresolved", "status-less result recorded as unresolved")
+
+    print("\n== cache cost is what the arm budget reads ==")
+    sys.path.insert(0, str(PKG / "loop"))
+    sys.path.insert(0, str(PKG / "scripts" / "eval"))
+    import skill_runner as SR  # noqa: E402
+    import arm_runner as AR  # noqa: E402
+
+    dest = Path(tempfile.mkdtemp(prefix="reaxevolve_cost_"))
+    cache = dest / "runs" / "step" / "strict_cache.json"
+    cache.parent.mkdir(parents=True)
+    json.dump({"C>>CC": {"status": "unresolved", "nprocs": 8}}, open(cache, "w"))
+    check(AR.spent_core_h(str(dest)) == 0.0, "cache without wall_s sums to 0")
+    SR._stamp_cost(str(cache), "C>>CC", 3600.0, 8)
+    got = AR.spent_core_h(str(dest))
+    check(got == 8.0, f"1 hour × 8 cores is 8 core-h after stamp (got {got})")
+
+    sys.path.insert(0, str(PKG / "scripts" / "validate"))
+    import verdict_writer as VW  # noqa: E402
+
+    dest2 = Path(tempfile.mkdtemp(prefix="reaxevolve_cost2_"))
+    cache2 = dest2 / "runs" / "step" / "strict_cache.json"
+    cache2.parent.mkdir(parents=True)
+    VW.write_strict_cache(str(cache2), "C>>CC", {"name": "g0", "nprocs": 8}, "unresolved")
+    SR._stamp_cost(str(cache2), "C>>CC", 3600.0, 8)
+    VW.write_strict_cache(str(cache2), "C>>CC", {"name": "g1", "nprocs": 8}, "unresolved")
+    SR._stamp_cost(str(cache2), "C>>CC", 3600.0, 8)
+    got2 = AR.spent_core_h(str(dest2))
+    check(got2 == 16.0, f"two 8 core-h attempts on one key sum to 16 (got {got2})")
+
+    hv = Path(tempfile.mkdtemp(prefix="reaxevolve_hv_")) / "discovered_cache.json"
+    SR._harvest_perceived(
+        {
+            "status": "rejected",
+            "reactant": "CCO",
+            "product": "C=C",
+            "coproduct": "O",
+            "irc_fwd": "C=C.O",
+            "irc_bwd": "CCO",
+            "endpoint_double_ended": True,
+        },
+        dest=hv,
+    )
+    check(not hv.is_file() or json.loads(hv.read_text()) == [], "double-ended match with coproduct is not harvested")
+    SR._harvest_perceived(
+        {
+            "status": "rejected",
+            "reactant": "CCO",
+            "product": "C=C",
+            "irc_fwd": "CCC",
+            "irc_bwd": "CC",
+            "endpoint_double_ended": False,
+        },
+        dest=hv,
+    )
+    got_h = json.loads(hv.read_text()) if hv.is_file() else []
+    check(len(got_h) == 1, f"true mismatch is harvested (got {len(got_h)})")
+
+    print("\n== driver label follows the running tree ==")
+    dest_v0 = Path(tempfile.mkdtemp(prefix="reaxevolve_drv0_"))
+    (dest_v0 / "tools").mkdir()
+    json.dump(
+        {"tools": {"workflow/run_qm_step.py": "v0"}},
+        open(dest_v0 / "tools" / "VERSIONS.json", "w"),
+    )
+    check(
+        SR._run_qm_step_label(dest_v0) == "run_qm_step.v0",
+        "explicit root with VERSIONS v0 is run_qm_step.v0",
+    )
+    dest_v1 = Path(tempfile.mkdtemp(prefix="reaxevolve_drv1_"))
+    (dest_v1 / "tools").mkdir()
+    json.dump(
+        {"tools": {"workflow/run_qm_step.py": "v1"}},
+        open(dest_v1 / "tools" / "VERSIONS.json", "w"),
+    )
+    check(
+        SR._run_qm_step_label(dest_v1) == "run_qm_step.v1",
+        "explicit root with VERSIONS v1 is run_qm_step.v1",
+    )
+    prev = os.getcwd()
+    try:
+        os.chdir(dest_v0)
+        check(
+            SR._run_qm_step_label() == "run_qm_step.v0",
+            "cwd VERSIONS v0 wins over the live tree",
+        )
+    finally:
+        os.chdir(prev)
 
     print("\n==== SUMMARY ====")
     if FAILS:

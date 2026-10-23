@@ -5,9 +5,9 @@ kin) via a GFN2 constrained 2D scan.
 This is a minimal rebuild of the missing scan2d.py named by the skill
 `strict-pathway-validation`. Scope is deliberately narrower than the lost tool:
 GFN2 xTB dual-distance scan only, then hand the highest-energy points to the
-existing DFT gate (strict_validate.py / soft_mode_cleanup.py). It does not
+existing DFT gate (`tools/workflow/run_qm_step.py` / `soft_mode_cleanup.py`). It does not
 reproduce the ORCA DEFGRID3 relaxed 2D surface that the repro_runs/*/dft_scan2d
-directories hold, and it is not wired into validate_candidate.
+directories hold.
 
 Driving coordinates follow the skill ladder: form hydride C→C *and* form proton
 O→O (two different H's). Atom indices are 1-based (xtb xcontrol convention).

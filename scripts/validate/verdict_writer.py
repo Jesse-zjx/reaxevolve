@@ -93,11 +93,14 @@ def adjudicate_with_policy(
         status, detail = "STRICT", None
     else:
         # QM ran and produced endpoints but failed a hard clause → rejected;
-        # missing IRC / unparsed → unresolved.
+        # missing IRC / unparsed / wrong level → unresolved. Never mint STRICT
+        # from an incomplete check (single imag without endpoints used to pass).
         if r.get("endpoints_ok") is False or r.get("water_ok") is False:
             status, detail = "rejected", "; ".join(r.get("notes") or []) or "clause fail"
         elif r.get("single_imag") is False:
             status, detail = "rejected", f"imag={r.get('imag')}"
+        elif r.get("level_ok") is False:
+            status, detail = "unresolved", "level is not r2SCAN-3c / CPCM(water)"
         else:
             status, detail = "unresolved", "; ".join(r.get("notes") or []) or "incomplete"
     r["status"] = status
@@ -157,6 +160,18 @@ def stamp(
     return dict(record)
 
 
+def _cost_slice(rec: Mapping[str, Any]) -> dict:
+    """Wall-clock fields one attempt contributes to the budget."""
+    return {
+        "wall_s": rec.get("wall_s"),
+        "nprocs": rec.get("nprocs"),
+        "status": rec.get("status"),
+        "time": rec.get("time"),
+        "guess_path": rec.get("guess_path"),
+        "name": rec.get("name"),
+    }
+
+
 def write_strict_cache(
     cache_path: str,
     edge_key: str,
@@ -165,7 +180,12 @@ def write_strict_cache(
     detail: Optional[str] = None,
     input_paths=None,
 ) -> dict:
-    """Write one attempt into a run-local strict_cache.json via the unique entry point."""
+    """Write one attempt into a run-local strict_cache.json via the unique entry point.
+
+    The edge key holds the latest verdict (what graph readers expect). Prior
+    attempts on the same key are kept under ``attempts`` so core-hour sums
+    do not drop a finished job when the next guess overwrites the latest row.
+    """
     data: dict = {}
     if os.path.exists(cache_path):
         try:
@@ -173,6 +193,13 @@ def write_strict_cache(
         except json.JSONDecodeError:
             data = {}
     rec = stamp(dict(record), status, detail, input_paths=input_paths)
+    history: list = []
+    prev = data.get(edge_key)
+    if isinstance(prev, dict):
+        history = [dict(x) for x in (prev.get("attempts") or []) if isinstance(x, dict)]
+        if not history:
+            history = [_cost_slice(prev)]
+    rec["attempts"] = history + [_cost_slice(rec)]
     data[edge_key] = rec
     os.makedirs(os.path.dirname(os.path.abspath(cache_path)) or ".", exist_ok=True)
     json.dump(data, open(cache_path, "w"), indent=2)

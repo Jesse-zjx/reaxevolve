@@ -67,11 +67,9 @@ number from this lane.
 ## Isolation
 
 `benchmark/` and `results/` hold the reaction manifest, reference transition states, and
-published scores. The main loop must never read them:
-`scripts/qa/isolation_audit.py` treats those paths as violations and runs every Reflect
-round, so "the evolved assets never saw the evaluation set" is a checked property rather
-than an assurance. This lane is exempt because reading them is its whole purpose, which
-is why it lives outside the audited tree.
+published scores. They are not vendored. The main loop has no import of this lane
+(`smoke_test.py` checks that). Attach a local TSBench clone only when running work
+under this directory; do not point the main campaign at it.
 
 ## Convention for supplementary work
 

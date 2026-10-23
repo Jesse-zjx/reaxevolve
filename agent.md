@@ -67,15 +67,6 @@ transferred, say local fix, not capability.
 Work inside this repository. Outside it you may use only the ORCA tree (`$ORCA_DIR`), xTB
 (`$XTB_BIN`), conda/miniforge Python, and ordinary system libraries.
 
-Never read:
-
-- the TSBench `benchmark/` or `results/` trees — held-out evaluation set
-  (`tsbench/README.md`); reading them invalidates that evaluation
-- any other agent's session transcripts, or any prior campaign workspace or backup tree
-
-There is no kernel sandbox. `scripts/qa/isolation_audit.py` is the only check and
-`loop/run_loop.py` runs it every Reflect round. Treat a violation as invalidating the run.
-
 ## Runtime
 
 Use the project-local `pi` through `loop/pi_call.sh`. Do not touch a global CLI config.

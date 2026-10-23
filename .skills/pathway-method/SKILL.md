@@ -97,12 +97,8 @@ gate of every new step, and after assembling any deposit. Requires `rdkit` for c
 reports 11/11 with a uniform DEFGRID3.
 
 ## External tools (canonical locations — not bundled, they are part of the running pipeline)
-- `tools/workflow/validate_candidate.py` — OptTS+NumFreq+IRC + strict
-  endpoint check (`--active-atoms`, `--spectators`). Its `endpoint_matches()` compares the
-  multiset of stereo-stripped neutral canonical SMILES of the IRC fragments and forces
-  `DetermineBonds(charge=0)`, so charged and zwitterionic endpoints cannot match; use
-  `sv.endpoint_matches(xyz,[smi])` for ad-hoc checks. (`EXACT_SMILES_ONLY=1` is the equivalent
-  switch in `orca_xtb_workflow.classify_endpoint_match`, not a flag of this script.)
+- `tools/workflow/run_qm_step.py` — live Validate driver (OptTS+NumFreq+IRC). Endpoint
+  identity is `scripts/validate/endpoint_match.py` plus `policy/acceptance/check_strict_bar.py`.
 - `.../tools/guess/dry_proton_guess.py` — automatic dry proton-transfer guesses (atom-maps R→P, locates the
   migrating H, GFN2 H→acceptor scan + a concerted donor-H/H-acceptor grid). **Primary method for new
   proton-transfer edges**; it is what replaced the water relay.
