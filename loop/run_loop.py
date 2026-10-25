@@ -29,6 +29,7 @@ import os
 import subprocess
 import sys
 import time
+import uuid
 from pathlib import Path
 
 PKG = Path(__file__).resolve().parents[1]
@@ -128,6 +129,83 @@ def explore(template_top: int, llm_top: int, dry: bool = False, use_llm: bool = 
         return {"status": "error", "stage": "explore", "n_proposed": 0, "error": str(exc)[:1000]}
 
 
+def _saved_for_invocation(path: Path, invocation_id: str | None) -> dict | None:
+    if not path.is_file():
+        return None
+    try:
+        blob = json.load(open(path))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(blob, dict):
+        return None
+    if invocation_id and blob.get("invocation_id") != invocation_id:
+        return None
+    return blob
+
+
+def _recover_result(
+    res: dict,
+    workdir: Path,
+    started: float | None = None,
+    invocation_id: str | None = None,
+) -> dict:
+    """If the child died after writing a result or a cache, use that evidence.
+
+    Identity is the invocation id written by this launch. mtime slack treated a
+    1-second-old STRICT file as this run, and minute-resolution attempt times
+    either double-counted a fast retry or dropped a same-minute cost.
+    """
+    del started  # kept so older callers do not break
+    if invocation_id and res.get("invocation_id") not in (None, invocation_id):
+        res = {"status": "unresolved"}
+    if (
+        (attempt_wall_seconds(res) > 0 or res.get("core_hours_spent"))
+        and (not invocation_id or res.get("invocation_id") in (None, invocation_id))
+    ):
+        return res
+    saved = workdir / "skill_runner_result.json"
+    blob = _saved_for_invocation(saved, invocation_id)
+    if blob and (attempt_wall_seconds(blob) > 0 or blob.get("core_hours_spent")):
+        blob.setdefault("status", res.get("status") or "unresolved")
+        return blob
+    cache = workdir / "strict_cache.json"
+    if cache.is_file():
+        try:
+            data = json.load(open(cache))
+        except (OSError, json.JSONDecodeError):
+            data = {}
+        wall = 0.0
+        for rec in data.values() if isinstance(data, dict) else []:
+            if not isinstance(rec, dict):
+                continue
+            atts = [a for a in (rec.get("attempts") or [_cost_like(rec)]) if isinstance(a, dict)]
+            if invocation_id:
+                chosen = [a for a in atts if a.get("invocation_id") == invocation_id]
+            elif not invocation_id:
+                chosen = []
+            for a in chosen:
+                wall += float(a.get("wall_s") or 0)
+        if wall:
+            res = dict(res)
+            res.setdefault("best", {"wall_s": wall})
+            res["recovered_wall_s"] = wall
+    return res
+
+
+def _cost_like(rec: dict) -> dict:
+    return {"wall_s": rec.get("wall_s"), "nprocs": rec.get("nprocs")}
+
+
+def _result_core_hours(res: dict, nprocs: int) -> float:
+    spent = res.get("core_hours_spent")
+    wall = attempt_wall_seconds(res)
+    if wall > 0:
+        return nprocs * wall / 3600.0
+    if spent:
+        return float(spent)
+    return nprocs * float(res.get("recovered_wall_s") or 0) / 3600.0
+
+
 def attempt_wall_seconds(res: dict) -> float:
     """Wall seconds actually spent on QM for one candidate, counting each guess once.
 
@@ -221,12 +299,17 @@ def validate(
             c["product"][:40],
             f"(budget left {remaining_core_h:.2f} core-h)" if remaining_core_h is not None else "",
         )
-        r = subprocess.run(cmd, cwd=str(PKG), text=True, capture_output=True)
+        invocation_id = uuid.uuid4().hex
+        env = os.environ.copy()
+        env["CHEM_INVOCATION_ID"] = invocation_id
+        cmd += ["--invocation-id", invocation_id]
+        r = subprocess.run(cmd, cwd=str(PKG), text=True, capture_output=True, env=env)
         try:
             res = json.loads(r.stdout)
         except json.JSONDecodeError:
             res = {"status": "unresolved", "stdout": r.stdout[-2000:], "stderr": r.stderr[-2000:]}
-        add_core_hours(nprocs * attempt_wall_seconds(res) / 3600.0)
+        res = _recover_result(res, wd, invocation_id=invocation_id)
+        add_core_hours(_result_core_hours(res, nprocs))
         c["status"] = res.get("status") or "unresolved"
         results.append({"candidate": c, "result": res})
         n_done += 1

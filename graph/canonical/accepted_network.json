@@ -1,657 +1,792 @@
 {
  "nodes": {
-  "O=CC(=O)CC(O)C(O)CO": {
-   "smiles": "O=CC(=O)CC(O)C(O)CO",
+  "O=CC(O)=CC(O)C(O)CO": {
+   "id": "N_793b1107a726",
+   "smiles": "O=CC(O)=CC(O)C(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
    "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
    "in_chain": true
-  },
-  "O=CCO": {
-   "smiles": "O=CCO",
-   "formula": "C2H4O2",
-   "is_target": true,
-   "target_name": "HAA",
-   "in_chain": false
-  },
-  "O=C(C=C(O)CO)CO": {
-   "smiles": "O=C(C=C(O)CO)CO",
-   "formula": "C5H8O4",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
   },
   "O=CC(=O)CC(O)CO": {
+   "id": "N_0ac89d84136d",
    "smiles": "O=CC(=O)CC(O)CO",
-   "formula": "C5H8O4",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "OC=C(O)C(O)C(O)C(O)CO": {
-   "smiles": "OC=C(O)C(O)C(O)C(O)CO",
-   "formula": "C6H12O6",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CCC=O": {
-   "smiles": "O=CCC=O",
-   "formula": "C3H4O2",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=C(C=C(O)CO)C(O)CO": {
-   "smiles": "O=C(C=C(O)CO)C(O)CO",
-   "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC(=O)C(O)CC(O)CO": {
-   "smiles": "O=CC(=O)C(O)CC(O)CO",
-   "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=C(CO)C(O)C(O)C(O)CO": {
-   "smiles": "O=C(CO)C(O)C(O)C(O)CO",
-   "formula": "C6H12O6",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC(O)C(O)=CC(O)CO": {
-   "smiles": "O=CC(O)C(O)=CC(O)CO",
-   "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "OC=C(O)C(O)C(O)CO": {
-   "smiles": "OC=C(O)C(O)C(O)CO",
-   "formula": "C5H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC1(O)C=CCO1": {
-   "smiles": "O=CC1(O)C=CCO1",
-   "formula": "C5H6O3",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC(=O)C=CC(O)CO": {
-   "smiles": "O=CC(=O)C=CC(O)CO",
-   "formula": "C6H8O4",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": true
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C5H8O4"
   },
   "O=CC(O)C(O)C(O)CO": {
+   "id": "N_77639917fc4e",
    "smiles": "O=CC(O)C(O)C(O)CO",
-   "formula": "C5H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=Cc1ccco1": {
-   "smiles": "O=Cc1ccco1",
-   "formula": "C5H4O2",
-   "is_target": true,
-   "target_name": "FF",
-   "in_chain": false
-  },
-  "O=CC(O)CO": {
-   "smiles": "O=CC(O)CO",
-   "formula": "C3H6O3",
-   "is_target": true,
-   "target_name": "glyceraldehyde",
-   "in_chain": false
-  },
-  "O=C(CO)C(O)=CC(O)CO": {
-   "smiles": "O=C(CO)C(O)=CC(O)CO",
-   "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC(O)=CC(O)CO": {
-   "smiles": "O=CC(O)=CC(O)CO",
-   "formula": "C5H8O4",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "OC=C1C=CC(O)(CO)O1": {
-   "smiles": "OC=C1C=CC(O)(CO)O1",
-   "formula": "C6H8O4",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC=CO": {
-   "smiles": "O=CC=CO",
-   "formula": "C3H4O2",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "OC1CO1": {
-   "smiles": "OC1CO1",
-   "formula": "C2H4O2",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC(O)=CC(O)C(O)CO": {
-   "smiles": "O=CC(O)=CC(O)C(O)CO",
-   "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": true
-  },
-  "O=C(CO)C(O)C(O)CO": {
-   "smiles": "O=C(CO)C(O)C(O)CO",
-   "formula": "C5H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=C(C(O)CO)C(O)C(O)CO": {
-   "smiles": "O=C(C(O)CO)C(O)C(O)CO",
-   "formula": "C6H12O6",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
-  },
-  "O=CC(O)C(O)C(O)C(O)CO": {
-   "smiles": "O=CC(O)C(O)C(O)C(O)CO",
-   "formula": "C6H12O6",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": true
-  },
-  "O=CC(O)C(=O)CC(O)CO": {
-   "smiles": "O=CC(O)C(=O)CC(O)CO",
-   "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C5H10O5"
   },
   "O=CC1(O)C=CC(CO)O1": {
+   "id": "N_77c12f8aaefb",
    "smiles": "O=CC1(O)C=CC(CO)O1",
+   "role": "intermediate",
+   "source": "campaign",
    "formula": "C6H8O4",
-   "is_target": false,
-   "target_name": null,
    "in_chain": true
   },
   "OCC(O)=C(O)C(O)C(O)CO": {
+   "id": "N_0577e2234ac2",
    "smiles": "OCC(O)=C(O)C(O)C(O)CO",
-   "formula": "C6H12O6",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H12O6"
   },
-  "O=C(CO)CC(=O)C(O)CO": {
-   "smiles": "O=C(CO)CC(=O)C(O)CO",
-   "formula": "C6H10O5",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
+  "O=CC=CO": {
+   "id": "N_29a4f23eb150",
+   "smiles": "O=CC=CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C3H4O2"
   },
-  "OC=CO": {
-   "smiles": "OC=CO",
-   "formula": "C2H4O2",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
+  "O=C(C(O)CO)C(O)C(O)CO": {
+   "id": "N_75226888a50e",
+   "smiles": "O=C(C(O)CO)C(O)C(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H12O6"
+  },
+  "O=C(CO)C(O)C(O)CO": {
+   "id": "N_6f6df69df08d",
+   "smiles": "O=C(CO)C(O)C(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C5H10O5"
+  },
+  "O=C(CO)C(O)C(O)C(O)CO": {
+   "id": "N_a196c0266c5c",
+   "smiles": "O=C(CO)C(O)C(O)C(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H12O6"
+  },
+  "O=CCC=O": {
+   "id": "N_549b2b02af53",
+   "smiles": "O=CCC=O",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C3H4O2"
+  },
+  "O=CC(=O)C(O)CC(O)CO": {
+   "id": "N_6fde11af16d4",
+   "smiles": "O=CC(=O)C(O)CC(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H10O5"
+  },
+  "O=CC(O)=CC(O)CO": {
+   "id": "N_5df10755848f",
+   "smiles": "O=CC(O)=CC(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C5H8O4"
   },
   "O=CC1=CCC(O)(CO)O1": {
+   "id": "N_34389bbd7da1",
    "smiles": "O=CC1=CCC(O)(CO)O1",
-   "formula": "C6H8O4",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H8O4"
+  },
+  "OC=C(O)C(O)C(O)CO": {
+   "id": "N_dd5d720d834d",
+   "smiles": "OC=C(O)C(O)C(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C5H10O5"
   },
   "O=Cc1ccc(CO)o1": {
+   "id": "N_fd7d440b13ce",
    "smiles": "O=Cc1ccc(CO)o1",
+   "role": "seed_target",
+   "source": "campaign",
    "formula": "C6H6O3",
-   "is_target": true,
    "target_name": "HMF",
    "in_chain": true
   },
   "O=CC(=O)C=CCO": {
+   "id": "N_595993825299",
    "smiles": "O=CC(=O)C=CCO",
-   "formula": "C5H6O3",
-   "is_target": false,
-   "target_name": null,
-   "in_chain": false
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C5H6O3"
+  },
+  "O=CCO": {
+   "id": "N_c12d5c862321",
+   "smiles": "O=CCO",
+   "role": "seed_target",
+   "source": "campaign",
+   "formula": "C2H4O2",
+   "target_name": "HAA"
+  },
+  "OC=CO": {
+   "id": "N_c7e46f7d0c10",
+   "smiles": "OC=CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C2H4O2"
+  },
+  "O=CC1(O)C=CCO1": {
+   "id": "N_4a61ad95f1ae",
+   "smiles": "O=CC1(O)C=CCO1",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C5H6O3"
+  },
+  "O=CC(O)C(=O)CC(O)CO": {
+   "id": "N_0e16f1f4fa8c",
+   "smiles": "O=CC(O)C(=O)CC(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H10O5"
+  },
+  "O=CC(=O)C=CC(O)CO": {
+   "id": "N_20ecca32285a",
+   "smiles": "O=CC(=O)C=CC(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H8O4",
+   "in_chain": true
+  },
+  "O=CC(=O)CC(O)C(O)CO": {
+   "id": "N_04f6b22ed525",
+   "smiles": "O=CC(=O)CC(O)C(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H10O5",
+   "in_chain": true
+  },
+  "O=CC(O)CO": {
+   "id": "N_9ef4cb513905",
+   "smiles": "O=CC(O)CO",
+   "role": "seed_target",
+   "source": "campaign",
+   "formula": "C3H6O3",
+   "target_name": "glyceraldehyde"
+  },
+  "O=CC(O)C(O)C(O)C(O)CO": {
+   "id": "N_5918b7c83c39",
+   "smiles": "O=CC(O)C(O)C(O)C(O)CO",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H12O6",
+   "in_chain": true
+  },
+  "O=Cc1ccco1": {
+   "id": "N_ae8d6e05817a",
+   "smiles": "O=Cc1ccco1",
+   "role": "seed_target",
+   "source": "campaign",
+   "formula": "C5H4O2",
+   "target_name": "FF"
+  },
+  "OC=C1C=CC(O)(CO)O1": {
+   "id": "N_ffc653007ff1",
+   "smiles": "OC=C1C=CC(O)(CO)O1",
+   "role": "intermediate",
+   "source": "campaign",
+   "formula": "C6H8O4"
   }
  },
  "edges": [
   {
+   "id": "E_79aabdae3d37",
    "reactant": "O=C(C(O)CO)C(O)C(O)CO",
    "product": "OC=C(O)C(O)C(O)CO",
+   "reactant_id": "N_75226888a50e",
+   "product_id": "N_dd5d720d834d",
    "coproduct": "C=O",
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -869.65,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/repro_runs/FF_s4/OeCCOCOCOCOCO__OCeCOCOCOCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -932.28,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridge2_c6c5/sv/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-09 01:49",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_8a3527e7126b",
    "reactant": "O=CC(O)C(O)C(O)CO",
    "product": "O=CC(O)=CC(O)CO",
+   "reactant_id": "N_77639917fc4e",
+   "product_id": "N_5df10755848f",
    "coproduct": "O",
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -1458.56,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/repro_runs/OeCCOCOCOCO__OeCCOeCCOCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -1459.8,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step1/sv/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-07 02:11",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_154165ceb847",
    "reactant": "O=CC(O)CO",
    "product": "OC=CO",
+   "reactant_id": "N_9ef4cb513905",
+   "product_id": "N_c7e46f7d0c10",
    "coproduct": "C=O",
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -1014.95,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/repro_runs/HAA_s3/OeCCOCO__OCeCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -942.1,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ra_glyc_dftscan/optts/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-05 11:03",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_a42be6175c98",
    "reactant": "O=C(CO)C(O)C(O)CO",
    "product": "O=CC(O)C(O)C(O)CO",
+   "reactant_id": "N_6f6df69df08d",
+   "product_id": "N_77639917fc4e",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -800.75,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/repro_runs/FF_s6/OeCCOCOCOCO__OeCCOCOCOCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -766.5,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridge_stepC/iso5b/clean_-7/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-16",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_c7fe8d0d8ee8",
    "reactant": "O=CC1(O)C=CCO1",
    "product": "O=Cc1ccco1",
+   "reactant_id": "N_4a61ad95f1ae",
+   "product_id": "N_ae8d6e05817a",
    "coproduct": "O",
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -850.57,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/repro_runs/FF_s11/OeCC1OCeCCO1__OeCc1ccco1/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -872.91,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step5/sv/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-07 08:44",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_3a3b157916db",
    "reactant": "O=CC(=O)CC(O)CO",
    "product": "O=CC(=O)C=CCO",
+   "reactant_id": "N_0ac89d84136d",
+   "product_id": "N_595993825299",
    "coproduct": "O",
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -1545.74,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/repro_runs/OeCCeOCCOCO__OeCCeOCeCCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -1541.1,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step3/sv/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-07 05:42",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_a3e6b58e3a31",
    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
    "product": "O=CC(O)CO",
+   "reactant_id": "N_a196c0266c5c",
+   "product_id": "N_9ef4cb513905",
    "coproduct": "OC=C(O)CO",
-   "reaction_kind": "retro_aldol",
+   "kind": "retro_aldol",
    "status": "STRICT",
-   "ts_imag": -421.62,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/repro_runs/HAA_s2/OeCCOCOCOCOCO__OeCCOCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -758.07,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ra_fructose/grid3/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-06",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_d707ffd89cbd",
    "reactant": "OC=C(O)C(O)C(O)CO",
    "product": "O=C(CO)C(O)C(O)CO",
+   "reactant_id": "N_dd5d720d834d",
+   "product_id": "N_6f6df69df08d",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -1629.95,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/bridge_stepC/dry5k/optts_f50/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -1629.95,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridge_stepC/dry5k/optts_f50/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-16",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_c6c390291b25",
    "reactant": "OCC(O)=C(O)C(O)C(O)CO",
    "product": "O=C(C(O)CO)C(O)C(O)CO",
+   "reactant_id": "N_0577e2234ac2",
+   "product_id": "N_75226888a50e",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -2032.48,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/bridgeA/a2/sv/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -2032.48,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridgeA/a2/sv/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-10 02:52",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_0c307fa7798d",
    "reactant": "O=C(CO)C(O)C(O)C(O)CO",
    "product": "OCC(O)=C(O)C(O)C(O)CO",
+   "reactant_id": "N_a196c0266c5c",
+   "product_id": "N_0577e2234ac2",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -2042.51,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/bridgeA/a1/g3vtight/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -2042.51,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/bridgeA/a1/g3vtight/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-11",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_546ff4a855aa",
    "reactant": "O=CC(O)C(O)C(O)C(O)CO",
    "product": "O=C(CO)C(O)C(O)C(O)CO",
+   "reactant_id": "N_5918b7c83c39",
+   "product_id": "N_a196c0266c5c",
    "coproduct": null,
-   "reaction_kind": "isomerization",
+   "kind": "isomerization",
    "status": "STRICT",
-   "ts_imag": -434.65,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -434.65,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-06-18 16:15",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
-   "reactant": "O=C(CO)C(O)C(O)C(O)CO",
-   "product": "OC=C(O)C(O)C(O)C(O)CO",
-   "coproduct": null,
-   "reaction_kind": null,
-   "status": "STRICT",
-   "ts_imag": -2252.31,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
-  },
-  {
+   "id": "E_be9c6cb58ebc",
    "reactant": "O=CC(=O)CC(O)C(O)CO",
    "product": "O=CC(=O)C=CC(O)CO",
+   "reactant_id": "N_04f6b22ed525",
+   "product_id": "N_20ecca32285a",
    "coproduct": "O",
-   "reaction_kind": "dehydration",
+   "kind": "dehydration",
    "status": "STRICT",
-   "ts_imag": -1533.0,
-   "barrier_kcal": 46.6,
-   "dE_kcal": 11.6,
-   "source": "FINAL_STRICT_CHAIN",
-   "in_chain": true
+   "detail": null,
+   "ts_imag_cm-1": -1532.96,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-06-19 02:54",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
-   "reactant": "O=C(CO)C(O)C(O)C(O)CO",
-   "product": "O=C(CO)C(O)=CC(O)CO",
-   "coproduct": "O",
-   "reaction_kind": "dehydration",
-   "status": "STRICT",
-   "ts_imag": -1454.63,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
-   "in_chain": false,
-   "n_imag": null
-  },
-  {
+   "id": "E_d9dbc825f2e2",
    "reactant": "O=CC1(O)C=CC(CO)O1",
    "product": "O=Cc1ccc(CO)o1",
+   "reactant_id": "N_77c12f8aaefb",
+   "product_id": "N_fd7d440b13ce",
    "coproduct": "O",
-   "reaction_kind": "aromatization",
+   "kind": "aromatization",
    "status": "STRICT",
-   "ts_imag": -830.4,
-   "barrier_kcal": 51.1,
-   "dE_kcal": -10.7,
-   "source": "FINAL_STRICT_CHAIN",
-   "in_chain": true
+   "detail": null,
+   "ts_imag_cm-1": -830.39,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/hmfarom_run/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-06-21 13:22",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_15bc1ddf18db",
    "reactant": "O=CC(=O)C=CC(O)CO",
    "product": "O=CC1(O)C=CC(CO)O1",
+   "reactant_id": "N_20ecca32285a",
+   "product_id": "N_77c12f8aaefb",
    "coproduct": null,
-   "reaction_kind": "ring_closure",
+   "kind": "ring_closure",
    "status": "STRICT",
-   "ts_imag": -1574.5,
-   "barrier_kcal": 32.9,
-   "dE_kcal": -7.3,
-   "source": "FINAL_STRICT_CHAIN",
-   "in_chain": true
+   "detail": null,
+   "ts_imag_cm-1": -1578.83,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/anomeric/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-06-29 08:22",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_aa50fb6413d4",
    "reactant": "OC=C1C=CC(O)(CO)O1",
    "product": "O=CC1=CCC(O)(CO)O1",
+   "reactant_id": "N_ffc653007ff1",
+   "product_id": "N_34389bbd7da1",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -1532.87,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/cpcm_chain/openroute/round7/n16_16ald/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -1532.87,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/openroute/round7/n16_16ald/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-06-26 04:16",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "runs",
+    "reason": []
+   }
   },
   {
-   "reactant": "O=CC(O)C(O)=CC(O)CO",
-   "product": "O=CC(O)C(=O)CC(O)CO",
-   "coproduct": null,
-   "reaction_kind": null,
-   "status": "STRICT",
-   "ts_imag": -2051.06,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/gapfill/OeCCOCOeCCOCO__OeCCOCeOCCOCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
-  },
-  {
+   "id": "E_f09df3df8383",
    "reactant": "O=CC(O)C(=O)CC(O)CO",
    "product": "O=CC(=O)C(O)CC(O)CO",
+   "reactant_id": "N_0e16f1f4fa8c",
+   "product_id": "N_6fde11af16d4",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -827.44,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/gapfill/OeCCOCeOCCOCO__OeCCeOCOCCOCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -827.44,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/gapfill/OeCCOCeOCCOCO__OeCCeOCOCCOCO/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-08-04 16:51",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "runs",
+    "reason": []
+   }
   },
   {
+   "id": "E_169c0cc931bb",
    "reactant": "O=CCC=O",
    "product": "O=CC=CO",
+   "reactant_id": "N_549b2b02af53",
+   "product_id": "N_29a4f23eb150",
    "coproduct": null,
-   "reaction_kind": "keto_to_enol",
+   "kind": "keto_to_enol",
    "status": "STRICT",
-   "ts_imag": -1884.84,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/dispatch_runs_keto/OeCCCeO__OeCCeCO/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -1884.84,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/dispatch_runs_keto/OeCCCeO__OeCCeCO/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-08-04 22:47",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "runs",
+    "reason": []
+   }
   },
   {
-   "reactant": "OC1CO1",
-   "product": "O=CCO",
-   "coproduct": null,
-   "reaction_kind": null,
-   "status": "STRICT",
-   "ts_imag": -479.77,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/enol_keto_ga/dry/sv/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
-  },
-  {
+   "id": "E_93e0968ea39f",
    "reactant": "OC=CO",
    "product": "O=CCO",
+   "reactant_id": "N_c7e46f7d0c10",
+   "product_id": "N_c12d5c862321",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -920.12,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/enol_keto_ga/wcat/sv/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -920.12,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/enol_keto_ga/wcat/sv/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-05 23:47",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": [
+     "catalytic water shuttle allowed: catalytic shuttle O8: H[9, 10] ↔ H[4, 10]"
+    ]
+   }
   },
   {
+   "id": "E_f66ae3c1de20",
    "reactant": "O=CC(O)=CC(O)CO",
    "product": "O=CC(=O)CC(O)CO",
+   "reactant_id": "N_5df10755848f",
+   "product_id": "N_0ac89d84136d",
    "coproduct": null,
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -2137.83,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/ff_chain/step2/sv2/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -2137.83,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step2/sv2/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-07 04:10",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_84e16d7e3933",
    "reactant": "O=CC(=O)C=CCO",
    "product": "O=CC1(O)C=CCO1",
+   "reactant_id": "N_595993825299",
+   "product_id": "N_4a61ad95f1ae",
    "coproduct": null,
-   "reaction_kind": "ring_opening",
+   "kind": "ring_opening",
    "status": "STRICT",
-   "ts_imag": -1621.5,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/qm-workspace/validation/ff_chain/step4/sv/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -1621.5,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/ff_chain/step4/sv/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-07 07:00",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
-   "reactant": "O=C(C=C(O)CO)C(O)CO",
-   "product": "O=C(CO)CC(=O)C(O)CO",
-   "coproduct": null,
-   "reaction_kind": null,
-   "status": "STRICT",
-   "ts_imag": -1810.26,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/reaction_network/r2_hmftaut/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
-  },
-  {
-   "reactant": "O=C(CO)C(O)C(O)CO",
-   "product": "O=C(C=C(O)CO)CO",
-   "coproduct": "O",
-   "reaction_kind": null,
-   "status": "STRICT",
-   "ts_imag": -1995.79,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/reaction_network/r2_ffdehyd/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
-  },
-  {
-   "reactant": "O=C(C(O)CO)C(O)C(O)CO",
-   "product": "O=C(C=C(O)CO)C(O)CO",
-   "coproduct": "O",
-   "reaction_kind": null,
-   "status": "STRICT",
-   "ts_imag": -1873.27,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/reaction_network/r2_hmfdehyd/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
-  },
-  {
+   "id": "E_21597693ea11",
    "reactant": "O=C(CO)C(O)C(O)CO",
    "product": "O=CCO",
+   "reactant_id": "N_6f6df69df08d",
+   "product_id": "N_c12d5c862321",
    "coproduct": "OC=C(O)CO",
-   "reaction_kind": null,
+   "kind": "unknown",
    "status": "STRICT",
-   "ts_imag": -540.8,
-   "barrier_kcal": null,
-   "dE_kcal": null,
-   "source": "tools/reaction_network/r2_xlu_cleanp/strict_cache.json",
-   "in_chain": false,
-   "n_imag": 1
+   "detail": null,
+   "ts_imag_cm-1": -540.8,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/reaction_network/r2_xlu_cleanp/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-07-19",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_2c6837886071",
    "reactant": "O=CC(O)=CC(O)C(O)CO",
    "product": "O=CC(=O)CC(O)C(O)CO",
+   "reactant_id": "N_793b1107a726",
+   "product_id": "N_04f6b22ed525",
    "coproduct": null,
-   "reaction_kind": "tautomerization",
+   "kind": "tautomerization",
    "status": "STRICT",
-   "ts_imag": -1449.8,
-   "barrier_kcal": 68.2,
-   "dE_kcal": -5.6,
-   "source": "FINAL_STRICT_CHAIN",
-   "in_chain": true
+   "detail": null,
+   "ts_imag_cm-1": -1449.78,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-06-20",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   },
   {
+   "id": "E_cb478a12c8db",
    "reactant": "O=CC(O)C(O)C(O)C(O)CO",
    "product": "O=CC(O)=CC(O)C(O)CO",
+   "reactant_id": "N_5918b7c83c39",
+   "product_id": "N_793b1107a726",
    "coproduct": "O",
-   "reaction_kind": "dehydration",
+   "kind": "dehydration",
    "status": "STRICT",
-   "ts_imag": -1410.1,
-   "barrier_kcal": 50.2,
-   "dE_kcal": 7.5,
-   "source": "FINAL_STRICT_CHAIN",
-   "in_chain": true
+   "detail": null,
+   "ts_imag_cm-1": -1410.08,
+   "source": "strict_cache",
+   "cache_path": "/root/inno-agent/workspaces/reaxevolve/graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+   "input_fingerprint": null,
+   "attempt_time": "2026-06-19",
+   "updated_at": "2026-10-24T17:09:05Z",
+   "readjudication": {
+    "ledger": "readjudication",
+    "strict_version": "v5",
+    "status_from_cache": "STRICT",
+    "new_status": "STRICT",
+    "judgement_source": "deposit",
+    "reason": []
+   }
   }
  ],
- "targets": {
-  "HMF": "O=Cc1ccc(CO)o1",
-  "FF": "O=Cc1ccco1",
-  "HAA": "O=CCO",
-  "furan": "c1ccoc1",
-  "5-MF": "Cc1ccc(C=O)o1",
-  "furfuryl_alcohol": "OCc1ccco1",
-  "glyceraldehyde": "O=CC(O)CO",
-  "DHA": "O=C(CO)CO",
-  "pyruvaldehyde": "CC(=O)C=O",
-  "glyoxal": "O=CC=O",
-  "erythrose": "O=CC(O)C(O)CO",
-  "acetol": "CC(=O)CO"
- },
- "target_reachable_strict_from_glucose": {
+ "targets": [
+  "O=Cc1ccc(CO)o1",
+  "O=CCO",
+  "O=Cc1ccco1"
+ ],
+ "targets_reachable_strict": {
   "HMF": true,
-  "FF": true,
   "HAA": true,
-  "furan": false,
-  "5-MF": false,
-  "furfuryl_alcohol": false,
-  "glyceraldehyde": true,
-  "DHA": false,
-  "pyruvaldehyde": false,
-  "glyoxal": false,
-  "erythrose": false,
-  "acetol": false
+  "FF": true
  },
  "stats": {
-  "n_nodes": 33,
-  "n_edges": 30,
+  "n_nodes": 26,
+  "n_edges": 23,
   "edges_by_status": {
-   "STRICT": 30
+   "STRICT": 23
   },
   "projection": "accepted"
  }

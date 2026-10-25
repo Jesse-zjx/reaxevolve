@@ -1,0 +1,54 @@
+{
+  "purpose": "Each geometry-less provisional row in readjudication.jsonl covers one cache attempt, not the reaction pair. A later STRICT row replaces that judgement only when it is a different attempt (different cache file, or a fingerprint the bound attempt did not have).",
+  "binds": [
+    {
+      "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+      "product": "O=C(C=C(O)CO)C(O)CO",
+      "cache_path": "graph/caches/strict_caches/reaction_network/r2_hmfdehyd/strict_cache.json",
+      "time": "2026-07-20",
+      "name": "r2_hmfdehyd"
+    },
+    {
+      "reactant": "O=C(C=C(O)CO)C(O)CO",
+      "product": "O=C(CO)CC(=O)C(O)CO",
+      "cache_path": "graph/caches/strict_caches/reaction_network/r2_hmftaut/strict_cache.json",
+      "time": "2026-07-21",
+      "name": "r2_hmftaut"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+      "product": "O=C(CO)C(O)=CC(O)CO",
+      "cache_path": "graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+      "time": "2026-06-19",
+      "name": "dh1"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+      "product": "OC=C(O)C(O)C(O)C(O)CO",
+      "cache_path": "graph/caches/strict_caches/templates/path-validator-workspace/validation/cpcm_chain/strict_search/strict_cache.json",
+      "time": "2026-06-18 21:44",
+      "name": "edA"
+    },
+    {
+      "reactant": "O=C(CO)C(O)C(O)CO",
+      "product": "O=C(C=C(O)CO)CO",
+      "cache_path": "graph/caches/strict_caches/reaction_network/r2_ffdehyd/strict_cache.json",
+      "time": "2026-07-20",
+      "name": "r2_ffdehyd"
+    },
+    {
+      "reactant": "O=CC(O)C(O)=CC(O)CO",
+      "product": "O=CC(O)C(=O)CC(O)CO",
+      "cache_path": "graph/caches/strict_caches/templates/path-validator-workspace/validation/gapfill/OeCCOCOeCCOCO__OeCCOCeOCCOCO/strict_cache.json",
+      "time": "2026-08-04 05:03",
+      "name": "gapA_clean"
+    },
+    {
+      "reactant": "OC1CO1",
+      "product": "O=CCO",
+      "cache_path": "graph/caches/strict_caches/templates/path-validator-workspace/validation/enol_keto_ga/dry/sv/strict_cache.json",
+      "time": "2026-07-05 11:37",
+      "name": "glycolaldehyde_oxiranol_dft"
+    }
+  ]
+}

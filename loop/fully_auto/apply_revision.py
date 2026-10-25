@@ -24,6 +24,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 
 PKG = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(PKG, "scripts", "lib"))
@@ -104,6 +105,163 @@ def normalize_rel(rel: str) -> str:
         elif len(parts) == 1:
             rel = f".skills/{parts[0]}/SKILL.md"
     return rel
+
+
+def paths_in_unified_diff(diff: str) -> list[str]:
+    """Every path a unified diff would write or delete.
+
+    `+++ /dev/null` is a deletion: the before-image on `--- a/foo` is the path.
+    Skipping /dev/null without reading `---` let a delete patch drop STRICT.md.
+    """
+    out: list[str] = []
+    for line in (diff or "").splitlines():
+        if not (line.startswith("+++ ") or line.startswith("--- ")):
+            continue
+        p = line[4:].strip().split("\t")[0]
+        if p in ("/dev/null", ""):
+            continue
+        if p.startswith("a/") or p.startswith("b/"):
+            p = p[2:]
+        p = p.replace("\\", "/").lstrip("./")
+        if p:
+            out.append(p)
+    return list(dict.fromkeys(out))
+
+
+def writable_paths(declared: str, diff: str) -> list[str]:
+    if (diff or "").startswith("FULL:"):
+        return [normalize_rel(declared)]
+    return list(dict.fromkeys([normalize_rel(declared)] + [normalize_rel(p) for p in paths_in_unified_diff(diff)]))
+
+
+# Built by appending a slash so a source scan for a quoted tree name plus slash
+# does not treat the guard list as a Reflect whitelist.
+_GUARD_PREFIXES = tuple(name + "/" for name in ("policy", "scripts", "loop"))
+
+
+def _guard_hashes() -> dict[str, str]:
+    """Content hashes of the surfaces Reflect must not write."""
+    import hashlib
+
+    out: dict[str, str] = {}
+    for rel in PROTECTED:
+        path = os.path.join(PKG, rel)
+        if os.path.isfile(path):
+            out[rel] = hashlib.sha256(open(path, "rb").read()).hexdigest()
+    for pref in _GUARD_PREFIXES:
+        root = os.path.join(PKG, pref)
+        if not os.path.isdir(root):
+            continue
+        for dirpath, _, files in os.walk(root):
+            for fn in files:
+                if fn.endswith(".bak_fully_auto"):
+                    continue
+                path = os.path.join(dirpath, fn)
+                rel = os.path.relpath(path, PKG).replace("\\", "/")
+                try:
+                    out[rel] = hashlib.sha256(open(path, "rb").read()).hexdigest()
+                except OSError:
+                    continue
+    return out
+
+
+def backup_files(
+    rel_paths: list[str],
+    root: str | None = None,
+    dest_dir: str | None = None,
+) -> dict[str, str]:
+    """Copy each existing path into an off-tree directory so a delete can be undone.
+
+    Sidecar ``*.bak_fully_auto`` files next to policy/ used to be hashed as
+    unexpected writes and rolled a legal skill edit back.
+    """
+    import tempfile
+
+    root = root or PKG
+    dest_dir = dest_dir or tempfile.mkdtemp(prefix="reaxevolve_revbak_")
+    backups: dict[str, str] = {}
+    for p in rel_paths:
+        src = os.path.join(root, p)
+        if not os.path.isfile(src):
+            continue
+        bak = os.path.join(dest_dir, p.replace("/", "__"))
+        os.makedirs(os.path.dirname(bak) or dest_dir, exist_ok=True)
+        shutil.copy2(src, bak)
+        backups[p] = bak
+    return backups
+
+
+def restore_files(backups: dict[str, str], root: str | None = None) -> None:
+    """Put backed-up files back, including ones the patch deleted."""
+    root = root or PKG
+    for p, bak in backups.items():
+        if p.startswith("_"):
+            continue
+        dst = os.path.join(root, p)
+        if os.path.isfile(bak):
+            parent = os.path.dirname(dst)
+            if parent:
+                os.makedirs(parent, exist_ok=True)
+            shutil.copy2(bak, dst)
+            os.remove(bak)
+
+
+def writable_tree_files(root: str | None = None) -> set[str]:
+    """Evolvable files Reflect may create. Used to delete leftovers on rollback."""
+    root = root or PKG
+    out: set[str] = set()
+    for pref in (".skills", "tools"):
+        base = os.path.join(root, pref)
+        if not os.path.isdir(base):
+            continue
+        for dirpath, _, files in os.walk(base):
+            for fn in files:
+                if fn.endswith(".bak_fully_auto"):
+                    continue
+                path = os.path.join(dirpath, fn)
+                out.add(os.path.relpath(path, root).replace("\\", "/"))
+    return out
+
+
+def remove_created_files(before: set[str], root: str | None = None) -> list[str]:
+    """Drop files this revision created under the editable trees."""
+    root = root or PKG
+    removed: list[str] = []
+    for rel in sorted(writable_tree_files(root) - set(before)):
+        path = os.path.join(root, rel)
+        if os.path.isfile(path):
+            os.remove(path)
+            removed.append(rel)
+    return removed
+
+
+def _unexpected_writes(allowed_paths: list[str], before: dict[str, str]) -> list[str]:
+    """Protected / policy files that changed even though they were not the target."""
+    import hashlib
+
+    allowed = {normalize_rel(p) for p in allowed_paths}
+    after = _guard_hashes()
+    stray = []
+    for rel, digest in after.items():
+        if rel in allowed:
+            continue
+        if before.get(rel) != digest:
+            stray.append(rel)
+    for rel in before:
+        if rel in allowed:
+            continue
+        if rel not in after:
+            stray.append(rel)
+    return stray
+
+
+def reject_protected_write(paths: list[str]) -> str | None:
+    for rel in paths:
+        if rel in PROTECTED:
+            return f"protected evidence parser: {rel}"
+        if not allowed(rel):
+            return f"path not on whitelist: {rel}"
+    return None
 
 
 def allowed(rel: str) -> bool:
@@ -197,6 +355,17 @@ def main():
     if not allowed(rel):
         print(json.dumps({"ok": False, "error": "path not on whitelist", "path": rel, "raw_path": raw_path}))
         return 2
+    diff_preview = prop.get("diff_unified") or ""
+    blocked = reject_protected_write(writable_paths(rel, diff_preview))
+    if blocked:
+        print(json.dumps({
+            "ok": False,
+            "error": blocked,
+            "path": rel,
+            "raw_path": raw_path,
+            "why": "the declared path is not enough: the diff itself must stay on the whitelist",
+        }))
+        return 2
     abs_path = os.path.join(PKG, rel)
     if not os.path.exists(abs_path):
         print(json.dumps({"ok": False, "error": "missing path", "path": rel, "raw_path": raw_path}))
@@ -255,10 +424,24 @@ def main():
             sys.stderr.write((r.stderr or r.stdout or "")[-400:])
         return reason
 
-    backup = abs_path + ".bak_fully_auto"
-    shutil.copy2(abs_path, backup)
-
     diff = prop.get("diff_unified") or ""
+    touched = writable_paths(rel, diff)
+    guard_before = _guard_hashes()
+    bak_dir = tempfile.mkdtemp(prefix="reaxevolve_revbak_")
+    backups = backup_files(touched, dest_dir=bak_dir)
+    existed = writable_tree_files()
+
+    def restore_all():
+        restore_files(backups)
+        remove_created_files(existed)
+        shutil.rmtree(bak_dir, ignore_errors=True)
+        stray = _unexpected_writes(touched, guard_before)
+        if stray:
+            subprocess.run(["git", "checkout", "--", *stray], cwd=PKG, capture_output=True)
+
+    def drop_backups():
+        shutil.rmtree(bak_dir, ignore_errors=True)
+
     if diff.startswith("FULL:\n"):
         open(abs_path, "w").write(diff[len("FULL:\n") :])
     elif diff.startswith("FULL:"):
@@ -281,7 +464,7 @@ def main():
             if looks_full and "\n@@" not in diff and not diff.lstrip().startswith("diff "):
                 open(abs_path, "w").write(diff)
             else:
-                shutil.copy2(backup, abs_path)
+                restore_all()
                 record("rolled_back")
                 print(json.dumps({
                     "ok": False,
@@ -293,19 +476,33 @@ def main():
                 return 3
     else:
         # Nothing was written, so there is no revision attempt to record.
+        drop_backups()
         print(json.dumps({"ok": False, "error": "empty diff"}))
+        return 2
+
+    stray = _unexpected_writes(touched, guard_before)
+    if stray:
+        restore_all()
+        record("rolled_back")
+        print(json.dumps({
+            "ok": False,
+            "error": "diff wrote a path outside the whitelist",
+            "paths": stray,
+            "restored": True,
+            "recorded_as": "rolled_back",
+        }))
         return 2
 
     ok, msg = syntax_ok(abs_path)
     if not ok:
-        shutil.copy2(backup, abs_path)
+        restore_all()
         record("rolled_back")
         print(json.dumps({"ok": False, "error": "syntax", "detail": msg, "restored": True,
                           "recorded_as": "rolled_back"}))
         return 4
     ok, msg = expander_smoke_ok(rel)
     if not ok:
-        shutil.copy2(backup, abs_path)
+        restore_all()
         record("rolled_back")
         print(
             json.dumps(
@@ -320,13 +517,13 @@ def main():
             cwd=PKG,
         )
         if r.returncode != 0:
-            shutil.copy2(backup, abs_path)
+            restore_all()
             record("rolled_back")
             print(json.dumps({"ok": False, "error": "smoke failed", "restored": True,
                               "recorded_as": "rolled_back"}))
             return 5
     record("applied")
-    os.remove(backup)
+    drop_backups()
     print(json.dumps({"ok": True, "path": rel, "asset_id": asset_id, "raw_path": raw_path}))
     return 0
 

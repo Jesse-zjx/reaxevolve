@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-10-22 03:31:12",
+  "generated_at": "2026-10-25 01:09:38",
   "n_nodes": 243,
   "n_edges": 325,
-  "n_strict": 30,
+  "n_strict": 23,
   "edges_by_status": {
-    "STRICT": 30,
+    "STRICT": 23,
     "PARTIAL_MATCH": 14,
     "NOT_CLEAN_TS": 27,
     "MISMATCH": 18,
-    "unresolved": 6,
+    "unresolved": 13,
     "TS_FAILED": 5,
     "rejected": 2,
     "validated": 49,
@@ -18,9 +18,9 @@
     "qm_real": 9
   },
   "edges_by_bucket": {
-    "accepted": 30,
+    "accepted": 23,
     "rejected": 34,
-    "unresolved": 203,
+    "unresolved": 210,
     "evidence_ok": 58
   },
   "targets_reachable_strict": {
@@ -34,19 +34,48 @@
     "FF": 11
   },
   "readjudication_applied": {
-    "status_changes": 8,
+    "status_changes": 15,
     "unmatched": 0,
     "ledgers": [
       "evidence/audit/readjudication.jsonl",
       "evidence/audit/demoted_from_pin_v5.jsonl"
     ]
   },
-  "n_strict_dated": 30,
+  "n_strict_dated": 23,
   "n_strict_undated": 0,
   "delta_vs_previous_pin": {
     "added": [],
-    "removed": [],
-    "d_strict": 0
+    "removed": [
+      {
+        "reactant": "O=C(C(O)CO)C(O)C(O)CO",
+        "product": "O=C(C=C(O)CO)C(O)CO"
+      },
+      {
+        "reactant": "O=C(C=C(O)CO)C(O)CO",
+        "product": "O=C(CO)CC(=O)C(O)CO"
+      },
+      {
+        "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+        "product": "O=C(CO)C(O)=CC(O)CO"
+      },
+      {
+        "reactant": "O=C(CO)C(O)C(O)C(O)CO",
+        "product": "OC=C(O)C(O)C(O)C(O)CO"
+      },
+      {
+        "reactant": "O=C(CO)C(O)C(O)CO",
+        "product": "O=C(C=C(O)CO)CO"
+      },
+      {
+        "reactant": "O=CC(O)C(O)=CC(O)CO",
+        "product": "O=CC(O)C(=O)CC(O)CO"
+      },
+      {
+        "reactant": "OC1CO1",
+        "product": "O=CCO"
+      }
+    ],
+    "d_strict": -7
   },
   "pin_path": "graph/canonical/audited_strict_edges.json",
   "note": "Single source for prose counts. Prefer this file over HANDOVER/README literals. Refresh via scripts/reflect/repin_state.py."

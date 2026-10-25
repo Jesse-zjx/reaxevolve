@@ -68,13 +68,16 @@ def xtb_opt(xyz_text: str, name: str = "tmp") -> str:
         env = os.environ.copy()
         env.setdefault("OMP_NUM_THREADS", "2")
         env.setdefault("MKL_NUM_THREADS", "2")
+        if not XTB or not os.path.isfile(str(XTB)):
+            print("[warn] xtb not available; returning unoptimized xyz", file=sys.stderr)
+            return xyz_text
         try:
             subprocess.run(
                 [XTB, str(inp), "--gfn", "2", "--opt", "normal", "--namespace", name],
                 cwd=td_p, env=env, check=True,
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
             )
-        except subprocess.CalledProcessError as e:
+        except (subprocess.CalledProcessError, FileNotFoundError, OSError) as e:
             print(f"[warn] xtb opt failed ({e}); returning unoptimized xyz",
                   file=sys.stderr)
             return xyz_text

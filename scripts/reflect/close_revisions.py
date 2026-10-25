@@ -31,7 +31,9 @@ from collections import Counter
 PKG = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(PKG, "scripts", "lib"))
 sys.path.insert(0, os.path.join(PKG, "scripts", "reflect"))
+sys.path.insert(0, os.path.join(PKG, "scripts", "validate"))
 import chem_paths as CP  # noqa: E402
+import verdict_writer as VW  # noqa: E402
 
 LOG = os.path.join(PKG, "evolution", "EVOLUTION_LOG.jsonl")
 
@@ -90,6 +92,8 @@ def attempt_records() -> list[dict]:
     ]
     for pat in patterns:
         for path in sorted(glob.glob(pat, recursive=True)):
+            if CP.is_eval_arm_cache(path):
+                continue
             try:
                 data = json.load(open(path))
             except (OSError, json.JSONDecodeError):
@@ -97,8 +101,9 @@ def attempt_records() -> list[dict]:
             if not isinstance(data, dict):
                 continue
             for key, rec in data.items():
-                if isinstance(rec, dict):
-                    r = dict(rec)
+                if not isinstance(rec, dict):
+                    continue
+                for r in VW.expand_attempts(key, rec):
                     r["_edge"] = key
                     r["_cache"] = os.path.relpath(path, PKG)
                     out.append(r)
@@ -165,7 +170,7 @@ def close(rows: list[dict], attempts: list[dict]) -> tuple[list[dict], list[dict
     for row in rows:
         if row.get("outcome") == "rolled_back":
             continue
-        if row.get("closed_status"):
+        if row.get("closed_status") == "closed":
             continue
         # Compare against the identifier and numbering the attempts actually carry. For
         # revisions from the two-lineage era that is `origin_*`; the merged `asset_id` and

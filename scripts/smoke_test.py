@@ -72,6 +72,7 @@ def main():
         "scripts/reflect/graph_views.py",
         "scripts/qa/run_manifest.py",
         "scripts/qa/test_loop_accounting.py",
+        "scripts/qa/test_audit_invariants.py",
         "scripts/qa/test_runner_paths.py",
         "tools/expand/templates_expand.py",
         "tools/screen/diversity.py",
@@ -245,16 +246,19 @@ def main():
             fail(f"{want} missing from the apply whitelist")
     if '"tools/geometry/"' in text:
         fail("tools/geometry/ is whitelisted by prefix, which would include the evidence parsers")
-    for banned in ("policy/", "scripts/", "loop/"):
-        if f'"{banned}"' in text:
-            fail(f"{banned} must never be on the apply whitelist")
-    ok("policy/, scripts/ and loop/ are not writable by Reflect")
-
     # Evidence parsers decide what the calculation says. A revision to one could change a
     # verdict without changing any chemistry, so they sit outside the editable surface.
     sys.path.insert(0, str(PKG / "loop" / "fully_auto"))
     try:
         import apply_revision as AR  # noqa: WPS433
+
+        for banned in ("policy/", "scripts/", "loop/"):
+            if any(p == banned or p.startswith(banned) for p in AR.ALLOWED_PREFIXES):
+                fail(f"{banned} must never be on the apply whitelist")
+        guards = {p.rstrip("/") for p in AR._GUARD_PREFIXES}
+        if guards != {"policy", "scripts", "loop"}:
+            fail(f"guard prefixes should be the protected trees, got {sorted(guards)}")
+        ok("policy/, scripts/ and loop/ are not writable by Reflect")
 
         for parser in ("tools/geometry/parse_orca_output.py", "tools/geometry/xyz_to_smiles.py",
                        "tools/parse_orca_output.py", "tools/xyz_to_smiles.py"):

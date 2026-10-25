@@ -288,6 +288,10 @@ def guesses_from_record(record_path: Path, workdir: Path, round_dir: Path) -> li
     return uniq
 
 
+def _invocation_id() -> str | None:
+    return os.environ.get("CHEM_INVOCATION_ID") or None
+
+
 def _stamp_cost(cache_path: str, edge_key: str, wall_s: float, nprocs: int) -> None:
     """Write wall_s/nprocs onto the cache record the arm budget later sums.
 
@@ -305,10 +309,15 @@ def _stamp_cost(cache_path: str, edge_key: str, wall_s: float, nprocs: int) -> N
         return
     rec["wall_s"] = float(wall_s)
     rec["nprocs"] = int(nprocs)
+    inv = _invocation_id()
+    if inv:
+        rec["invocation_id"] = inv
     atts = rec.get("attempts")
     if isinstance(atts, list) and atts and isinstance(atts[-1], dict):
         atts[-1]["wall_s"] = float(wall_s)
         atts[-1]["nprocs"] = int(nprocs)
+        if inv:
+            atts[-1]["invocation_id"] = inv
     json.dump(data, open(cache_path, "w"), indent=2)
     open(cache_path, "a").write("\n")
 
@@ -412,6 +421,7 @@ def validate_guess(
             "guess_path": str(guess),
             "wall_s": elapsed,
             "nprocs": nprocs,
+            "invocation_id": _invocation_id(),
         }
         written = _VW.write_strict_cache(
             str(workdir / "strict_cache.json"),
@@ -453,6 +463,7 @@ def validate_guess(
                 "rc": rc,
                 "wall_s": elapsed,
                 "nprocs": nprocs,
+                "invocation_id": _invocation_id(),
                 "stdout_tail": (out or "")[-1500:],
                 "stderr_tail": (err or "")[-1500:],
             },
@@ -573,7 +584,12 @@ Requirements:
 - Final guess files only (no `*_tmp*.xyz` intermediates) — at most {max_guesses_per_round}.
 - Do not edit policy/ or leave the reaxevolve workspace.
 """
-        pi_skill(gen_skills, gen_prompt)
+        try:
+            pi_skill(gen_skills, gen_prompt)
+        except Exception as e:
+            history.append({"round": rnd, "results": [], "gen_error": str(e)})
+            stop_reason = "generator_error"
+            break
 
         # Prefer the curated record list; fall back to non-tmp xyz on disk.
         guesses = guesses_from_record(record_path, workdir, round_dir)
@@ -682,9 +698,28 @@ Requirements:
         "core_hours_spent": round(spent_core_h, 4),
         "budget_core_h": budget_core_h,
         "stop_reason": stop_reason,
+        "invocation_id": _invocation_id(),
     }
     json.dump(out, open(workdir / "skill_runner_result.json", "w"), indent=2)
     return out
+
+
+def load_result_if_this_run(
+    saved: Path,
+    invocation_id: str | None = None,
+    started: float | None = None,
+) -> dict:
+    """Only a result this invocation wrote is this launch's verdict."""
+    del started
+    if not saved.is_file() or not invocation_id:
+        return {}
+    try:
+        loaded = json.load(open(saved))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if isinstance(loaded, dict) and loaded.get("invocation_id") == invocation_id:
+        return loaded
+    return {}
 
 
 def main():
@@ -704,18 +739,43 @@ def main():
         help="core-hours this step may spend; caps each guess so one round "
         "cannot overshoot the campaign budget. Omit for no intra-step limit.",
     )
-    a = ap.parse_args()
-    res = run_step(
-        a.reactant_smiles,
-        a.product_smiles,
-        Path(a.workdir),
-        coproduct=a.coproduct,
-        max_rounds=a.max_rounds,
-        nprocs=a.nprocs,
-        wall_s=a.wall_s,
-        reactant_xyz=Path(a.reactant_xyz) if a.reactant_xyz else None,
-        budget_core_h=a.budget_core_h,
+    ap.add_argument(
+        "--invocation-id",
+        default=None,
+        help="caller-assigned id for this launch; reused workdirs must not "
+        "inherit a previous result or its core-hours",
     )
+    a = ap.parse_args()
+    wd = Path(a.workdir)
+    invocation_id = a.invocation_id or uuid.uuid4().hex
+    os.environ["CHEM_INVOCATION_ID"] = invocation_id
+    try:
+        res = run_step(
+            a.reactant_smiles,
+            a.product_smiles,
+            wd,
+            coproduct=a.coproduct,
+            max_rounds=a.max_rounds,
+            nprocs=a.nprocs,
+            wall_s=a.wall_s,
+            reactant_xyz=Path(a.reactant_xyz) if a.reactant_xyz else None,
+            budget_core_h=a.budget_core_h,
+        )
+    except Exception as exc:
+        saved = wd / "skill_runner_result.json"
+        res = load_result_if_this_run(saved, invocation_id)
+        if not res:
+            res = {
+                "status": "unresolved",
+                "history": [],
+                "core_hours_spent": 0.0,
+                "invocation_id": invocation_id,
+            }
+        res.setdefault("status", "unresolved")
+        res["error"] = str(exc)[:1000]
+        res.setdefault("history", [])
+        res.setdefault("core_hours_spent", 0.0)
+        json.dump(res, open(saved, "w"), indent=2)
     print(json.dumps(res, indent=2, ensure_ascii=False))
     return 0 if res.get("status") in ("STRICT", "evidence_ok", "rejected", "unresolved") else 1
 

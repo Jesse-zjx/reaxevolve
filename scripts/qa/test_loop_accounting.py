@@ -18,6 +18,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 PKG = Path(__file__).resolve().parents[2]
@@ -198,6 +199,176 @@ def main() -> int:
     )
     got_h = json.loads(hv.read_text()) if hv.is_file() else []
     check(len(got_h) == 1, f"true mismatch is harvested (got {len(got_h)})")
+
+    print("\n== attempt archive keeps failure evidence ==")
+    dest3 = Path(tempfile.mkdtemp(prefix="reaxevolve_arch_"))
+    cache3 = dest3 / "strict_cache.json"
+    VW.write_strict_cache(
+        str(cache3),
+        "C>>CC",
+        {
+            "reactant": "C",
+            "product": "CC",
+            "detail": "IRC_FAILED",
+            "irc_fwd": None,
+            "asset_versions": {"tools": {"workflow/run_qm_step.py": "v0"}},
+            "wall_s": 10,
+            "nprocs": 8,
+        },
+        "unresolved",
+        "IRC_FAILED",
+    )
+    VW.write_strict_cache(
+        str(cache3),
+        "C>>CC",
+        {
+            "reactant": "C",
+            "product": "CC",
+            "detail": "WALL_TIME",
+            "wall_s": 20,
+            "nprocs": 8,
+        },
+        "unresolved",
+        "WALL_TIME",
+    )
+    VW.write_strict_cache(
+        str(cache3),
+        "C>>CC",
+        {
+            "reactant": "C",
+            "product": "CC",
+            "status": "STRICT",
+            "irc_fwd": "CC",
+            "irc_bwd": "C",
+            "wall_s": 30,
+            "nprocs": 8,
+        },
+        "STRICT",
+    )
+    blob = json.load(open(cache3))
+    atts = blob["C>>CC"]["attempts"]
+    check(len(atts) == 3, f"three writes leave three archived attempts (got {len(atts)})")
+    check(atts[0].get("detail") == "IRC_FAILED", "first failure reason is kept")
+    check(
+        isinstance(atts[0].get("asset_versions"), dict)
+        and atts[0]["asset_versions"].get("tools"),
+        "first attempt version vector is kept",
+    )
+    check("attempts" not in atts[0], "archived row does not nest attempts")
+
+    print("\n== exception path still counts spent core-h ==")
+    sys.path.insert(0, str(PKG / "loop"))
+    import run_loop as RL2  # noqa: E402
+
+    dead = {"status": "unresolved", "stdout": "traceback"}
+    recovered = RL2._recover_result(
+        dead,
+        dest3,
+    )
+    # dest3 has no skill_runner_result; seed one
+    json.dump(
+        {
+            "history": [{"round": 0, "results": [{"guess_path": "g.xyz", "wall_s": 3600}]}],
+            "core_hours_spent": 8.0,
+            "status": "unresolved",
+        },
+        open(dest3 / "skill_runner_result.json", "w"),
+    )
+    recovered = RL2._recover_result(dead, dest3)
+    check(
+        RL2._result_core_hours(recovered, 8) == 8.0,
+        f"spent 8 core-h is recovered after a generator crash "
+        f"(got {RL2._result_core_hours(recovered, 8)})",
+    )
+
+    print("\n== reused workdir does not double historical core-h or revive STRICT ==")
+    reuse = Path(tempfile.mkdtemp(prefix="reaxevolve_reuse_"))
+    old_t = time.strftime("%Y-%m-%d %H:%M", time.localtime(time.time() - 86400))
+    json.dump(
+        {
+            "C>>CC": {
+                "status": "STRICT",
+                "wall_s": 3600,
+                "nprocs": 8,
+                "time": old_t,
+                "attempts": [
+                    {"status": "STRICT", "wall_s": 3600, "nprocs": 8, "time": old_t},
+                ],
+            }
+        },
+        open(reuse / "strict_cache.json", "w"),
+    )
+    json.dump(
+        {
+            "status": "STRICT",
+            "core_hours_spent": 8.0,
+            "history": [{"round": 0, "results": [{"guess_path": "g.xyz", "wall_s": 3600}]}],
+        },
+        open(reuse / "skill_runner_result.json", "w"),
+    )
+    crash = {"status": "unresolved", "stdout": "died"}
+    recovered2 = RL2._recover_result(crash, reuse, invocation_id="run-2")
+    check(
+        RL2._result_core_hours(recovered2, 8) == 0.0,
+        f"stale 8 core-h from a previous launch is not added "
+        f"(got {RL2._result_core_hours(recovered2, 8)})",
+    )
+    check(
+        recovered2.get("status") != "STRICT" or recovered2 is crash,
+        "a leftover STRICT result is not returned for this launch",
+    )
+    stale = SR.load_result_if_this_run(reuse / "skill_runner_result.json", "run-2")
+    check(stale == {}, "skill_runner ignores a previous invocation's STRICT file")
+
+    json.dump(
+        {
+            "status": "STRICT",
+            "invocation_id": "run-1",
+            "core_hours_spent": 8.0,
+            "history": [{"round": 0, "results": [{"guess_path": "g.xyz", "wall_s": 3600}]}],
+        },
+        open(reuse / "skill_runner_result.json", "w"),
+    )
+    os.utime(reuse / "skill_runner_result.json", None)
+    quick = RL2._recover_result(
+        {"status": "unresolved"}, reuse, invocation_id="run-2"
+    )
+    check(
+        RL2._result_core_hours(quick, 8) == 0.0,
+        f"a same-second leftover 8 core-h is not billed again "
+        f"(got {RL2._result_core_hours(quick, 8)})",
+    )
+    json.dump(
+        {
+            "C>>CC": {
+                "status": "unresolved",
+                "attempts": [
+                    {"wall_s": 3600, "nprocs": 8, "time": "2026-10-25 12:00",
+                     "invocation_id": "run-1"},
+                    {"wall_s": 3600, "nprocs": 8, "time": "2026-10-25 13:00",
+                     "invocation_id": "run-1"},
+                ],
+            }
+        },
+        open(reuse / "strict_cache.json", "w"),
+    )
+    (reuse / "skill_runner_result.json").unlink()
+    minute = RL2._recover_result(
+        {"status": "unresolved"}, reuse, invocation_id="run-2"
+    )
+    check(
+        RL2._result_core_hours(minute, 8) == 0.0,
+        f"minute-resolution history without this id is not recovered "
+        f"(got {RL2._result_core_hours(minute, 8)})",
+    )
+    this = RL2._recover_result(
+        {"status": "unresolved"}, reuse, invocation_id="run-1"
+    )
+    check(
+        RL2._result_core_hours(this, 8) == 16.0,
+        f"both attempts of this invocation are recovered "
+        f"(got {RL2._result_core_hours(this, 8)})",
+    )
 
     print("\n== driver label follows the running tree ==")
     dest_v0 = Path(tempfile.mkdtemp(prefix="reaxevolve_drv0_"))

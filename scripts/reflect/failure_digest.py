@@ -27,8 +27,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _d = HERE
 while _d != '/' and not os.path.isfile(os.path.join(_d, 'tools', 'chem_paths.py')):
     _d = os.path.dirname(_d)
-sys.path.insert(0, os.path.join(_d, 'tools'))
+sys.path.insert(0, os.path.join(_d, 'scripts', 'lib'))
+sys.path.insert(0, os.path.join(_d, 'scripts', 'validate'))
 import chem_paths as CP  # noqa: E402
+import verdict_writer as VW  # noqa: E402
 
 from rdkit import Chem, RDLogger  # noqa: E402
 RDLogger.DisableLog('rdApp.*')    # the caches hold a few names and paths where SMILES belong
@@ -212,10 +214,14 @@ def iter_records():
                 line = line.strip()
                 if line:
                     rec = json.loads(line)
-                    yield rec.get('edge'), rec
+                    edge = rec.get('edge')
+                    for a in VW.expand_attempts(edge, rec):
+                        yield a.get('edge'), a
         return
     for f in glob.glob(os.path.join(CP.GRAPH, 'strict_caches', '**', 'strict_cache.json'),
                        recursive=True):
+        if CP.is_eval_arm_cache(f):
+            continue
         try:
             cache = json.load(open(f))
         except Exception:
@@ -224,7 +230,8 @@ def iter_records():
             continue
         for name, e in cache.items():
             if isinstance(e, dict):
-                yield name, e
+                for a in VW.expand_attempts(name, e):
+                    yield a.get('edge') or name, a
 
 
 def main():

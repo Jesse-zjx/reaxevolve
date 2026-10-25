@@ -159,6 +159,9 @@ def overlay_snapshot(dest: str, asset_id: str, snapshot: str) -> dict:
     src = os.path.join(PKG, snapshot)
     if not os.path.isdir(src):
         raise SystemExit(f"snapshot not found: {snapshot}")
+    # Newer snapshots copy a directory as snapshot/<basename>/.... Using the
+    # snapshot root as the file source then joins dest/asset_id/<basename>/...
+    src = _snapshot_payload_root(src, asset_id)
     target = os.path.join(dest, asset_id)
     replaced, kept = [], []
     if os.path.isfile(target) or asset_id.endswith(".py"):
@@ -176,7 +179,9 @@ def overlay_snapshot(dest: str, asset_id: str, snapshot: str) -> dict:
             for r, _, fs in os.walk(src) for f in fs
         }
         for rel in sorted(snap_names):
-            shutil.copy2(os.path.join(src, rel), os.path.join(target, rel))
+            dst = os.path.join(target, rel)
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            shutil.copy2(os.path.join(src, rel), dst)
             replaced.append(os.path.join(asset_id, rel))
         for r, _, fs in os.walk(target):
             for f in fs:
@@ -190,6 +195,47 @@ def overlay_snapshot(dest: str, asset_id: str, snapshot: str) -> dict:
         "left_at_arm_content": sorted(kept),
         "whole_asset_restored": not kept,
     }
+
+
+def _snapshot_payload_root(src: str, asset_id: str) -> str:
+    """Unwrap snapshot/<asset-basename>/ used by directory-format snapshots."""
+    try:
+        entries = [e for e in os.listdir(src) if not e.startswith(".")]
+    except OSError:
+        return src
+    asset_base = os.path.basename(asset_id.rstrip("/"))
+    if len(entries) == 1 and os.path.isdir(os.path.join(src, entries[0])):
+        if entries[0] == asset_base:
+            return os.path.join(src, entries[0])
+    return src
+
+
+def _write_replay_versions(dest: str, applied: list[dict]) -> None:
+    """Record the versions actually overlaid, not the frozen set's v0 vector."""
+    path = os.path.join(dest, "tools", "VERSIONS.json")
+    try:
+        vers = json.load(open(path))
+    except (OSError, json.JSONDecodeError):
+        vers = {}
+    skills = vers.setdefault("skills", {})
+    tools = vers.setdefault("tools", {})
+    for item in applied:
+        asset_id = item.get("asset_id") or ""
+        version = item.get("version")
+        if version is None:
+            continue
+        label = f"v{version}" if not str(version).startswith("v") else str(version)
+        rel = asset_id.replace("\\", "/").strip().lstrip("./")
+        if rel.startswith("skills/"):
+            rel = "." + rel
+        if rel.startswith(".skills/"):
+            skills[rel.split("/")[1]] = label
+        elif rel.startswith("tools/"):
+            tools[rel[len("tools/") :]] = label
+        else:
+            tools[rel] = label
+    json.dump(vers, open(path, "w"), indent=2)
+    open(path, "a").write("\n")
 
 
 def _version_number(value) -> int:
@@ -266,6 +312,7 @@ def pin_replay(dest: str, seq: int, arm: str) -> dict:
     if os.path.isdir(skills):
         present = {f".skills/{name}" for name in os.listdir(skills)}
     unpinned = sorted(present - set(vector))
+    _write_replay_versions(dest, applied)
     return {
         "seq": seq,
         "arm": arm,

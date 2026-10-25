@@ -1,26 +1,26 @@
 {
   "workspace": "/root/inno-agent/workspaces/reaxevolve",
   "event": "update",
-  "updated_at": "2026-09-23T16:58:07Z",
+  "updated_at": "2026-10-24T18:10:02Z",
   "started_at": "2026-09-19T10:23:27Z",
   "ended_at": null,
-  "pi_version": "missing",
+  "pi_version": "0.84.1",
   "strict_bar_version": "v5",
   "model": {
-    "MODEL_NAME": null,
-    "BASE_URL_host": null,
-    "has_api_key": false
+    "MODEL_NAME": "deepseek-v4-pro",
+    "BASE_URL_host": "apicz.boyuerichdata.com",
+    "has_api_key": true
   },
   "asset_versions": {
     "schema": "reaxevolve-asset-versions.v1",
     "note": "Monotonic version per evolvable asset. Attempts record this whole vector, so a verdict can be traced to the asset set that produced it. Bumped only through scripts/reflect/asset_snapshot.py --bump, which also writes evolution/snapshots/ and appends evolution/EVOLUTION_LOG.jsonl. Files under policy/, scripts/ and loop/ are not assets and do not appear here.",
     "asset_set": "final",
     "skills": {
-      "pathway-method": "v2",
-      "strict-edge-criterion": "v2",
-      "ts-validation-strategy": "v2",
-      "strict-chain-assembly": "v2",
-      "qm-reaction-validation": "v2",
+      "pathway-method": "v3",
+      "strict-edge-criterion": "v3",
+      "ts-validation-strategy": "v3",
+      "strict-chain-assembly": "v3",
+      "qm-reaction-validation": "v3",
       "memory-and-reflection": "v1"
     },
     "tools": {
@@ -33,26 +33,26 @@
       "record_update.py": "v0",
       "expand/templates_expand.py": "v2",
       "screen/diversity.py": "v1",
-      "guess/ladder.py": "v1",
+      "guess/ladder.py": "v2",
       "guess/auto_guess.py": "v2",
       "guess/constrained_scan_guess.py": "v1",
       "guess/dry_proton_guess.py": "v1",
-      "guess/water_relay_guess.py": "v1",
+      "guess/water_relay_guess.py": "v2",
       "guess/neb_guess.py": "v1",
       "guess/scan2d.py": "v1",
-      "guess/scan2d_guess.py": "v1",
+      "guess/scan2d_guess.py": "v2",
       "guess/proton_scan.py": "v1",
-      "workflow/run_qm_step.py": "v0",
+      "workflow/run_qm_step.py": "v1",
       "workflow/orca_xtb_workflow.py": "v1",
-      "workflow/validate_candidate.py": "v1",
       "workflow/soft_mode_cleanup.py": "v1",
       "guess": "v1"
     },
     "retired": {
       "workflow/prepare_step.py": "depends on the retired path-validator workspace layout",
-      "workflow/auto_validate_driver.py": "depends on the retired path-validator workspace layout"
+      "workflow/auto_validate_driver.py": "depends on the retired path-validator workspace layout",
+      "workflow/validate_candidate.py": "discovery-era batch dispatcher; needed a resources/ layout this repository does not ship. Removed from the live tree. Live Validate is tools/workflow/run_qm_step.py"
     }
   },
   "core_hours": 0.0,
-  "git_head": "6be164e"
+  "git_head": "ec6934e"
 }

@@ -24,6 +24,7 @@ import glob
 import os
 import re
 import sys
+from collections import Counter
 
 STRICT_VERSION = "v5"
 WATER = "O"  # canonical SMILES of H2O after RemoveHs
@@ -103,6 +104,33 @@ def xyz_species(path):
         return whole, frags, n
     except Exception:
         return None, [], n
+
+
+def element_counts(atoms):
+    """Element tally from read_xyz_atoms output. Missing geometry is empty."""
+    return Counter(sym for sym, *_ in (atoms or []))
+
+
+def element_conserved(atoms_a, atoms_b, coproduct=None) -> bool:
+    """Same atoms, or a real water leaving/joining the system.
+
+    A count-only ±3 gate, and later a bare {O:1,H:2} delta, accepted ethanol
+    vs ethene with no water in the files and no declared coproduct.
+    """
+    if not atoms_a or not atoms_b:
+        return False
+    if len(atoms_a) - len(atoms_b) not in (0, -3, 3):
+        return False
+    ca, cb = element_counts(atoms_a), element_counts(atoms_b)
+    if ca == cb:
+        return True
+    delta = Counter(ca)
+    delta.subtract(cb)
+    leftover = {k: v for k, v in delta.items() if v}
+    if leftover not in ({"O": 1, "H": 2}, {"O": -1, "H": -2}):
+        return False
+    declared = canon(coproduct) == WATER if coproduct else False
+    return declared or bool(water_h_indices(atoms_a)) or bool(water_h_indices(atoms_b))
 
 
 def canon(smiles):
@@ -282,28 +310,42 @@ def check_step(
                 whole = ".".join(sorted(frags)) if frags else None
                 return frags == [organic] or whole == organic
 
-            # Either orientation of IRC
+            # Either orientation of IRC. One end must be the reactant; the other
+            # the product (plus coproduct / catalytic water). A loose
+            # "each end is somewhere in {R,P,P.C}" used to accept two product-side
+            # fragments with no reactant.
             orient_a = matches(f_frags, want_p, True) and matches(b_frags, want_r, False)
             orient_b = matches(f_frags, want_r, False) and matches(b_frags, want_p, True)
-            # Fallback: whole-string membership (legacy single-component)
-            if not (orient_a or orient_b):
-                fwd_ok = f_whole in (want_p, want_r) or (
-                    want_c and f_whole in (canon(f"{want_p}.{want_c}"), canon(f"{want_c}.{want_p}"))
-                )
-                bwd_ok = b_whole in (want_p, want_r) or (
-                    want_c and b_whole in (canon(f"{want_p}.{want_c}"), canon(f"{want_c}.{want_p}"))
-                )
-                r["endpoints_ok"] = bool(
-                    f_whole and b_whole and fwd_ok and bwd_ok and f_whole != b_whole
-                )
-            else:
-                r["endpoints_ok"] = True
+            if not (orient_a or orient_b) and f_whole and b_whole:
+                def is_reactant(whole, frags):
+                    return whole == want_r or frags == [want_r]
+
+                def is_product(whole, frags):
+                    if want_c:
+                        combo = (
+                            canon(f"{want_p}.{want_c}"),
+                            canon(f"{want_c}.{want_p}"),
+                        )
+                        return sorted(frags) == sorted([want_p, want_c]) or whole in combo
+                    return whole == want_p or frags == [want_p]
+
+                orient_a = is_product(f_whole, f_frags) and is_reactant(b_whole, b_frags)
+                orient_b = is_reactant(f_whole, f_frags) and is_product(b_whole, b_frags)
+            r["endpoints_ok"] = bool(orient_a or orient_b)
         elif f_whole and b_whole:
+            # As-built deposit audit: no declared pair, only require two distinct species.
             r["endpoints_ok"] = f_whole != b_whole
 
         dn = f_n - b_n
-        if dn not in (0, -3, 3):
-            r["notes"].append(f"atom count changes by {dn:+d} (expect 0 or ±3 for dry/dehyd)")
+        atoms_f = read_xyz_atoms(irc_f)
+        atoms_b = read_xyz_atoms(irc_b)
+        r["atoms_ok"] = element_conserved(atoms_f, atoms_b, coproduct=coproduct)
+        if not r["atoms_ok"]:
+            r["notes"].append(
+                f"atom/element change is not a dry step or real water (±H2O); "
+                f"count {dn:+d}"
+            )
+            r["endpoints_ok"] = False
     else:
         r["notes"].append("IRC endpoints not supplied — clauses 3-4 not checked")
 
@@ -314,7 +356,9 @@ def check_step(
     if incomplete:
         r["pass"] = False
         return r
-    r["pass"] = all((r["level_ok"], r["single_imag"], r["endpoints_ok"], r["water_ok"]))
+    r["pass"] = all(
+        (r["level_ok"], r["single_imag"], r["endpoints_ok"], r["water_ok"], r.get("atoms_ok", True))
+    )
     return r
 
 

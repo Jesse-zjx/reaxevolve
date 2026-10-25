@@ -38,10 +38,15 @@ echo "=== 3. network STRICT set equals the audited pin ==="
 import json
 net = json.load(open("graph/canonical/reaction_network.json"))
 pin = json.load(open("graph/canonical/audited_strict_edges.json"))
+acc = json.load(open("graph/canonical/accepted_network.json"))
 ns = {(e["reactant"], e["product"]) for e in net["edges"].values() if e.get("status") == "STRICT"}
 ps = {(e["reactant"], e["product"]) for e in pin["edges"]}
-print(f"  network {len(ns)} | pin {pin['n_strict']} | identical: {ns == ps}")
-raise SystemExit(0 if ns == ps else 1)
+aes = acc.get("edges") or []
+if isinstance(aes, dict):
+    aes = list(aes.values())
+as_ = {(e["reactant"], e["product"]) for e in aes if e.get("status") == "STRICT" or str(e.get("status") or "").startswith("STRICT")}
+print(f"  network {len(ns)} | pin {pin['n_strict']} | accepted {len(as_)} | identical: {ns == ps == as_}")
+raise SystemExit(0 if ns == ps == as_ else 1)
 PY
 ) || rc=1
 
@@ -94,6 +99,7 @@ echo "=== 7. structural + accounting checks ==="
 ( cd "$C" && $PY scripts/smoke_test.py 2>&1 | tail -2 ) | sed 's/^/  /' || rc=1
 ( cd "$C" && $PY scripts/qa/test_loop_accounting.py 2>&1 | tail -1 ) | sed 's/^/  /' || rc=1
 ( cd "$C" && $PY scripts/qa/test_reflect_payload.py 2>&1 | tail -1 ) | sed 's/^/  /' || rc=1
+( cd "$C" && $PY scripts/qa/test_audit_invariants.py 2>&1 | tail -1 ) | sed 's/^/  /' || rc=1
 
 echo "=== 8. loop wiring (no DFT, no API) ==="
 ( cd "$C" && $PY loop/run_loop.py --dry-run --no-llm 2>&1 | tail -2 ) | sed 's/^/  /' || rc=1

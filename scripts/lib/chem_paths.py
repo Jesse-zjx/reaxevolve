@@ -47,6 +47,29 @@ def orca_env(**extra):
     return env
 
 
+def is_eval_arm_cache(path: str) -> bool:
+    """Isolated campaign trees must not feed discovery archives or the main graph.
+
+    Live Validate writes under ``runs/validation/``. Everything else under
+    ``runs/`` is a copy: control arms, C1/C2 replay trees, and review worktrees.
+    Merging those silently re-promotes their labels into the canonical network.
+    """
+    candidates = [path]
+    try:
+        candidates.append(os.path.realpath(path))
+    except OSError:
+        pass
+    for cand in candidates:
+        norm = os.path.normpath(cand).replace("\\", "/")
+        padded = f"/{norm}/"
+        if "/runs/" not in padded:
+            continue
+        if "/runs/validation/" in padded:
+            return False
+        return True
+    return False
+
+
 def bootstrap():
     for p in (
         RESOURCES,

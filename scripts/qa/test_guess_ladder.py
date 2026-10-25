@@ -98,7 +98,8 @@ def main() -> int:
         with tempfile.TemporaryDirectory() as td:
             xyz = Path(td) / "r.xyz"
             sub = subprocess.run(
-                [PY, os.path.join(PKG, "tools", "geometry", "smi_to_xyz.py"), R, str(xyz)],
+                [PY, os.path.join(PKG, "tools", "geometry", "smi_to_xyz.py"),
+                 R, str(xyz), "--no-xtb"],
                 capture_output=True, text=True, cwd=PKG,
             )
             if not xyz.is_file():

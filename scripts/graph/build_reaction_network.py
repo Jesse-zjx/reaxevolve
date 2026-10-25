@@ -141,6 +141,10 @@ def split_status(raw):
     return m.group(1), m.group(2).strip()
 
 
+def is_eval_arm_cache(path: str) -> bool:
+    return CP.is_eval_arm_cache(path)
+
+
 def collect_caches():
     patterns = [
         os.path.join(CP.RUNS, "**", "strict_cache.json"),
@@ -150,6 +154,8 @@ def collect_caches():
     out = {}
     for pat in patterns:
         for path in glob.glob(pat, recursive=True):
+            if is_eval_arm_cache(path):
+                continue
             try:
                 data = json.load(open(path))
             except (OSError, json.JSONDecodeError):
@@ -167,7 +173,189 @@ def collect_caches():
     return out
 
 
-def apply_readjudication(net) -> dict:
+def _has_attempt_identity(rec: dict) -> bool:
+    """Live evidence that can be told apart from a geometry-less record."""
+    fp = rec.get("input_fingerprint")
+    if isinstance(fp, dict) and fp:
+        return True
+    if isinstance(fp, str) and fp:
+        return True
+    return bool(rec.get("invocation_id"))
+
+
+def cache_identity_fields(rec: dict) -> dict:
+    """Fields a cache row must keep on the graph edge for later readjudication."""
+    return {
+        "input_fingerprint": rec.get("input_fingerprint"),
+        "attempt_time": rec.get("time"),
+        "invocation_id": rec.get("invocation_id"),
+        "name": rec.get("name"),
+    }
+
+
+_BINDS_PATH = os.path.join(_PKG, "evidence", "audit", "provisional_binds.json")
+_PROVISIONAL_BINDS = None
+
+
+def load_provisional_binds(path=None) -> dict:
+    """Map `reactant>>product` to the cache attempt a provisional row judged."""
+    raw = load_json(path or _BINDS_PATH, {})
+    rows = raw.get("binds") if isinstance(raw, dict) else None
+    if rows is None and isinstance(raw, dict):
+        rows = [v for k, v in raw.items() if isinstance(v, dict) and k != "purpose"]
+    out = {}
+    for v in rows or []:
+        if not isinstance(v, dict):
+            continue
+        r, p = canon(v.get("reactant")), canon(v.get("product"))
+        if not r or not p:
+            continue
+        out[f"{r}>>{p}"] = v
+    return out
+
+
+def provisional_binds() -> dict:
+    global _PROVISIONAL_BINDS
+    if _PROVISIONAL_BINDS is None:
+        _PROVISIONAL_BINDS = load_provisional_binds()
+    return _PROVISIONAL_BINDS
+
+
+def _cache_paths_match(a, b) -> bool:
+    """True when two cache paths name the same artifact, including isolated clones."""
+    if not a or not b:
+        return False
+    na = os.path.normpath(str(a)).replace("\\", "/")
+    nb = os.path.normpath(str(b)).replace("\\", "/")
+    if na == nb:
+        return True
+    if os.path.realpath(na) == os.path.realpath(nb):
+        return True
+    def tail(s: str) -> str:
+        for marker in ("/graph/caches/", "/graph/strict_caches/"):
+            i = s.find(marker)
+            if i >= 0:
+                return s[i + 1 :]
+        return s.lstrip("./")
+    ta, tb = tail(na), tail(nb)
+    if ta == tb:
+        return True
+    return na.endswith(nb) or nb.endswith(na)
+
+
+def _bound_attempt(rec: dict) -> dict:
+    """The attempt a pair-level judgement actually covered."""
+    bound = {
+        "cache_path": rec.get("cache") or rec.get("cache_path"),
+        "time": str(rec.get("time") or rec.get("demoted_at") or ""),
+        "invocation_id": rec.get("invocation_id"),
+        "input_fingerprint": rec.get("input_fingerprint"),
+        "name": rec.get("name"),
+    }
+    if bound["cache_path"] or bound["time"] or bound["invocation_id"] or bound["input_fingerprint"]:
+        return bound
+    r, p = canon(rec.get("reactant")), canon(rec.get("product"))
+    if not r or not p:
+        return bound
+    extra = provisional_binds().get(f"{r}>>{p}") or {}
+    return {
+        "cache_path": extra.get("cache_path"),
+        "time": str(extra.get("time") or ""),
+        "invocation_id": extra.get("invocation_id"),
+        "input_fingerprint": extra.get("input_fingerprint"),
+        "name": extra.get("name"),
+    }
+
+
+def _same_bound_attempt(edge: dict, bound: dict) -> bool:
+    """True when the live row is still the attempt the judgement named.
+
+    A reusable workdir and task name are not attempt identity. The writer
+    keeps prior rows under ``attempts`` and writes a later retry as the
+    latest row in the same cache; that retry has a new time (and usually a
+    new fingerprint / invocation id). Path+name without that original time
+    is not the bound attempt.
+    """
+    if bound.get("invocation_id") and edge.get("invocation_id"):
+        return str(edge["invocation_id"]) == str(bound["invocation_id"])
+    if bound.get("input_fingerprint") and edge.get("input_fingerprint"):
+        return edge.get("input_fingerprint") == bound.get("input_fingerprint")
+    path_match = _cache_paths_match(edge.get("cache_path"), bound.get("cache_path"))
+    time_match = bool(bound.get("time") and str(edge.get("attempt_time") or "") == str(bound["time"]))
+    name_match = bool(bound.get("name") and edge.get("name") == bound["name"])
+    if path_match and time_match:
+        return True
+    if time_match and name_match:
+        return True
+    if path_match and not bound.get("time") and not str(edge.get("attempt_time") or ""):
+        return True
+    return False
+
+
+def _supersedes_bound(edge: dict, bound: dict) -> bool:
+    """True when the live row is a different attempt than the one judged.
+
+    Presence of an invocation id, or a similar imaginary frequency, is not
+    enough. The live row must be another cache file, a fingerprint the
+    bound attempt did not have, or a later launch in the same file (new
+    time plus an identity the bound row never had). An explicit
+    ``supersedes`` pointer also names the replaced evidence.
+    """
+    if _same_bound_attempt(edge, bound):
+        return False
+    if edge.get("supersedes") and bound.get("cache_path"):
+        if _cache_paths_match(edge.get("supersedes"), bound["cache_path"]):
+            return True
+        if bound.get("name") and edge.get("supersedes") == bound["name"]:
+            return True
+    edge_cache = edge.get("cache_path")
+    bound_cache = bound.get("cache_path")
+    if edge_cache and bound_cache and not _cache_paths_match(edge_cache, bound_cache):
+        return True
+    edge_fp = edge.get("input_fingerprint")
+    has_fp = (isinstance(edge_fp, dict) and bool(edge_fp)) or (isinstance(edge_fp, str) and bool(edge_fp))
+    bound_fp = bound.get("input_fingerprint")
+    if has_fp and (not bound_fp or edge_fp != bound_fp):
+        return True
+    edge_time = str(edge.get("attempt_time") or "")
+    if bound.get("time") and edge_time and edge_time != str(bound["time"]):
+        if edge.get("invocation_id") and edge.get("invocation_id") != bound.get("invocation_id"):
+            return True
+    return False
+
+
+def _newer_qualifying_attempt(edge: dict, rec: dict, ledger_path: str) -> bool:
+    """True when the live cache is a later successful attempt than this demotion.
+
+    Historical demotions key only on the reaction pair, so a later STRICT
+    repair of the same pair used to inherit the old reject. Geometry-less
+    provisional rows are bound to one cache attempt; they still demote that
+    attempt, including after identity fields are pasted onto it. A later
+    retry in the same cache (new time plus fingerprint or invocation) is a
+    different attempt, as is another cache file. Invocation id or imaginary
+    frequency alone is not attempt identity.
+    """
+    before = edge.get("status")
+    if rank(before) < rank("STRICT"):
+        return False
+    rec_fp = rec.get("input_fingerprint")
+    rec_cache = rec.get("cache") or rec.get("cache_path")
+    rec_time = str(rec.get("time") or rec.get("demoted_at") or "")
+    if rec.get("provisional") and not (rec_fp or rec_cache or rec_time):
+        return _supersedes_bound(edge, _bound_attempt(rec))
+    edge_fp = edge.get("input_fingerprint")
+    if rec_fp and edge_fp and rec_fp != edge_fp:
+        return True
+    edge_cache = edge.get("cache_path")
+    if rec_cache and edge_cache and not _cache_paths_match(edge_cache, rec_cache):
+        return True
+    edge_time = str(edge.get("attempt_time") or "")
+    if rec_time and edge_time and edge_time > rec_time:
+        return True
+    return False
+
+
+def apply_readjudication(net, ledgers=None) -> dict:
     """Overlay recorded re-adjudications on top of the merged cache evidence.
 
     A `strict_cache.json` entry is raw evidence: what one driver run observed. A
@@ -182,11 +370,13 @@ def apply_readjudication(net) -> dict:
     Reads (append-only, never rewritten here):
       evidence/audit/readjudication.jsonl        kept   -> new_status
       evidence/audit/demoted_from_pin_v5.jsonl   demoted -> new_status + reason
+      evidence/audit/provisional_binds.json      which attempt a provisional row judged
     """
-    ledgers = [
-        ("readjudication", os.path.join(_PKG, "evidence", "audit", "readjudication.jsonl")),
-        ("demotion", os.path.join(_PKG, "evidence", "audit", "demoted_from_pin_v5.jsonl")),
-    ]
+    if ledgers is None:
+        ledgers = [
+            ("readjudication", os.path.join(_PKG, "evidence", "audit", "readjudication.jsonl")),
+            ("demotion", os.path.join(_PKG, "evidence", "audit", "demoted_from_pin_v5.jsonl")),
+        ]
     edges = net.get("edges") or {}
     applied, unmatched = [], []
     for kind, path in ledgers:
@@ -203,12 +393,19 @@ def apply_readjudication(net) -> dict:
             r, p = canon(rec.get("reactant")), canon(rec.get("product"))
             if not new_status or not r or not p:
                 continue
+            # A geometry-less provisional audit is not an accepted edge.
+            if rec.get("provisional") and new_status == "STRICT":
+                new_status = "unresolved"
             i = eid(r, p)
             e = edges.get(i)
             if e is None:
                 unmatched.append({"ledger": kind, "edge": f"{r}>>{p}"})
                 continue
             before = e.get("status")
+            # Pair-level ledger rows, including a geometry-less provisional, must
+            # not cover a later independent qualifying attempt on the same pair.
+            if rank(new_status) < rank(before) and _newer_qualifying_attempt(e, rec, path):
+                continue
             e["status"] = new_status
             e["readjudication"] = {
                 "ledger": kind,
@@ -352,6 +549,7 @@ def main():
             "source": "strict_cache",
             "cache_path": rec.get("_cache_path"),
             "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            **cache_identity_fields(rec),
         }
         net.setdefault("nodes", {}).setdefault(
             nid(r), {"id": nid(r), "smiles": r, "role": "intermediate", "source": "cache"}

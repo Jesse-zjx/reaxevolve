@@ -186,6 +186,24 @@ def load_verdicts():
     return rows
 
 
+def status_from_record_only(rec, imag):
+    """Judgement when final geometry cannot be opened.
+
+    A stored STRICT label is not evidence. Missing artifacts stay unresolved.
+    Returns (new_status, provisional, note).
+    """
+    labeled = rec.get("status") in ("STRICT",) or str(rec.get("status", "")).startswith("STRICT")
+    one_imag = bool(imag) and len([x for x in imag if x < -1]) == 1
+    if labeled and one_imag:
+        return (
+            "unresolved",
+            True,
+            "record has single imag + STRICT but geometry was not re-opened; "
+            "not counted as accepted",
+        )
+    return "unresolved", False, None
+
+
 def water_only_reject_scan(verdicts):
     """Zero-compute: find rejects that look like spectator-water-only failures."""
     hits = []
@@ -314,20 +332,6 @@ def main():
                 e.get("product"),
                 coproduct=art.get("coproduct"),
             )
-            # Deposit geometry already expert-accepted: if only endpoint string
-            # mismatch remains but single_imag+water pass, keep STRICT with note.
-            if (
-                art.get("source") == "deposit"
-                and not r.get("pass")
-                and r.get("single_imag")
-                and r.get("water_ok") is not False
-                and r.get("endpoints_ok") is False
-            ):
-                r["pass"] = True
-                r.setdefault("notes", []).append(
-                    "deposit as-built override: endpoints differ from pin SMILES "
-                    "(likely coproduct/fragment bookkeeping); frequency+water ok"
-                )
             row.update(
                 {
                     "judgement_source": art.get("source"),
@@ -362,16 +366,12 @@ def main():
                     "record_status": rec.get("status"),
                 }
             )
-            # Conservative: if record shows exactly one imag and STRICT, keep provisional
-            if (
-                rec.get("status") in ("STRICT",) or str(rec.get("status", "")).startswith("STRICT")
-            ) and imag and len([x for x in imag if x < -1]) == 1:
-                row["new_status"] = "STRICT"
-                row["pass"] = True
-                row["notes"].append(
-                    "provisional keep: record has single imag + STRICT; geometry not re-opened"
-                )
-                row["provisional"] = True
+            st, prov, note = status_from_record_only(rec, imag)
+            row["new_status"] = st
+            row["provisional"] = prov
+            row["pass"] = None
+            if note:
+                row["notes"].append(note)
         results.append(row)
 
     water_hits = water_only_reject_scan(verdicts)

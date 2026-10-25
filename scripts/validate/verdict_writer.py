@@ -172,6 +172,59 @@ def _cost_slice(rec: Mapping[str, Any]) -> dict:
     }
 
 
+# Pair identity only. Copying the latest row first filled early failures with a
+# later attempt's frequencies, IRC ends and asset versions, and the digest
+# then classified those failures as `ok`.
+_ATTEMPT_IDENTITY = ("reactant", "product", "coproduct", "charge", "hypothesis_id")
+
+
+def attempt_token(entry: Mapping[str, Any]) -> tuple:
+    """Stable attempt identity for archive dedup.
+
+    Same reaction + name + minute used to collapse two invocations. Prefer the
+    invocation id; fall back to the input fingerprint; old rows without either
+    still share one legacy key so copied caches remain one record.
+    """
+    inv = entry.get("invocation_id")
+    if inv:
+        return ("inv", str(inv))
+    fp = entry.get("input_fingerprint")
+    if isinstance(fp, dict) and fp:
+        return ("fp", tuple(sorted((str(k), str(v)) for k, v in fp.items())))
+    if fp:
+        return ("fp", str(fp))
+    return ("legacy", None)
+
+
+def expand_attempts(edge: str, entry: Mapping[str, Any]) -> list[dict]:
+    """One record per attempt, without inheriting a later success's observations."""
+    atts = entry.get("attempts")
+    if isinstance(atts, list) and any(isinstance(a, dict) for a in atts):
+        identity = {k: entry[k] for k in _ATTEMPT_IDENTITY if k in entry}
+        rows: list[dict] = []
+        for a in atts:
+            if not isinstance(a, dict):
+                continue
+            rec = dict(identity)
+            rec.update({k: v for k, v in a.items() if k != "attempts"})
+            rec["edge"] = edge
+            rows.append(rec)
+        return rows
+    rec = {k: v for k, v in entry.items() if k != "attempts"}
+    rec["edge"] = edge
+    return [rec]
+
+
+def _archive_attempt(rec: Mapping[str, Any]) -> dict:
+    """Full attempt row, minus the nested history list.
+
+    Cost-only slices dropped failure reasons, IRC termini and the version
+    vector, so a later overwrite left nothing to replay.
+    """
+    archived = {k: v for k, v in rec.items() if k != "attempts"}
+    return archived
+
+
 def write_strict_cache(
     cache_path: str,
     edge_key: str,
@@ -198,8 +251,8 @@ def write_strict_cache(
     if isinstance(prev, dict):
         history = [dict(x) for x in (prev.get("attempts") or []) if isinstance(x, dict)]
         if not history:
-            history = [_cost_slice(prev)]
-    rec["attempts"] = history + [_cost_slice(rec)]
+            history = [_archive_attempt(prev)]
+    rec["attempts"] = history + [_archive_attempt(rec)]
     data[edge_key] = rec
     os.makedirs(os.path.dirname(os.path.abspath(cache_path)) or ".", exist_ok=True)
     json.dump(data, open(cache_path, "w"), indent=2)

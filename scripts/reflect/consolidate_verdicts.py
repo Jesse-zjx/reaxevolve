@@ -27,8 +27,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 _d = HERE
 while _d != '/' and not os.path.isfile(os.path.join(_d, 'tools', 'chem_paths.py')):
     _d = os.path.dirname(_d)
-sys.path.insert(0, os.path.join(_d, 'tools'))
+sys.path.insert(0, os.path.join(_d, 'scripts', 'lib'))
+sys.path.insert(0, os.path.join(_d, 'scripts', 'validate'))
 import chem_paths as CP  # noqa: E402
+import verdict_writer as VW  # noqa: E402
 
 OUT = os.path.join(CP.GRAPH, 'verdicts.jsonl')
 
@@ -91,7 +93,8 @@ def dedup_key(entry, edge):
     the same guess keeps its own row.
     """
     return (edge, entry.get('name'), entry.get('reactant'), entry.get('product'),
-            entry.get('coproduct'), entry.get('time'), str(entry.get('status'))[:60])
+            entry.get('coproduct'), entry.get('time'), str(entry.get('status'))[:60],
+            VW.attempt_token(entry))
 
 
 def order(rec):
@@ -112,6 +115,8 @@ def collect():
             real = os.path.realpath(path)
             if real in seen_real:          # the symlink farm reaches some files twice
                 continue
+            if CP.is_eval_arm_cache(path):
+                continue
             seen_real.add(real)
             try:
                 blob = json.load(open(path))
@@ -122,27 +127,28 @@ def collect():
             for edge, entry in blob.items():
                 if not isinstance(entry, dict):
                     continue
-                entries += 1
-                key = dedup_key(entry, edge)
-                rec = dict(entry)
-                rec['edge'] = edge
-                prev = found.get(key)
-                if prev is None:
-                    # Roots are ordered package-first, so the recorded path is the in-package copy
-                    # whenever one exists. Listing every tree a record was found in would make the
-                    # output depend on which optional trees the machine can reach.
-                    where = rel(path)
-                    rec['source'] = {'cache': where}
-                    if os.path.isabs(where):
-                        rec['source']['recovered'] = True
-                    found[key] = rec
-                    new += 1
-                else:
-                    # Keep the copy that recorded more: a later validator generation added
-                    # ts_imag_all and endpoint_match to records the first one left null.
-                    for k, v in entry.items():
-                        if v is not None and prev.get(k) is None:
-                            prev[k] = v
+                for rec in VW.expand_attempts(edge, entry):
+                    entries += 1
+                    key = dedup_key(rec, edge)
+                    prev = found.get(key)
+                    if prev is None:
+                        # Roots are ordered package-first, so the recorded path is the in-package copy
+                        # whenever one exists. Listing every tree a record was found in would make the
+                        # output depend on which optional trees the machine can reach.
+                        where = rel(path)
+                        rec['source'] = {'cache': where}
+                        if os.path.isabs(where):
+                            rec['source']['recovered'] = True
+                        found[key] = rec
+                        new += 1
+                    else:
+                        # Keep the copy that recorded more: a later validator generation added
+                        # ts_imag_all and endpoint_match to records the first one left null.
+                        for k, v in rec.items():
+                            if k == 'source':
+                                continue
+                            if v is not None and prev.get(k) is None:
+                                prev[k] = v
         per_root.append({'tree': label, 'root': rel(root), 'cache_files': len(seen_real),
                          'entries': entries, 'new_records': new})
     return found, per_root
@@ -157,7 +163,8 @@ def load_frozen():
         if not line:
             continue
         rec = json.loads(line)
-        out[dedup_key(rec, rec.get('edge'))] = rec
+        for a in VW.expand_attempts(rec.get('edge'), rec):
+            out[dedup_key(a, a.get('edge'))] = a
     return out
 
 

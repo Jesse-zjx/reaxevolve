@@ -22,6 +22,7 @@ OUT_JL = os.path.join(PKG, "evidence", "audit", "repair_queue.jsonl")
 OUT_MD = os.path.join(PKG, "evidence", "audit", "REPAIR_QUEUE.md")
 PIN = os.path.join(CP.GRAPH_ROOT, "canonical", "audited_strict_edges.json")
 NET = os.path.join(CP.GRAPH_ROOT, "canonical", "reaction_network.json")
+DEMOTE_LOG = os.path.join(PKG, "evidence", "audit", "DEMOTE_LOG.md")
 
 
 def load_rows():
@@ -143,18 +144,28 @@ def demote(queue, dry_run=True):
     pin["n_strict"] = len(kept)
     pin["pinned_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     pin["demoted_v5"] = removed
-    json.dump(pin, open(PIN, "w"), indent=2)
-    # Network status demotion
+    net_out = None
     if os.path.isfile(NET):
         net = json.load(open(NET))
-        for e in net.get("edges") or []:
+        raw = net.get("edges") or {}
+        items = raw.values() if isinstance(raw, dict) else raw
+        for e in items:
+            if not isinstance(e, dict):
+                continue
             key = e.get("id") or e.get("edge") or f"{e.get('reactant')}>>{e.get('product')}"
-            if key in demote_keys and (e.get("status") == "STRICT" or str(e.get("status","")).startswith("STRICT")):
+            pair = f"{e.get('reactant')}>>{e.get('product')}"
+            if (key in demote_keys or pair in demote_keys) and (
+                e.get("status") == "STRICT" or str(e.get("status", "")).startswith("STRICT")
+            ):
                 e["status"] = "rejected"
                 e["detail"] = "demoted after STRICT(v5) spectator-water fail"
                 e["strict_version"] = "v5"
-        json.dump(net, open(NET, "w"), indent=2)
-    open(os.path.join(PKG, "evidence", "audit", "DEMOTE_LOG.md"), "w").write(
+        net_out = net
+    # Network first: a schema crash used to leave a rewritten pin and an untouched graph.
+    if net_out is not None:
+        json.dump(net_out, open(NET, "w"), indent=2)
+    json.dump(pin, open(PIN, "w"), indent=2)
+    open(DEMOTE_LOG, "w").write(
         "# Demotions under STRICT(v5)\n\n" + "\n".join(f"- `{k}`" for k in removed) + "\n"
     )
     print("pin + network updated")

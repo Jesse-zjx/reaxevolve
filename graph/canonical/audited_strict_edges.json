@@ -1,31 +1,13 @@
 {
   "schema": "audited_strict_edges/v1",
   "description": "Audited STRICT edge set mirrored from graph/reaction_network.json. Refresh with scripts/reflect/repin_state.py after expansion.",
-  "n_strict": 30,
-  "pinned_at": "2026-10-22",
+  "n_strict": 23,
+  "pinned_at": "2026-10-25",
   "edges": [
-    {
-      "reactant": "O=C(C(O)CO)C(O)C(O)CO",
-      "product": "O=C(C=C(O)CO)C(O)CO",
-      "reaction_kind": "unknown",
-      "source": "strict_cache"
-    },
     {
       "reactant": "O=C(C(O)CO)C(O)C(O)CO",
       "product": "OC=C(O)C(O)C(O)CO",
       "reaction_kind": "unknown",
-      "source": "strict_cache"
-    },
-    {
-      "reactant": "O=C(C=C(O)CO)C(O)CO",
-      "product": "O=C(CO)CC(=O)C(O)CO",
-      "reaction_kind": "unknown",
-      "source": "strict_cache"
-    },
-    {
-      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
-      "product": "O=C(CO)C(O)=CC(O)CO",
-      "reaction_kind": "dehydration",
       "source": "strict_cache"
     },
     {
@@ -36,19 +18,7 @@
     },
     {
       "reactant": "O=C(CO)C(O)C(O)C(O)CO",
-      "product": "OC=C(O)C(O)C(O)C(O)CO",
-      "reaction_kind": "unknown",
-      "source": "strict_cache"
-    },
-    {
-      "reactant": "O=C(CO)C(O)C(O)C(O)CO",
       "product": "OCC(O)=C(O)C(O)C(O)CO",
-      "reaction_kind": "unknown",
-      "source": "strict_cache"
-    },
-    {
-      "reactant": "O=C(CO)C(O)C(O)CO",
-      "product": "O=C(C=C(O)CO)CO",
       "reaction_kind": "unknown",
       "source": "strict_cache"
     },
@@ -107,12 +77,6 @@
       "source": "strict_cache"
     },
     {
-      "reactant": "O=CC(O)C(O)=CC(O)CO",
-      "product": "O=CC(O)C(=O)CC(O)CO",
-      "reaction_kind": "unknown",
-      "source": "strict_cache"
-    },
-    {
       "reactant": "O=CC(O)C(O)C(O)C(O)CO",
       "product": "O=C(CO)C(O)C(O)C(O)CO",
       "reaction_kind": "isomerization",
@@ -152,12 +116,6 @@
       "reactant": "O=CCC=O",
       "product": "O=CC=CO",
       "reaction_kind": "keto_to_enol",
-      "source": "strict_cache"
-    },
-    {
-      "reactant": "OC1CO1",
-      "product": "O=CCO",
-      "reaction_kind": "unknown",
       "source": "strict_cache"
     },
     {

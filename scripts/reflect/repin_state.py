@@ -28,6 +28,7 @@ import chem_paths as CP  # noqa: E402
 
 PIN = os.path.join(CP.GRAPH, 'audited_strict_edges.json')
 NET = os.path.join(CP.GRAPH, 'reaction_network.json')
+ACCEPTED = os.path.join(CP.GRAPH, 'accepted_network.json')
 STATE_DIR = os.path.join(PKG, 'evidence', 'state')
 STATE_JSON = os.path.join(STATE_DIR, 'NETWORK_STATE.json')
 STATE_MD = os.path.join(STATE_DIR, 'NETWORK_STATE.md')
@@ -313,6 +314,14 @@ def main():
         json.dump(pin, f, ensure_ascii=False, indent=2)
         f.write('\n')
     print('wrote', os.path.relpath(PIN, PKG))
+
+    sys.path.insert(0, HERE)
+    import graph_views as GV  # noqa: WPS433
+    accepted = GV.accepted_subgraph(net)
+    with open(ACCEPTED, 'w') as f:
+        json.dump(accepted, f, ensure_ascii=False, indent=1)
+        f.write('\n')
+    print('wrote', os.path.relpath(ACCEPTED, PKG))
 
     dated = dated_strict_from_timeline()
     state = write_network_state(net, pairs, dated, prev_pairs)

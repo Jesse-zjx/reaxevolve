@@ -72,6 +72,46 @@ def run(inp, out):
         subprocess.run([ORCA, inp], stdout=f, stderr=subprocess.STDOUT, env=ENV)
 
 
+def _unlink(*paths):
+    for p in paths:
+        if p and os.path.isfile(p):
+            try:
+                os.remove(p)
+            except OSError:
+                pass
+
+
+def stale_irc_endpoints(fpath, bpath, started: float, slack_s: float = 1.0) -> bool:
+    """True when F/B xyz exist but were not written by this IRC job."""
+    for p in (fpath, bpath):
+        if not os.path.isfile(p):
+            return True
+        try:
+            if os.path.getmtime(p) < started - slack_s:
+                return True
+        except OSError:
+            return True
+    return False
+
+
+def opt_endpoint(name: str, xyz: str, charge: int, mult: int, nprocs: int) -> str | None:
+    """Unconstrained r2SCAN-3c Opt of one IRC end. Policy clause 3 requires this."""
+    inp = f"{name}_opt.inp"
+    out = f"{name}_opt.out"
+    out_xyz = f"{name}_opt.xyz"
+    _unlink(out_xyz)
+    with open(inp, "w") as f:
+        f.write(
+            "! r2SCAN-3c Opt TightSCF DEFGRID3 CPCM(water)\n"
+            f"%maxcore 4000\n%pal nprocs {nprocs} end\n"
+            f"* xyzfile {charge} {mult} {xyz}\n"
+        )
+    run(inp, out)
+    if terminated_ok(out) and opt_converged(out) and os.path.isfile(out_xyz):
+        return out_xyz
+    return None
+
+
 def clean():
     for pat in (
         "*.gbw",
@@ -98,6 +138,16 @@ def terminated_ok(out):
     return os.path.exists(out) and "ORCA TERMINATED NORMALLY" in open(out).read()
 
 
+def opt_converged(out):
+    """Normal termination is not convergence. MaxIter jobs still print the former."""
+    if not os.path.exists(out):
+        return False
+    txt = open(out, errors="ignore").read()
+    if "THE OPTIMIZATION HAS CONVERGED" in txt:
+        return True
+    return "HURRAY" in txt and "CONVERGED" in txt
+
+
 def _final_imag_values(out):
     txt = open(out).read()
     idx = txt.rfind("VIBRATIONAL FREQUENCIES")
@@ -113,11 +163,19 @@ def _final_imag_values(out):
     return sorted(vals)
 
 
+def attach_guess(res, guess):
+    """Keep the raw guess even when xTB fails, so the attempt still fingerprints."""
+    if guess:
+        res["guess_path"] = guess
+    return res
+
+
 def _save(res, status=None, detail=None):
     key = f"{res['reactant']}>>{res['product']}"
     st = status if status is not None else res.get("status") or "unresolved"
     # Hash the guess this attempt started from, so the record identifies the job and not just
     # the edge: two attempts on one edge differ precisely in their starting geometry.
+    # xTB fallback used to leave guess_path unset, so a STRICT row had only invocation_id.
     inputs = [p for p in (res.get("guess_path"), res.get("xtb_xyz")) if p and os.path.isfile(p)]
     written = _VW.write_strict_cache(
         "strict_cache.json", key, res, st, detail, input_paths=inputs
@@ -180,9 +238,11 @@ def main():
         "status": None,
         "endpoint_match": None,
         "time": time.strftime("%Y-%m-%d %H:%M"),
+        "invocation_id": os.environ.get("CHEM_INVOCATION_ID"),
         "driver": "run_qm_step.v1",
         "method_ladder": "xtb_optts -> r2SCAN-3c_optts_numfreq -> r2SCAN-3c_irc",
     }
+    attach_guess(res, a.guess)
 
     ts_xyz = a.ts_xyz
     if not a.irc_only:
@@ -246,17 +306,29 @@ def main():
             f"%maxcore 4000\n%pal nprocs {a.nprocs} end\n"
             f"* xyzfile {a.charge} {a.mult} {ts_xyz}\n"
         )
-    run(f"{a.name}_irc.inp", f"{a.name}_irc.out")
     fpath, bpath = f"{a.name}_irc_IRC_F.xyz", f"{a.name}_irc_IRC_B.xyz"
-    if not (os.path.exists(fpath) and os.path.exists(bpath)):
+    _unlink(fpath, bpath, f"{a.name}_irc.out")
+    irc_started = time.time()
+    run(f"{a.name}_irc.inp", f"{a.name}_irc.out")
+    if not terminated_ok(f"{a.name}_irc.out") or stale_irc_endpoints(fpath, bpath, irc_started):
         clean()
         _save(res, "unresolved", "IRC_FAILED")
         print(json.dumps(res, indent=2))
         return
 
+    fopt = opt_endpoint(f"{a.name}_irc_F", fpath, a.charge, a.mult, a.nprocs)
+    bopt = opt_endpoint(f"{a.name}_irc_B", bpath, a.charge, a.mult, a.nprocs)
+    if not (fopt and bopt):
+        clean()
+        _save(res, "unresolved", "ENDPOINT_OPT_FAILED")
+        print(json.dumps(res, indent=2))
+        return
+    res["irc_f_opt"] = fopt
+    res["irc_b_opt"] = bopt
+
     cls = _EM.classify_double_ended(
-        fpath,
-        bpath,
+        fopt,
+        bopt,
         a.reactant,
         a.product,
         a.coproduct,
@@ -267,8 +339,8 @@ def main():
 
     adj = _VW.adjudicate_with_policy(
         f"{a.name}_ts.out",
-        fpath,
-        bpath,
+        fopt,
+        bopt,
         a.reactant,
         a.product,
         name=a.name,
